@@ -10,9 +10,9 @@
 		7F4502CF17F5A1C5008A54D2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F4502CE17F5A1C5008A54D2 /* main.cpp */; };
 		7F4502D117F5A1C5008A54D2 /* AGPLab1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */; };
 		7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
-		7F4502E617F5C590008A54D2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E517F5C590008A54D2 /* SDL2.framework */; };
 		7F4502EF17F647FE008A54D2 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E717F5C622008A54D2 /* minimal.vsh */; };
 		7F4502F017F64801008A54D2 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E817F5C62E008A54D2 /* minimal.fsh */; };
+		7FC4003817F6F4110066CEA2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,9 +44,9 @@
 		7F4502CE17F5A1C5008A54D2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab1.1; sourceTree = "<group>"; };
 		7F4502E317F5C487008A54D2 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		7F4502E517F5C590008A54D2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = AGPLab1/SDL2.framework; sourceTree = "<group>"; };
 		7F4502E717F5C622008A54D2 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
 		7F4502E817F5C62E008A54D2 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
+		7FC4003717F6F4110066CEA2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = Frameworks/SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */,
-				7F4502E617F5C590008A54D2 /* SDL2.framework in Frameworks */,
+				7FC4003817F6F4110066CEA2 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,8 +93,8 @@
 		7F4502D917F5A28C008A54D2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7F4502E517F5C590008A54D2 /* SDL2.framework */,
 				7F4502E317F5C487008A54D2 /* OpenGL.framework */,
+				7FC4003717F6F4110066CEA2 /* SDL2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -241,16 +241,10 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/AGPLab1",
+					"$(SRCROOT)/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL2.framework/Headers,
-					/usr/local/Cellar/glew/1.10.0/include,
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/Cellar/glew/1.10.0/lib,
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -260,16 +254,10 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/AGPLab1",
+					"$(SRCROOT)/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL2.framework/Headers,
-					/usr/local/Cellar/glew/1.10.0/include,
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/Cellar/glew/1.10.0/lib,
-				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
