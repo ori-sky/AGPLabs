@@ -287,7 +287,7 @@ int main(int argc, const char ** argv)
         return 1;
     }
     
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__linux__)
     glewExperimental = true;
     
     GLenum err = glewInit();
