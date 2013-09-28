@@ -1,6 +1,7 @@
 CPPC=g++
 CPPFLAGS=-g -c -Wall -I../include
-LDFLAGS=-g -lrt -ldl -lGL -lGLEW -lSDL2 -L../lib
+LIBPATHS=-L../lib/x86 -L../lib/x64
+LDFLAGS=-g $(LIBPATHS) -lSDL2 -lGLEW -lrt -ldl -lpthread -lGL
 
 SRCS=main.cpp
 OBJS=$(SRCS:.cpp=.o)
