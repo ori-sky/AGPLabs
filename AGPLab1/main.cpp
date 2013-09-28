@@ -129,9 +129,9 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     SDL_Window *wnd = SDL_CreateWindow("AGPLab1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                       1280, 800,
+                                       1280, 720,
                                        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
-                                       | SDL_WINDOW_FULLSCREEN_DESKTOP);
+                                       | SDL_WINDOW_BORDERLESS);
     if(!wnd)
     {
         fprintf(stderr, "SDL_CreateWindow: error: %s\n", SDL_GetError());
