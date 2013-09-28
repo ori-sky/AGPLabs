@@ -123,17 +123,17 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
 
     // create dummy window and context to test default options
 
-    SDL_Window *wnd = SDL_CreateWindow("", 0, 0, 0, 0, SDL_WINDOW_HIDDEN);
+    SDL_Window *wnd = SDL_CreateWindow("", 0, 0, 0, 0, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
     if(!wnd)
     {
-        fprintf(stderr, "SDL_CreateWindow: error: %s\n", SDL_GetError());
+        fprintf(stderr, "SDL_CreateWindow: dummy error: %s\n", SDL_GetError());
         return NULL;
     }
 
     *ctx = SDL_GL_CreateContext(wnd);
     if(!*ctx)
     {
-        fprintf(stderr, "SDL_GL_CreateContext: error: %s\n", SDL_GetError());
+        fprintf(stderr, "SDL_GL_CreateContext: dummy error: %s\n", SDL_GetError());
         return NULL;
     }
 
