@@ -117,7 +117,7 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
 {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        fprintf(stderr, "SDL_Init: error\n");
+        fprintf(stderr, "SDL_Init: error: %s\n", SDL_GetError());
         return NULL;
     }
 
@@ -134,7 +134,7 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
                                        | SDL_WINDOW_FULLSCREEN_DESKTOP);
     if(!wnd)
     {
-        fprintf(stderr, "SDL_CreateWindow: error\n");
+        fprintf(stderr, "SDL_CreateWindow: error: %s\n", SDL_GetError());
         return NULL;
     }
 
