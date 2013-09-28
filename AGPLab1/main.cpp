@@ -121,6 +121,29 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
         return NULL;
     }
 
+    // create dummy window and context to test default options
+
+    SDL_Window *wnd = SDL_CreateWindow("", 0, 0, 0, 0, SDL_WINDOW_HIDDEN);
+    if(!wnd)
+    {
+        fprintf(stderr, "SDL_CreateWindow: error: %s\n", SDL_GetError());
+        return NULL;
+    }
+
+    *ctx = SDL_GL_CreateContext(wnd);
+    if(!*ctx)
+    {
+        fprintf(stderr, "SDL_GL_CreateContext: error: %s\n", SDL_GetError());
+        return NULL;
+    }
+
+    fprintf(stderr, "OpenGL dummy version: %s\n", glGetString(GL_VERSION));
+
+    SDL_GL_DeleteContext(*ctx);
+    SDL_DestroyWindow(wnd);
+
+    // set attributes and create window and context
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -128,7 +151,7 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
-    SDL_Window *wnd = SDL_CreateWindow("AGPLab1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    wnd = SDL_CreateWindow("AGPLab1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                        1280, 720,
                                        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
                                        | SDL_WINDOW_BORDERLESS);
@@ -144,6 +167,8 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
         fprintf(stderr, "SDL_GL_CreateContext: error: %s\n", SDL_GetError());
         return NULL;
     }
+
+    fprintf(stderr, "OpenGL version: %s\n", glGetString(GL_VERSION));
 
     // enable vsync
     SDL_GL_SetSwapInterval(1);
