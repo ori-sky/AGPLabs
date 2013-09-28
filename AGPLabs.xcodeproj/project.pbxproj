@@ -11,7 +11,6 @@
 		7F4502D117F5A1C5008A54D2 /* AGPLab1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */; };
 		7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
 		7F4502E617F5C590008A54D2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E517F5C590008A54D2 /* SDL2.framework */; };
-		7F4502ED17F645BB008A54D2 /* libGLEW.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502EC17F645BB008A54D2 /* libGLEW.dylib */; };
 		7F4502EF17F647FE008A54D2 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E717F5C622008A54D2 /* minimal.vsh */; };
 		7F4502F017F64801008A54D2 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E817F5C62E008A54D2 /* minimal.fsh */; };
 /* End PBXBuildFile section */
@@ -48,7 +47,6 @@
 		7F4502E517F5C590008A54D2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = AGPLab1/SDL2.framework; sourceTree = "<group>"; };
 		7F4502E717F5C622008A54D2 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
 		7F4502E817F5C62E008A54D2 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
-		7F4502EC17F645BB008A54D2 /* libGLEW.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.dylib; path = ../../../../../usr/local/Cellar/glew/1.10.0/lib/libGLEW.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +56,6 @@
 			files = (
 				7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */,
 				7F4502E617F5C590008A54D2 /* SDL2.framework in Frameworks */,
-				7F4502ED17F645BB008A54D2 /* libGLEW.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +93,6 @@
 		7F4502D917F5A28C008A54D2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7F4502EC17F645BB008A54D2 /* libGLEW.dylib */,
 				7F4502E517F5C590008A54D2 /* SDL2.framework */,
 				7F4502E317F5C487008A54D2 /* OpenGL.framework */,
 			);
