@@ -137,7 +137,10 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
         return NULL;
     }
 
-    fprintf(stderr, "OpenGL dummy version: %s\n", glGetString(GL_VERSION));
+    // debug info
+
+    fprintf(stderr, "[DUMMY] OpenGL version: %s\n", glGetString(GL_VERSION));
+    fprintf(stderr, "[DUMMY] GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     SDL_GL_DeleteContext(*ctx);
     SDL_DestroyWindow(wnd);
@@ -148,8 +151,8 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     wnd = SDL_CreateWindow("AGPLab1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                        1280, 720,
@@ -168,7 +171,10 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
         return NULL;
     }
 
+    // debug info
+
     fprintf(stderr, "OpenGL version: %s\n", glGetString(GL_VERSION));
+    fprintf(stderr, "GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // enable vsync
     SDL_GL_SetSwapInterval(1);
