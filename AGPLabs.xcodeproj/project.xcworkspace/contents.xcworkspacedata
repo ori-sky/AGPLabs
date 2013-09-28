@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:AGPLab1.xcodeproj">
+      location = "self:AGPLabs.xcodeproj">
    </FileRef>
 </Workspace>

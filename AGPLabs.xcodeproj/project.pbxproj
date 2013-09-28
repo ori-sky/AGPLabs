@@ -141,7 +141,7 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Shockk;
 			};
-			buildConfigurationList = 7F4502C617F5A1C5008A54D2 /* Build configuration list for PBXProject "AGPLab1" */;
+			buildConfigurationList = 7F4502C617F5A1C5008A54D2 /* Build configuration list for PBXProject "AGPLabs" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -281,7 +281,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7F4502C617F5A1C5008A54D2 /* Build configuration list for PBXProject "AGPLab1" */ = {
+		7F4502C617F5A1C5008A54D2 /* Build configuration list for PBXProject "AGPLabs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7F4502D217F5A1C5008A54D2 /* Debug */,
@@ -297,6 +297,7 @@
 				7F4502D617F5A1C5008A54D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
