@@ -329,12 +329,8 @@ int main(int argc, const char ** argv)
     SDL_Event e;
     for(unsigned char running=1; running;)
     {
-        unsigned char event_avail = 1;
-        for(;;)
+        while(SDL_PollEvent(&e))
         {
-            event_avail = SDL_PollEvent(&e);
-            if(!event_avail) break;
-
             switch(e.type)
             {
                 case SDL_QUIT:
