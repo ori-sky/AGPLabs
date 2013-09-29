@@ -177,7 +177,7 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
     fprintf(stderr, "GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // enable vsync
-    //SDL_GL_SetSwapInterval(1);
+    SDL_GL_SetSwapInterval(1);
 
     return wnd;
 }
@@ -329,24 +329,29 @@ int main(int argc, const char ** argv)
     SDL_Event e;
     for(unsigned char running=1; running;)
     {
-        SDL_PollEvent(&e);
-
-        switch(e.type)
+        unsigned char event_avail = 1;
+        for(;;)
         {
-            case SDL_QUIT:
+            event_avail = SDL_PollEvent(&e);
+            if(!event_avail) break;
+
+            switch(e.type)
             {
-                running = 0;
-                break;
-            }
-            case SDL_KEYDOWN:
-            {
-                switch(e.key.keysym.sym)
+                case SDL_QUIT:
                 {
-                    case SDLK_ESCAPE:
-                        running = 0;
-                        break;
+                    running = 0;
+                    break;
                 }
-                break;
+                case SDL_KEYDOWN:
+                {
+                    switch(e.key.keysym.sym)
+                    {
+                        case SDLK_ESCAPE:
+                            running = 0;
+                            break;
+                    }
+                    break;
+                }
             }
         }
 
