@@ -177,7 +177,7 @@ SDL_Window * setup_rc(SDL_GLContext *ctx)
     fprintf(stderr, "GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // enable vsync
-    SDL_GL_SetSwapInterval(1);
+    //SDL_GL_SetSwapInterval(1);
 
     return wnd;
 }
