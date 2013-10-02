@@ -133,8 +133,6 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(p_id, v_id);
     glAttachShader(p_id, f_id);
 
-
-
     glBindAttribLocation(p_id, BLOCKGAME_ATTRIB_VERTEX, "a_vVertex");
     //glBindAttribLocation(p_id, ATTRIB_COLOR, "a_vColor");
     //glBindAttribLocation(p_id, ATTRIB_NORMAL, "a_vNormal");
@@ -159,6 +157,31 @@ bool BlockGame::Init(void)
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("minimal.vsh", "minimal.fsh")) return false;
 
+    static GLfloat vertices[] =
+    {
+        0, 0, 0,
+        1, 0, 0,
+        0, 1, 0
+    };
+
+    glGenVertexArrays(1, &this->vao);
+    glBindVertexArray(this->vao);
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, 3 * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(BLOCKGAME_ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(BLOCKGAME_ATTRIB_VERTEX);
+
+    static GLubyte indices[] =
+    {
+        0, 1, 2
+    };
+
+    glGenBuffers(1, &this->ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3, indices, GL_STATIC_DRAW);
+
     return true;
 }
 
@@ -178,6 +201,9 @@ bool BlockGame::Draw(void)
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    //glBindVertexArray(this->vao);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, NULL);
 
     SDL_GL_SwapWindow(this->wnd);
 
