@@ -34,6 +34,8 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
+#include "ResourceManager.h"
+
 #define BLOCKGAME_ATTRIB_VERTEX 0
 
 class BlockGame
@@ -51,7 +53,7 @@ public:
 
     bool InitSDL(void);
     bool InitGLEW(void);
-    bool InitShaders(const char *v_src, const char *f_src);
+    bool InitShaders(const char *v_path, const char *f_path);
     bool DestroySDL(void);
 
     bool Init(void);

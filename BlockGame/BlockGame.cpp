@@ -85,28 +85,29 @@ bool BlockGame::InitGLEW(void)
     return true;
 }
 
-bool BlockGame::InitShaders(const char *v_src, const char *f_src)
+bool BlockGame::InitShaders(const char *v_path, const char *f_path)
 {
+    long v_len, f_len;
+    const char *v_src = ResourceManager::Load(v_path, &v_len);
+    const char *f_src = ResourceManager::Load(f_path, &f_len);
+
     if(v_src == NULL)
     {
-        fprintf(stderr, "::InitShaders: error: v_src=NULL\n");
+        fprintf(stderr, "::InitShaders: error: failed to load vertex shader\n");
         return false;
     }
 
     if(f_src == NULL)
     {
-        fprintf(stderr, "::InitShaders: error: f_src=NULL\n");
+        fprintf(stderr, "::InitShaders: error: failed to load fragment shader\n");
         return false;
     }
 
     GLuint v_id = glCreateShader(GL_VERTEX_SHADER);
     GLuint f_id = glCreateShader(GL_FRAGMENT_SHADER);
 
-    GLint v_len = strlen(v_src);
-    GLint f_len = strlen(f_src);
-
-    glShaderSource(v_id, 1, &v_src, &v_len);
-    glShaderSource(f_id, 1, &f_src, &f_len);
+    glShaderSource(v_id, 1, &v_src, (GLint *)&v_len);
+    glShaderSource(f_id, 1, &f_src, (GLint *)&f_len);
 
     GLint compile_status;
 
@@ -156,7 +157,8 @@ bool BlockGame::Init(void)
 {
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
-    if(!this->InitShaders("", "")) return false;
+    if(!this->InitShaders("minimal.vsh", "minimal.fsh")) return false;
+
     return true;
 }
 
@@ -174,6 +176,11 @@ bool BlockGame::HandleSDL(SDL_Event *e)
 
 bool BlockGame::Draw(void)
 {
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    SDL_GL_SwapWindow(this->wnd);
+
     return true;
 }
 

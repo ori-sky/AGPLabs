@@ -3,7 +3,7 @@ CXXFLAGS=-g -c -Wall -I../include
 LIBPATHS=-L../lib/x86 -L../lib/x64
 LDFLAGS=-g $(LIBPATHS) -lSDL2 -lGLEW -lrt -ldl -lpthread -lGL
 
-SRCS=main.cpp BlockGame.cpp
+SRCS=main.cpp BlockGame.cpp ResourceManager.cpp
 OBJS=$(SRCS:.cpp=.o)
 EXECUTABLE=BlockGame
 
