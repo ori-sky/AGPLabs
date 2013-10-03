@@ -129,17 +129,17 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
         return false;
     }
 
-    GLuint p_id = glCreateProgram();
-    glAttachShader(p_id, v_id);
-    glAttachShader(p_id, f_id);
+    this->program_id = glCreateProgram();
+    glAttachShader(this->program_id, v_id);
+    glAttachShader(this->program_id, f_id);
 
-    glBindAttribLocation(p_id, BLOCKGAME_ATTRIB_VERTEX, "a_vVertex");
+    glBindAttribLocation(this->program_id, BLOCKGAME_ATTRIB_VERTEX, "a_vVertex");
     //glBindAttribLocation(p_id, ATTRIB_COLOR, "a_vColor");
     //glBindAttribLocation(p_id, ATTRIB_NORMAL, "a_vNormal");
     //glBindAttribLocation(p_id, ATTRIB_TEXCOORD, "a_vTexCoord");
 
-    glLinkProgram(p_id);
-    glUseProgram(p_id);
+    glLinkProgram(this->program_id);
+    glUseProgram(this->program_id);
 
     return true;
 }
@@ -157,11 +157,27 @@ bool BlockGame::Init(void)
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("minimal.vsh", "minimal.fsh")) return false;
 
-    static GLfloat vertices[] =
+    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    static glm::i8vec4 const vertices[] =
     {
-        0, 0, 0,
-        1, 0, 0,
-        0, 1, 0
+         glm::i8vec4(-1, -1, -1,  0),
+         glm::i8vec4(-1, -1,  1,  0),
+         glm::i8vec4(-1,  1, -1,  0),
+         glm::i8vec4(-1,  1,  1,  0),
+         glm::i8vec4( 1, -1, -1,  0),
+         glm::i8vec4( 1, -1,  1,  0),
+         glm::i8vec4( 1,  1, -1,  0),
+         glm::i8vec4( 1,  1,  1,  0),
+
+         glm::i8vec4(-1,  0,  0,  0),
+         glm::i8vec4( 1,  0,  0,  0),
+         glm::i8vec4( 0, -1,  0,  0),
+         glm::i8vec4( 0,  1,  0,  0),
+         glm::i8vec4( 0,  0, -1,  0),
+         glm::i8vec4( 0,  0,  1,  0),
     };
 
     glGenVertexArrays(1, &this->vao);
@@ -169,18 +185,34 @@ bool BlockGame::Init(void)
 
     glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, 3 * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(BLOCKGAME_ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //glVertexAttribPointer(BLOCKGAME_ATTRIB_VERTEX, 4, GL_BYTE, GL_FALSE, 0, NULL);
+    glVertexAttribIPointer(BLOCKGAME_ATTRIB_VERTEX, 4, GL_BYTE, 0, NULL);
     glEnableVertexAttribArray(BLOCKGAME_ATTRIB_VERTEX);
 
-    static GLubyte indices[] =
+    static glm::u8vec3 const indices[] =
     {
-        0, 1, 2
+        // left side
+        glm::u8vec3(8, 0, 2),
+        glm::u8vec3(8, 2, 3),
+        glm::u8vec3(8, 3, 1),
+        glm::u8vec3(8, 1, 0),
+
+        // right side
+        glm::u8vec3(9, 4, 5),
+        glm::u8vec3(9, 5, 7),
+        glm::u8vec3(9, 7, 6),
+        glm::u8vec3(9, 6, 4),
+
+        glm::u8vec3(10, 0, 4),
+        glm::u8vec3(10, 4, 5),
+        glm::u8vec3(10, 5, 1),
+        glm::u8vec3(10, 1, 0),
     };
 
     glGenBuffers(1, &this->ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     return true;
 }
@@ -199,11 +231,25 @@ bool BlockGame::HandleSDL(SDL_Event *e)
 
 bool BlockGame::Draw(void)
 {
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm::mat4 matIdentity(1.0f);
+    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
+    glm::mat4 matModelView = glm::translate(matIdentity, glm::vec3(0.0f, 0.0f, -4.0f));
+
+    static float r = 0.0f;
+    matModelView = glm::rotate(matModelView, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    matModelView = glm::rotate(matModelView, r+=0.1, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
+    GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
+
+    glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
+    glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
 
     //glBindVertexArray(this->vao);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, NULL);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, NULL);
 
     SDL_GL_SwapWindow(this->wnd);
 

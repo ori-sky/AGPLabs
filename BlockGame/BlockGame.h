@@ -34,6 +34,11 @@
 #include <OpenGL/gl3ext.h>
 #endif
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/type_precision.hpp>
+
 #include "ResourceManager.h"
 
 #define BLOCKGAME_ATTRIB_VERTEX 0
@@ -58,6 +63,8 @@ class BlockGame
 protected:
     SDL_Window *wnd;
     SDL_GLContext ctx;
+
+    GLuint program_id;
 
     GLuint vao;
     GLuint vbo;
