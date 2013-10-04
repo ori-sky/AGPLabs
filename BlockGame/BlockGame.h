@@ -76,6 +76,8 @@ protected:
     GLuint ibo;
 
     glm::vec3 position;
+    glm::vec3 rotation;
+    float obj_rotation;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
 

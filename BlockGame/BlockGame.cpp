@@ -178,6 +178,8 @@ bool BlockGame::Init(void)
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     this->position = glm::vec3(0.0f, 0.0f, -4.0f);
+    this->rotation = glm::vec3(0);
+    this->obj_rotation = 0;
 
     static glm::i8vec4 const vertices[] =
     {
@@ -348,45 +350,58 @@ bool BlockGame::Update(float seconds)
             case SDLK_q:
                 return false;
             case SDLK_w:
-                this->position.z += 0.1f;
+                this->position.z += 10.0f * seconds;
                 break;
             case SDLK_s:
-                this->position.z -= 0.1f;
+                this->position.z -= 10.0f * seconds;
                 break;
             case SDLK_a:
-                this->position.x += 0.1f;
+                this->position.x += 10.0f * seconds;
                 break;
             case SDLK_d:
-                this->position.x -= 0.1f;
+                this->position.x -= 10.0f * seconds;
+                break;
+            case SDLK_e:
+                this->position.y -= 10.0f * seconds;
+                break;
+            case SDLK_c:
+                this->position.y += 10.0f * seconds;
                 break;
         }
     }
+
+    this->obj_rotation += 40.0f * seconds;
 
     return true;
 }
 
 bool BlockGame::Draw(void)
 {
-    static float r = 0.0f;
-    r += 0.5f;
-
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4 matIdentity(1.0f);
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
+
     glm::mat4 matModelView = glm::translate(matIdentity, this->position);
-    matModelView = glm::rotate(matModelView, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    matModelView = glm::rotate(matModelView, r, glm::vec3(0.0f, 1.0f, 0.0f));
+    matModelView = glm::rotate(matModelView, this->rotation.x, glm::vec3(1, 0, 0));
+    matModelView = glm::rotate(matModelView, this->rotation.y, glm::vec3(0, 1, 0));
+    matModelView = glm::rotate(matModelView, this->rotation.z, glm::vec3(0, 0, 1));
+
+    glm::mat4 matObjectModelView = glm::rotate(matModelView, this->obj_rotation, glm::vec3(0, 1, 0));
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
+    GLint u_matObjectModelView = glGetUniformLocation(this->program_id, "u_matObjectModelView");
+
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
+    glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
 
-    //glBindVertexArray(this->vao);
     GLint firsts[] = {0, 6, 12, 18, 24, 30};
     GLint counts[] = {6, 6, 6, 6, 6, 6};
+
+    //glBindVertexArray(this->vao);
     glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
 
     SDL_GL_SwapWindow(this->wnd);
