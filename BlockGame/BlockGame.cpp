@@ -58,7 +58,7 @@ bool BlockGame::InitSDL(void)
 
     // create real window and context
 
-    this->wnd = SDL_CreateWindow("AGPLab1",
+    this->wnd = SDL_CreateWindow("BlockGame",
                                  SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                  1280, 720,
                                  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
