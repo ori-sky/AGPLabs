@@ -171,7 +171,7 @@ bool BlockGame::Init(void)
 {
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
-    if(!this->InitShaders("minimal.vsh", "minimal.fsh")) return false;
+    if(!this->InitShaders("basiclighting.vsh", "basiclighting.fsh")) return false;
 
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_BLEND);

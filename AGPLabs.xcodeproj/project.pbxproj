@@ -19,8 +19,8 @@
 		7FE07DF917FEAC4400007251 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE07DF717FEAC4400007251 /* ResourceManager.cpp */; };
 		7FE07DFF17FEACC500007251 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
 		7FE07E0017FEACC600007251 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
-		7FE07E0217FEACEC00007251 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DFB17FEAC6000007251 /* minimal.fsh */; };
-		7FE07E0317FEACEE00007251 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DFC17FEAC6000007251 /* minimal.vsh */; };
+		7FE07E0217FEACEC00007251 /* basiclighting.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DFB17FEAC6000007251 /* basiclighting.fsh */; };
+		7FE07E0317FEACEE00007251 /* basiclighting.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DFC17FEAC6000007251 /* basiclighting.vsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,8 +61,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				7FE07E0317FEACEE00007251 /* minimal.vsh in CopyFiles */,
-				7FE07E0217FEACEC00007251 /* minimal.fsh in CopyFiles */,
+				7FE07E0317FEACEE00007251 /* basiclighting.vsh in CopyFiles */,
+				7FE07E0217FEACEC00007251 /* basiclighting.fsh in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,8 +82,8 @@
 		7FE07DF617FEAC4400007251 /* BlockGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockGame.cpp; sourceTree = "<group>"; };
 		7FE07DF717FEAC4400007251 /* ResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
 		7FE07DFA17FEAC6000007251 /* BlockGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockGame.h; sourceTree = "<group>"; };
-		7FE07DFB17FEAC6000007251 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
-		7FE07DFC17FEAC6000007251 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
+		7FE07DFB17FEAC6000007251 /* basiclighting.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basiclighting.fsh; sourceTree = "<group>"; };
+		7FE07DFC17FEAC6000007251 /* basiclighting.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basiclighting.vsh; sourceTree = "<group>"; };
 		7FE07DFD17FEAC6000007251 /* ResourceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,11 +159,11 @@
 		7FE07DEE17FEABBA00007251 /* BlockGame */ = {
 			isa = PBXGroup;
 			children = (
+				7FE07DFB17FEAC6000007251 /* basiclighting.fsh */,
+				7FE07DFC17FEAC6000007251 /* basiclighting.vsh */,
 				7FE07DF617FEAC4400007251 /* BlockGame.cpp */,
 				7FE07DFA17FEAC6000007251 /* BlockGame.h */,
 				7FE07DEF17FEABBA00007251 /* main.cpp */,
-				7FE07DFB17FEAC6000007251 /* minimal.fsh */,
-				7FE07DFC17FEAC6000007251 /* minimal.vsh */,
 				7FE07DF717FEAC4400007251 /* ResourceManager.cpp */,
 				7FE07DFD17FEAC6000007251 /* ResourceManager.h */,
 				7FE07DFE17FEAC7D00007251 /* Supporting Files */,
@@ -421,6 +421,7 @@
 				7FE07DF417FEABBA00007251 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
