@@ -13,6 +13,14 @@
 		7F4502EF17F647FE008A54D2 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E717F5C622008A54D2 /* minimal.vsh */; };
 		7F4502F017F64801008A54D2 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E817F5C62E008A54D2 /* minimal.fsh */; };
 		7FC4003817F6F4110066CEA2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
+		7FE07DF017FEABBA00007251 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE07DEF17FEABBA00007251 /* main.cpp */; };
+		7FE07DF217FEABBA00007251 /* BlockGame.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DF117FEABBA00007251 /* BlockGame.1 */; };
+		7FE07DF817FEAC4400007251 /* BlockGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE07DF617FEAC4400007251 /* BlockGame.cpp */; };
+		7FE07DF917FEAC4400007251 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE07DF717FEAC4400007251 /* ResourceManager.cpp */; };
+		7FE07DFF17FEACC500007251 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
+		7FE07E0017FEACC600007251 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
+		7FE07E0217FEACEC00007251 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DFB17FEAC6000007251 /* minimal.fsh */; };
+		7FE07E0317FEACEE00007251 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DFC17FEAC6000007251 /* minimal.vsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +45,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7FE07DEB17FEABBA00007251 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				7FE07DF217FEABBA00007251 /* BlockGame.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		7FE07E0117FEACE200007251 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				7FE07E0317FEACEE00007251 /* minimal.vsh in CopyFiles */,
+				7FE07E0217FEACEC00007251 /* minimal.fsh in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +76,15 @@
 		7F4502E717F5C622008A54D2 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
 		7F4502E817F5C62E008A54D2 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
 		7FC4003717F6F4110066CEA2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		7FE07DED17FEABBA00007251 /* BlockGame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BlockGame; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FE07DEF17FEABBA00007251 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7FE07DF117FEABBA00007251 /* BlockGame.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BlockGame.1; sourceTree = "<group>"; };
+		7FE07DF617FEAC4400007251 /* BlockGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockGame.cpp; sourceTree = "<group>"; };
+		7FE07DF717FEAC4400007251 /* ResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
+		7FE07DFA17FEAC6000007251 /* BlockGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockGame.h; sourceTree = "<group>"; };
+		7FE07DFB17FEAC6000007251 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
+		7FE07DFC17FEAC6000007251 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
+		7FE07DFD17FEAC6000007251 /* ResourceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +97,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7FE07DEA17FEABBA00007251 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FE07DFF17FEACC500007251 /* OpenGL.framework in Frameworks */,
+				7FE07E0017FEACC600007251 /* SDL2.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -66,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				7F4502CD17F5A1C5008A54D2 /* AGPLab1 */,
+				7FE07DEE17FEABBA00007251 /* BlockGame */,
 				7F4502D917F5A28C008A54D2 /* Frameworks */,
 				7F4502CC17F5A1C5008A54D2 /* Products */,
 			);
@@ -75,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				7F4502CB17F5A1C5008A54D2 /* AGPLab1 */,
+				7FE07DED17FEABBA00007251 /* BlockGame */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,8 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				7F4502CE17F5A1C5008A54D2 /* main.cpp */,
-				7F4502E717F5C622008A54D2 /* minimal.vsh */,
 				7F4502E817F5C62E008A54D2 /* minimal.fsh */,
+				7F4502E717F5C622008A54D2 /* minimal.vsh */,
 				7F4502DA17F5A29A008A54D2 /* Supporting Files */,
 			);
 			path = AGPLab1;
@@ -103,6 +152,29 @@
 			isa = PBXGroup;
 			children = (
 				7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7FE07DEE17FEABBA00007251 /* BlockGame */ = {
+			isa = PBXGroup;
+			children = (
+				7FE07DF617FEAC4400007251 /* BlockGame.cpp */,
+				7FE07DFA17FEAC6000007251 /* BlockGame.h */,
+				7FE07DEF17FEABBA00007251 /* main.cpp */,
+				7FE07DFB17FEAC6000007251 /* minimal.fsh */,
+				7FE07DFC17FEAC6000007251 /* minimal.vsh */,
+				7FE07DF717FEAC4400007251 /* ResourceManager.cpp */,
+				7FE07DFD17FEAC6000007251 /* ResourceManager.h */,
+				7FE07DFE17FEAC7D00007251 /* Supporting Files */,
+			);
+			path = BlockGame;
+			sourceTree = "<group>";
+		};
+		7FE07DFE17FEAC7D00007251 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7FE07DF117FEABBA00007251 /* BlockGame.1 */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -128,6 +200,24 @@
 			productReference = 7F4502CB17F5A1C5008A54D2 /* AGPLab1 */;
 			productType = "com.apple.product-type.tool";
 		};
+		7FE07DEC17FEABBA00007251 /* BlockGame */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FE07DF517FEABBA00007251 /* Build configuration list for PBXNativeTarget "BlockGame" */;
+			buildPhases = (
+				7FE07DE917FEABBA00007251 /* Sources */,
+				7FE07DEA17FEABBA00007251 /* Frameworks */,
+				7FE07DEB17FEABBA00007251 /* CopyFiles */,
+				7FE07E0117FEACE200007251 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BlockGame;
+			productName = BlockGame;
+			productReference = 7FE07DED17FEABBA00007251 /* BlockGame */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -150,6 +240,7 @@
 			projectRoot = "";
 			targets = (
 				7F4502CA17F5A1C5008A54D2 /* AGPLab1 */,
+				7FE07DEC17FEABBA00007251 /* BlockGame */,
 			);
 		};
 /* End PBXProject section */
@@ -160,6 +251,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F4502CF17F5A1C5008A54D2 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FE07DE917FEABBA00007251 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FE07DF017FEABBA00007251 /* main.cpp in Sources */,
+				7FE07DF817FEAC4400007251 /* BlockGame.cpp in Sources */,
+				7FE07DF917FEAC4400007251 /* ResourceManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +363,36 @@
 			};
 			name = Release;
 		};
+		7FE07DF317FEABBA00007251 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/lib";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7FE07DF417FEABBA00007251 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/lib";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -282,6 +413,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		7FE07DF517FEABBA00007251 /* Build configuration list for PBXNativeTarget "BlockGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FE07DF317FEABBA00007251 /* Debug */,
+				7FE07DF417FEABBA00007251 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
