@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-g -c -Wall -I../include
+CXXFLAGS=-g -c -Wall -static-libstdc++ -I../include
 LIBPATHS=-L../lib/x86 -L../lib/x64
 LDFLAGS=-g $(LIBPATHS) -lSDL2 -lGLEW -lrt -ldl -lpthread -lGL
 
