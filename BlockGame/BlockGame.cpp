@@ -177,6 +177,8 @@ bool BlockGame::Init(void)
     //glEnable(GL_BLEND);
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    this->position = glm::vec3(0.0f, 0.0f, -4.0f);
+
     static glm::i8vec4 const vertices[] =
     {
         // left
@@ -303,7 +305,61 @@ bool BlockGame::HandleSDL(SDL_Event *e)
     {
         case SDL_QUIT:
             return false;
+        case SDL_KEYDOWN:
+            // remove key if already in pressed_keys
+            for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
+                i!=this->pressed_keys.end();
+                ++i)
+            {
+                if(*i == e->key.keysym.sym)
+                {
+                    this->pressed_keys.erase(i);
+                    break;
+                }
+            }
+
+            this->pressed_keys.push_back(e->key.keysym.sym);
             break;
+        case SDL_KEYUP:
+            // remove key if in pressed_keys
+            for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
+                i!=this->pressed_keys.end(); ++i)
+            {
+                if(*i == e->key.keysym.sym)
+                {
+                    this->pressed_keys.erase(i);
+                    break;
+                }
+            }
+            break;
+    }
+
+    return true;
+}
+
+bool BlockGame::Update(float seconds)
+{
+    for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
+        i!=this->pressed_keys.end(); ++i)
+    {
+        switch(*i)
+        {
+            case SDLK_ESCAPE:
+            case SDLK_q:
+                return false;
+            case SDLK_w:
+                this->position.z += 0.1f;
+                break;
+            case SDLK_s:
+                this->position.z -= 0.1f;
+                break;
+            case SDLK_a:
+                this->position.x += 0.1f;
+                break;
+            case SDLK_d:
+                this->position.x -= 0.1f;
+                break;
+        }
     }
 
     return true;
@@ -319,7 +375,7 @@ bool BlockGame::Draw(void)
 
     glm::mat4 matIdentity(1.0f);
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
-    glm::mat4 matModelView = glm::translate(matIdentity, glm::vec3(0.0f, 0.0f, -4.0f));
+    glm::mat4 matModelView = glm::translate(matIdentity, this->position);
     matModelView = glm::rotate(matModelView, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     matModelView = glm::rotate(matModelView, r, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -348,10 +404,31 @@ int BlockGame::Run(int argc, const char **argv)
 {
     if(!this->Init()) return 1;
 
+    Uint32 current_time = SDL_GetTicks();
+    Uint32 previous_time;
+    float accumulator = 0.0f;
+    const float timestep = 1.0f / 60.0f;
+
     SDL_Event e;
     for(this->running=true; this->running;)
     {
-        if(!this->Draw()) this->running = false;
+        previous_time = current_time;
+        current_time = SDL_GetTicks();
+        accumulator += (current_time - previous_time) / 1000.0f;
+
+        for(;accumulator >= timestep; accumulator -= timestep)
+        {
+            if(!this->Update(timestep))
+            {
+                this->running = false;
+                break;
+            }
+        }
+
+        if(this->running)
+        {
+            if(!this->Draw()) this->running = false;
+        }
 
         while(SDL_PollEvent(&e))
         {

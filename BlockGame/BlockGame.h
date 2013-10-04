@@ -17,8 +17,9 @@
 #ifndef BLOCKGAME_H
 #define BLOCKGAME_H
 
-#include "stdio.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
+#include <vector>
 
 #include <SDL.h>
 
@@ -62,6 +63,8 @@
 class BlockGame
 {
 protected:
+    std::vector<SDL_Keycode> pressed_keys;
+    
     SDL_Window *wnd;
     SDL_GLContext ctx;
 
@@ -71,6 +74,8 @@ protected:
     GLuint vbo_vertex;
     GLuint vbo_normal;
     GLuint ibo;
+
+    glm::vec3 position;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
 
@@ -84,6 +89,7 @@ public:
     bool Init(void);
     bool HandleSDL(SDL_Event *e);
     bool Draw(void);
+    bool Update(float seconds);
     bool Destroy(void);
     int Run(int argc = 0, const char **argv = NULL);
 };
