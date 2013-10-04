@@ -174,11 +174,13 @@ bool BlockGame::Init(void)
     if(!this->InitShaders("basiclighting.vsh", "basiclighting.fsh")) return false;
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     //glEnable(GL_BLEND);
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    this->position = glm::vec3(0.0f, 0.0f, -4.0f);
-    this->rotation = glm::vec3(0);
+    this->matIdentity = glm::mat4(1.0f);
+    this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
     this->obj_rotation = 0;
 
     static glm::i8vec4 const vertices[] =
@@ -186,49 +188,49 @@ bool BlockGame::Init(void)
         // left
         glm::i8vec4(-1,  0,  0, 0),
         glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
         glm::i8vec4(-1, -1,  1, 0),
+        glm::i8vec4(-1,  1,  1, 0),
+        glm::i8vec4(-1,  1, -1, 0),
         glm::i8vec4(-1, -1, -1, 0),
 
         // right
         glm::i8vec4( 1,  0,  0, 0),
         glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
         glm::i8vec4( 1,  1, -1, 0),
+        glm::i8vec4( 1,  1,  1, 0),
+        glm::i8vec4( 1, -1,  1, 0),
         glm::i8vec4( 1, -1, -1, 0),
 
         // bottom
         glm::i8vec4( 0, -1,  0, 0),
         glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
         glm::i8vec4( 1, -1, -1, 0),
+        glm::i8vec4( 1, -1,  1, 0),
+        glm::i8vec4(-1, -1,  1, 0),
         glm::i8vec4(-1, -1, -1, 0),
 
         // top
         glm::i8vec4( 0,  1,  0, 0),
         glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
         glm::i8vec4(-1,  1,  1, 0),
+        glm::i8vec4( 1,  1,  1, 0),
+        glm::i8vec4( 1,  1, -1, 0),
         glm::i8vec4(-1,  1, -1, 0),
 
         // front
         glm::i8vec4( 0,  0, -1, 0),
         glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
         glm::i8vec4(-1,  1, -1, 0),
+        glm::i8vec4( 1,  1, -1, 0),
+        glm::i8vec4( 1, -1, -1, 0),
         glm::i8vec4(-1, -1, -1, 0),
 
         // back
         glm::i8vec4( 0,  0,  1, 0),
         glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
         glm::i8vec4( 1, -1,  1, 0),
+        glm::i8vec4( 1,  1,  1, 0),
+        glm::i8vec4(-1,  1,  1, 0),
         glm::i8vec4(-1, -1,  1, 0),
     };
 
@@ -341,36 +343,55 @@ bool BlockGame::HandleSDL(SDL_Event *e)
 
 bool BlockGame::Update(float seconds)
 {
+    const float movement_speed = 3.0f;
+    const float rotation_speed = 90.0f;
+
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
         i!=this->pressed_keys.end(); ++i)
     {
         switch(*i)
         {
             case SDLK_ESCAPE:
-            case SDLK_q:
                 return false;
             case SDLK_w:
-                this->position.z += 10.0f * seconds;
+                //this->camera = glm::translate(this->camera, glm::vec3(0, 0, 5.0f * seconds));
+                this->camera = glm::translate(this->matIdentity, glm::vec3(0, 0, movement_speed * seconds)) * this->camera;
                 break;
             case SDLK_s:
-                this->position.z -= 10.0f * seconds;
+                this->camera = glm::translate(this->matIdentity, glm::vec3(0, 0, -movement_speed * seconds)) * this->camera;
                 break;
             case SDLK_a:
-                this->position.x += 10.0f * seconds;
+                this->camera = glm::translate(this->matIdentity, glm::vec3(movement_speed * seconds, 0, 0)) * this->camera;
                 break;
             case SDLK_d:
-                this->position.x -= 10.0f * seconds;
+                this->camera = glm::translate(this->matIdentity, glm::vec3(-movement_speed * seconds, 0, 0)) * this->camera;
                 break;
-            case SDLK_e:
-                this->position.y -= 10.0f * seconds;
+            case SDLK_SPACE:
+                this->camera = glm::translate(this->matIdentity, glm::vec3(0, -movement_speed * seconds, 0)) * this->camera;
                 break;
             case SDLK_c:
-                this->position.y += 10.0f * seconds;
+                this->camera = glm::translate(this->matIdentity, glm::vec3(0, movement_speed * seconds, 0)) * this->camera;
+                break;
+            case SDLK_UP:
+                this->camera = glm::rotate(this->matIdentity, -rotation_speed * seconds, glm::vec3(1, 0, 0)) * this->camera;
+                break;
+            case SDLK_DOWN:
+                this->camera = glm::rotate(this->matIdentity, rotation_speed * seconds, glm::vec3(1, 0, 0)) * this->camera;
+                break;
+            case SDLK_LEFT:
+                this->camera = glm::rotate(this->matIdentity, -rotation_speed * seconds, glm::vec3(0, 1, 0)) * this->camera;
+                break;
+            case SDLK_RIGHT:
+                this->camera = glm::rotate(this->matIdentity, rotation_speed * seconds, glm::vec3(0, 1, 0)) * this->camera;
+                break;
+            case SDLK_q:
+                this->camera = glm::rotate(this->matIdentity, -rotation_speed * seconds, glm::vec3(0, 0, 1)) * this->camera;
+                break;
+            case SDLK_e:
+                this->camera = glm::rotate(this->matIdentity, rotation_speed * seconds, glm::vec3(0, 0, 1)) * this->camera;
                 break;
         }
     }
-
-    this->obj_rotation += 40.0f * seconds;
 
     return true;
 }
@@ -380,15 +401,10 @@ bool BlockGame::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matIdentity(1.0f);
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
+    glm::mat4 matModelView = this->camera;
 
-    glm::mat4 matModelView = glm::translate(matIdentity, this->position);
-    matModelView = glm::rotate(matModelView, this->rotation.x, glm::vec3(1, 0, 0));
-    matModelView = glm::rotate(matModelView, this->rotation.y, glm::vec3(0, 1, 0));
-    matModelView = glm::rotate(matModelView, this->rotation.z, glm::vec3(0, 0, 1));
-
-    glm::mat4 matObjectModelView = glm::rotate(matModelView, this->obj_rotation, glm::vec3(0, 1, 0));
+    glm::mat4 matObjectModelView = matModelView;//glm::rotate(matModelView, this->obj_rotation, glm::vec3(0, 1, 0));
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
@@ -422,7 +438,7 @@ int BlockGame::Run(int argc, const char **argv)
     Uint32 current_time = SDL_GetTicks();
     Uint32 previous_time;
     float accumulator = 0.0f;
-    const float timestep = 1.0f / 60.0f;
+    const float timestep = 1.0f / 120.0f;
 
     SDL_Event e;
     for(this->running=true; this->running;)

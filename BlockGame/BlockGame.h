@@ -75,8 +75,8 @@ protected:
     GLuint vbo_normal;
     GLuint ibo;
 
-    glm::vec3 position;
-    glm::vec3 rotation;
+    glm::mat4 matIdentity;
+    glm::mat4 camera;
     float obj_rotation;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
