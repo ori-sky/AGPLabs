@@ -1,8 +1,9 @@
 #version 150
 precision highp float;
 
-uniform mat4x4 u_matProjection;
-uniform mat4x4 u_matModelView;
+uniform mat4 u_matProjection;
+uniform mat4 u_matModelView;
+uniform mat4 u_matObjectModelView;
 
 smooth in vec4 v_vVertex;
 smooth in vec3 v_vNormal;
