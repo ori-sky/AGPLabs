@@ -1,3 +1,19 @@
+/*
+ *  Copyright 2013 David Farrell
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 #include "BlockGame.h"
 
 bool BlockGame::InitSDL(void)
@@ -37,15 +53,15 @@ bool BlockGame::InitSDL(void)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     // create real window and context
 
     this->wnd = SDL_CreateWindow("AGPLab1",
                                  SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                  1280, 720,
-                                 SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+                                 SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if(!this->wnd)
     {
         fprintf(stderr, "SDL_CreateWindow: error: %s\n", SDL_GetError());
@@ -163,56 +179,120 @@ bool BlockGame::Init(void)
 
     static glm::i8vec4 const vertices[] =
     {
-         glm::i8vec4(-1, -1, -1,  0),
-         glm::i8vec4(-1, -1,  1,  0),
-         glm::i8vec4(-1,  1, -1,  0),
-         glm::i8vec4(-1,  1,  1,  0),
-         glm::i8vec4( 1, -1, -1,  0),
-         glm::i8vec4( 1, -1,  1,  0),
-         glm::i8vec4( 1,  1, -1,  0),
-         glm::i8vec4( 1,  1,  1,  0),
+        // left
+        glm::i8vec4(-1,  0,  0, 0),
+        glm::i8vec4(-1, -1, -1, 0),
+        glm::i8vec4(-1,  1, -1, 0),
+        glm::i8vec4(-1,  1,  1, 0),
+        glm::i8vec4(-1, -1,  1, 0),
+        glm::i8vec4(-1, -1, -1, 0),
 
-         glm::i8vec4(-1,  0,  0,  0),
-         glm::i8vec4( 1,  0,  0,  0),
-         glm::i8vec4( 0, -1,  0,  0),
-         glm::i8vec4( 0,  1,  0,  0),
-         glm::i8vec4( 0,  0, -1,  0),
-         glm::i8vec4( 0,  0,  1,  0),
+        // right
+        glm::i8vec4( 1,  0,  0, 0),
+        glm::i8vec4( 1, -1, -1, 0),
+        glm::i8vec4( 1, -1,  1, 0),
+        glm::i8vec4( 1,  1,  1, 0),
+        glm::i8vec4( 1,  1, -1, 0),
+        glm::i8vec4( 1, -1, -1, 0),
+
+        // bottom
+        glm::i8vec4( 0, -1,  0, 0),
+        glm::i8vec4(-1, -1, -1, 0),
+        glm::i8vec4(-1, -1,  1, 0),
+        glm::i8vec4( 1, -1,  1, 0),
+        glm::i8vec4( 1, -1, -1, 0),
+        glm::i8vec4(-1, -1, -1, 0),
+
+        // top
+        glm::i8vec4( 0,  1,  0, 0),
+        glm::i8vec4(-1,  1, -1, 0),
+        glm::i8vec4( 1,  1, -1, 0),
+        glm::i8vec4( 1,  1,  1, 0),
+        glm::i8vec4(-1,  1,  1, 0),
+        glm::i8vec4(-1,  1, -1, 0),
+
+        // front
+        glm::i8vec4( 0,  0, -1, 0),
+        glm::i8vec4(-1, -1, -1, 0),
+        glm::i8vec4( 1, -1, -1, 0),
+        glm::i8vec4( 1,  1, -1, 0),
+        glm::i8vec4(-1,  1, -1, 0),
+        glm::i8vec4(-1, -1, -1, 0),
+
+        // back
+        glm::i8vec4( 0,  0,  1, 0),
+        glm::i8vec4(-1, -1,  1, 0),
+        glm::i8vec4(-1,  1,  1, 0),
+        glm::i8vec4( 1,  1,  1, 0),
+        glm::i8vec4( 1, -1,  1, 0),
+        glm::i8vec4(-1, -1,  1, 0),
+    };
+
+    static glm::i8vec4 const normals[] =
+    {
+        // left
+        glm::i8vec4(-1,  0,  0, 0),
+        glm::i8vec4(-1,  0,  0, 0),
+        glm::i8vec4(-1,  0,  0, 0),
+        glm::i8vec4(-1,  0,  0, 0),
+        glm::i8vec4(-1,  0,  0, 0),
+        glm::i8vec4(-1,  0,  0, 0),
+
+        // right
+        glm::i8vec4( 1,  0,  0, 0),
+        glm::i8vec4( 1,  0,  0, 0),
+        glm::i8vec4( 1,  0,  0, 0),
+        glm::i8vec4( 1,  0,  0, 0),
+        glm::i8vec4( 1,  0,  0, 0),
+        glm::i8vec4( 1,  0,  0, 0),
+
+        // bottom
+        glm::i8vec4( 0, -1,  0, 0),
+        glm::i8vec4( 0, -1,  0, 0),
+        glm::i8vec4( 0, -1,  0, 0),
+        glm::i8vec4( 0, -1,  0, 0),
+        glm::i8vec4( 0, -1,  0, 0),
+        glm::i8vec4( 0, -1,  0, 0),
+
+        // top
+        glm::i8vec4( 0,  1,  0, 0),
+        glm::i8vec4( 0,  1,  0, 0),
+        glm::i8vec4( 0,  1,  0, 0),
+        glm::i8vec4( 0,  1,  0, 0),
+        glm::i8vec4( 0,  1,  0, 0),
+        glm::i8vec4( 0,  1,  0, 0),
+
+        // front
+        glm::i8vec4( 0,  0, -1, 0),
+        glm::i8vec4( 0,  0, -1, 0),
+        glm::i8vec4( 0,  0, -1, 0),
+        glm::i8vec4( 0,  0, -1, 0),
+        glm::i8vec4( 0,  0, -1, 0),
+        glm::i8vec4( 0,  0, -1, 0),
+
+        // back
+        glm::i8vec4( 0,  0,  1, 0),
+        glm::i8vec4( 0,  0,  1, 0),
+        glm::i8vec4( 0,  0,  1, 0),
+        glm::i8vec4( 0,  0,  1, 0),
+        glm::i8vec4( 0,  0,  1, 0),
+        glm::i8vec4( 0,  0,  1, 0),
     };
 
     glGenVertexArrays(1, &this->vao);
     glBindVertexArray(this->vao);
 
-    glGenBuffers(1, &this->vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glGenBuffers(1, &this->vbo_vertex);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertex);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    //glVertexAttribPointer(BLOCKGAME_ATTRIB_VERTEX, 4, GL_BYTE, GL_FALSE, 0, NULL);
     glVertexAttribIPointer(BLOCKGAME_ATTRIB_VERTEX, 4, GL_BYTE, 0, NULL);
     glEnableVertexAttribArray(BLOCKGAME_ATTRIB_VERTEX);
 
-    static glm::u8vec3 const indices[] =
-    {
-        // left side
-        glm::u8vec3(8, 0, 2),
-        glm::u8vec3(8, 2, 3),
-        glm::u8vec3(8, 3, 1),
-        glm::u8vec3(8, 1, 0),
-
-        // right side
-        glm::u8vec3(9, 4, 5),
-        glm::u8vec3(9, 5, 7),
-        glm::u8vec3(9, 7, 6),
-        glm::u8vec3(9, 6, 4),
-
-        glm::u8vec3(10, 0, 4),
-        glm::u8vec3(10, 4, 5),
-        glm::u8vec3(10, 5, 1),
-        glm::u8vec3(10, 1, 0),
-    };
-
-    glGenBuffers(1, &this->ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glGenBuffers(1, &this->vbo_normal);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_normal);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+    glVertexAttribIPointer(BLOCKGAME_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
+    glEnableVertexAttribArray(BLOCKGAME_ATTRIB_NORMAL);
 
     return true;
 }
@@ -231,25 +311,27 @@ bool BlockGame::HandleSDL(SDL_Event *e)
 
 bool BlockGame::Draw(void)
 {
+    static float r = 0.0f;
+    r += 0.5f;
+
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4 matIdentity(1.0f);
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
     glm::mat4 matModelView = glm::translate(matIdentity, glm::vec3(0.0f, 0.0f, -4.0f));
-
-    static float r = 0.0f;
     matModelView = glm::rotate(matModelView, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    matModelView = glm::rotate(matModelView, r+=0.1, glm::vec3(0.0f, 1.0f, 0.0f));
+    matModelView = glm::rotate(matModelView, r, glm::vec3(0.0f, 1.0f, 0.0f));
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
-
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
 
     //glBindVertexArray(this->vao);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, NULL);
+    GLint firsts[] = {0, 6, 12, 18, 24, 30};
+    GLint counts[] = {6, 6, 6, 6, 6, 6};
+    glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
 
     SDL_GL_SwapWindow(this->wnd);
 

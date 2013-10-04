@@ -42,6 +42,7 @@
 #include "ResourceManager.h"
 
 #define BLOCKGAME_ATTRIB_VERTEX 0
+#define BLOCKGAME_ATTRIB_NORMAL 1
 
 #define BLOCKGAME_LEFT              0x0
 #define BLOCKGAME_RIGHT             0x1
@@ -67,7 +68,8 @@ protected:
     GLuint program_id;
 
     GLuint vao;
-    GLuint vbo;
+    GLuint vbo_vertex;
+    GLuint vbo_normal;
     GLuint ibo;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
