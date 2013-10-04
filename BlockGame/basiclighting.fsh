@@ -17,7 +17,7 @@ void main(void)
     vec3 vAmbient = vec3(0.05);
     vec3 vDiffuse = vec3(1.0, 0.4, 0.0);
     vec3 vSpecular = vec3(1.0, 0.8, 0.1);
-    vec4 vLightPos = vec4(4.0, 3.0, -2.0, 1.0);
+    vec4 vLightPos = vec4(3.0, 5.0, 3.0, 1.0);
 
     vec3 vColor = vAmbient;
 
@@ -38,13 +38,13 @@ void main(void)
         float fDivisor = 1.0 +
                          fDistance * 0.0 +
                          pow(fDistance, 2.0) * 0.0 +
-                         pow(fDistance, 3.0) * 0.01 +
-                         pow(fDistance, 4.0) * 0.0;
+                         pow(fDistance, 3.0) * 0.0001 +
+                         pow(fDistance, 4.0) * 0.0003;
         float fAttenuation = 1.0 / fDivisor;
         vColor += fAttenuation * vDiffuse * fNDotL;
 
         float fNDotHV = max(0.0, dot(vNormal, vHalfVector));
-        vColor += vSpecular * pow(fNDotHV, 64.0);
+        vColor += vSpecular * pow(fNDotHV, 1024.0);
     }
 
     o_vColor = vec4(vColor, 1.0);
