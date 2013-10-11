@@ -41,6 +41,7 @@
 #include <glm/gtc/type_precision.hpp>
 
 #include "ResourceManager.h"
+#include "Block.h"
 
 #define BLOCKGAME_ATTRIB_VERTEX 0
 #define BLOCKGAME_ATTRIB_NORMAL 1
