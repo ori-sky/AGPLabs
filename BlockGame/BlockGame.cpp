@@ -149,10 +149,8 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(this->program_id, v_id);
     glAttachShader(this->program_id, f_id);
 
-    glBindAttribLocation(this->program_id, BLOCKGAME_ATTRIB_VERTEX, "a_vVertex");
-    //glBindAttribLocation(p_id, ATTRIB_COLOR, "a_vColor");
-    //glBindAttribLocation(p_id, ATTRIB_NORMAL, "a_vNormal");
-    //glBindAttribLocation(p_id, ATTRIB_TEXCOORD, "a_vTexCoord");
+    glBindAttribLocation(this->program_id, BLOCK_ATTRIB_VERTEX, "a_vVertex");
+    glBindAttribLocation(this->program_id, BLOCK_ATTRIB_NORMAL, "a_vNormal");
 
     glLinkProgram(this->program_id);
     glUseProgram(this->program_id);
@@ -181,124 +179,8 @@ bool BlockGame::Init(void)
 
     this->matIdentity = glm::mat4(1.0f);
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
-    this->obj_rotation = 0;
 
-    static glm::i8vec4 const vertices[] =
-    {
-        // left
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-
-        // right
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-
-        // bottom
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-
-        // top
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-
-        // front
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-
-        // back
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-    };
-
-    static glm::i8vec4 const normals[] =
-    {
-        // left
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-
-        // right
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-
-        // bottom
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-
-        // top
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-
-        // front
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-
-        // back
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-    };
-
-    glGenVertexArrays(1, &this->vao);
-    glBindVertexArray(this->vao);
-
-    glGenBuffers(1, &this->vbo_vertex);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertex);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribIPointer(BLOCKGAME_ATTRIB_VERTEX, 4, GL_BYTE, 0, NULL);
-    glEnableVertexAttribArray(BLOCKGAME_ATTRIB_VERTEX);
-
-    glGenBuffers(1, &this->vbo_normal);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_normal);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-    glVertexAttribIPointer(BLOCKGAME_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
-    glEnableVertexAttribArray(BLOCKGAME_ATTRIB_NORMAL);
+    this->block.Init();
 
     return true;
 }
@@ -354,7 +236,6 @@ bool BlockGame::Update(float seconds)
             case SDLK_ESCAPE:
                 return false;
             case SDLK_w:
-                //this->camera = glm::translate(this->camera, glm::vec3(0, 0, 5.0f * seconds));
                 this->camera = glm::translate(this->matIdentity, glm::vec3(0, 0, movement_speed * seconds)) * this->camera;
                 break;
             case SDLK_s:
@@ -414,11 +295,7 @@ bool BlockGame::Draw(void)
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
     glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
 
-    GLint firsts[] = {0, 6, 12, 18, 24, 30};
-    GLint counts[] = {6, 6, 6, 6, 6, 6};
-
-    //glBindVertexArray(this->vao);
-    glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
+    this->block.Draw();
 
     SDL_GL_SwapWindow(this->wnd);
 

@@ -59,14 +59,10 @@ protected:
 
     GLuint program_id;
 
-    GLuint vao;
-    GLuint vbo_vertex;
-    GLuint vbo_normal;
-    GLuint ibo;
-
     glm::mat4 matIdentity;
     glm::mat4 camera;
-    float obj_rotation;
+
+    Block block;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
 
