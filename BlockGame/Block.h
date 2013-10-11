@@ -17,6 +17,8 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include <glm/gtc/type_precision.hpp>
+
 #include "Object.h"
 
 class Block : public Object<Block>
