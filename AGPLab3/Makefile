@@ -3,9 +3,9 @@ CXXFLAGS=-g -c -Wall -static-libstdc++ -I../include
 LIBPATHS=-L../lib/x86 -L../lib/x64
 LDFLAGS=-g $(LIBPATHS) -lSDL2 -lGLEW -lrt -ldl -lpthread -lGL
 
-SRCS=main.cpp BlockGame.cpp ResourceManager.cpp Block.cpp
+SRCS=main.cpp BlockGame.cpp ResourceManager.cpp
 OBJS=$(SRCS:.cpp=.o)
-EXECUTABLE=BlockGame
+EXECUTABLE=AGPLab3
 
 all: $(SRCS) $(EXECUTABLE)
 
