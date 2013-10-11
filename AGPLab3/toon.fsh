@@ -55,8 +55,8 @@ void main(void)
     vColor += round(vFinalDiffuse * 19.0) / 19.0;
 
     // toon scan blocking
-    vColor *= round((int(gl_FragCoord.x) % 37) / 23.0);
-    vColor *= round((int(gl_FragCoord.y) % 37) / 23.0);
+    vColor *= round((int(u_matProjection * gl_FragCoord.x) % 37) / 23.0);
+    vColor *= round((int(u_matProjection * gl_FragCoord.y) % 37) / 23.0);
     vColor /= 2.0;
 
     // specular toon shading
