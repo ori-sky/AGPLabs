@@ -17,7 +17,8 @@ void main(void)
     vec3 vAmbient = vec3(0.05);
     vec3 vDiffuse = vec3(1.0, 0.4, 0.0);
     vec3 vSpecular = vec3(1.0, 0.8, 0.1);
-    vec4 vLightPos = vec4(3.0, 5.0, 3.0, 1.0);
+    //vec4 vLightPos = vec4(3.0, 5.0, 3.0, 1.0);
+    vec4 vLightPos = vec4(0.0);
 
     vec3 vColor = vAmbient;
     vec3 vFinalDiffuse;
