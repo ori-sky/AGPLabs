@@ -59,6 +59,11 @@ void main(void)
     vColor *= round((int(u_matProjection * gl_FragCoord.y) % 37) / 23.0);
     vColor /= 2.0;
 
+    vColor.g *= 1.0 - fNDotHV * -(u_matModelView * vec4(vAux, 1.0)).y;
+    vColor.b *= 1.0 - fNDotHV * -(u_matModelView * vec4(vAux, 1.0)).y * 0;
+
+    if(vColor.g < 0.2) vColor = vec3(1.0, 0.3, 0.9);
+
     // specular toon shading
     vColor += round(vFinalSpecular * 7.0) / 7.0;
 
