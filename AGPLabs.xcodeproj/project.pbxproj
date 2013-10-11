@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F2178151808044800FA332F /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F2178121808044800FA332F /* Block.cpp */; };
 		7F4502CF17F5A1C5008A54D2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F4502CE17F5A1C5008A54D2 /* main.cpp */; };
 		7F4502D117F5A1C5008A54D2 /* AGPLab1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */; };
 		7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
@@ -69,6 +70,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7F2178121808044800FA332F /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
+		7F2178131808044800FA332F /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
+		7F2178141808044800FA332F /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		7F4502CB17F5A1C5008A54D2 /* AGPLab1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGPLab1; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F4502CE17F5A1C5008A54D2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab1.1; sourceTree = "<group>"; };
@@ -161,9 +165,12 @@
 			children = (
 				7FE07DFB17FEAC6000007251 /* basiclighting.fsh */,
 				7FE07DFC17FEAC6000007251 /* basiclighting.vsh */,
+				7F2178121808044800FA332F /* Block.cpp */,
+				7F2178131808044800FA332F /* Block.h */,
 				7FE07DF617FEAC4400007251 /* BlockGame.cpp */,
 				7FE07DFA17FEAC6000007251 /* BlockGame.h */,
 				7FE07DEF17FEABBA00007251 /* main.cpp */,
+				7F2178141808044800FA332F /* Object.h */,
 				7FE07DF717FEAC4400007251 /* ResourceManager.cpp */,
 				7FE07DFD17FEAC6000007251 /* ResourceManager.h */,
 				7FE07DFE17FEAC7D00007251 /* Supporting Files */,
@@ -259,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FE07DF017FEABBA00007251 /* main.cpp in Sources */,
+				7F2178151808044800FA332F /* Block.cpp in Sources */,
 				7FE07DF817FEAC4400007251 /* BlockGame.cpp in Sources */,
 				7FE07DF917FEAC4400007251 /* ResourceManager.cpp in Sources */,
 			);

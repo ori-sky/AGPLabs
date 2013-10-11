@@ -101,10 +101,10 @@ Block::Block(void)
 
 bool Block::Init(void)
 {
-    
+    return true;
 }
 
 bool Block::Draw(void)
 {
-    
+    return true;
 }
