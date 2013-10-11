@@ -123,14 +123,14 @@ bool Block::Init(void)
     glGenBuffers(1, &this->vbo_vertex);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertex);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribIPointer(BLOCKGAME_ATTRIB_VERTEX, 4, GL_BYTE, 0, NULL);
-    glEnableVertexAttribArray(BLOCKGAME_ATTRIB_VERTEX);
+    glVertexAttribIPointer(BLOCK_ATTRIB_VERTEX, 4, GL_BYTE, 0, NULL);
+    glEnableVertexAttribArray(BLOCK_ATTRIB_VERTEX);
 
     glGenBuffers(1, &this->vbo_normal);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_normal);
     glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-    glVertexAttribIPointer(BLOCKGAME_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
-    glEnableVertexAttribArray(BLOCKGAME_ATTRIB_NORMAL);
+    glVertexAttribIPointer(BLOCK_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
+    glEnableVertexAttribArray(BLOCK_ATTRIB_NORMAL);
 
     return true;
 }

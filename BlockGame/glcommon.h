@@ -14,32 +14,14 @@
  *  limitations under the License.
  */
 
-#ifndef BLOCK_H
-#define BLOCK_H
+#if defined(_WIN32) || defined(__linux__)
+#define GLEW_STATIC
+#include <GL/glew.h>
+#endif
 
-#include <glm/gtc/type_precision.hpp>
-
-#include "glcommon.h"
-#include "Object.h"
-
-#define BLOCK_ATTRIB_VERTEX 0
-#define BLOCK_ATTRIB_NORMAL 1
-
-class Block : public Object<Block>
-{
-protected:
-    glm::i8vec4 vertices[36];
-    glm::i8vec4 normals[36];
-
-    GLuint vao;
-    GLuint vbo_vertex;
-    GLuint vbo_normal;
-
-    // TODO: position
-public:
-    Block(void);
-    bool Init(void);
-    bool Draw(void);
-};
-
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#include <OpenGL/gl3.h>
+#include <OpenGL/gl3ext.h>
 #endif
