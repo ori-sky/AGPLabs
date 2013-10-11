@@ -26,8 +26,12 @@ class Block : public Object<Block>
 protected:
     glm::i8vec4 vertices[36];
     glm::i8vec4 normals[36];
+
+    // TODO: position
 public:
     Block(void);
+    bool Init(void);
+    bool Draw(void);
 };
 
 #endif

@@ -98,3 +98,13 @@ Block::Block(void)
     this->normals[34]  = glm::i8vec4( 0,  0,  1, 0);
     this->normals[35]  = glm::i8vec4( 0,  0,  1, 0);
 }
+
+bool Block::Init(void)
+{
+    
+}
+
+bool Block::Draw(void)
+{
+    
+}
