@@ -48,18 +48,18 @@ void main(void)
         float fAttenuation = 1.0 / fDivisor;
         vFinalDiffuse = fAttenuation * vDiffuse * fNDotL;
 
-        vFinalSpecular = vSpecular * pow(fNDotHV, 1024.0);
+        vFinalSpecular = vSpecular * pow(fNDotHV, 128.0);
     }
 
-    // toon shading
+    // diffuse toon shading
     vColor += round(vFinalDiffuse * 19.0) / 19.0;
 
-    // scan blocks
+    // toon scan blocking
     vColor *= round((int(gl_FragCoord.x) % 37) / 23.0);
     vColor *= round((int(gl_FragCoord.y) % 37) / 23.0);
     vColor /= 2.0;
 
-    // more toon shading
+    // specular toon shading
     vColor += round(vFinalSpecular * 7.0) / 7.0;
 
     o_vColor = vec4(vColor, 1.0);
