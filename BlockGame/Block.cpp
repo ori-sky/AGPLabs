@@ -21,52 +21,52 @@ Block::Block(void)
     this->position = glm::vec3(0.0);
 
     // left
-    this->vertices[0]  = glm::i8vec4(-1,  0,  0, 0);
-    this->vertices[1]  = glm::i8vec4(-1, -1, -1, 0);
-    this->vertices[2]  = glm::i8vec4(-1, -1,  1, 0);
-    this->vertices[3]  = glm::i8vec4(-1,  1,  1, 0);
-    this->vertices[4]  = glm::i8vec4(-1,  1, -1, 0);
-    this->vertices[5]  = glm::i8vec4(-1, -1, -1, 0);
+    this->vertices[0]  = glm::i8vec4(-BLOCK_SIZE,           0,           0, 0);
+    this->vertices[1]  = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[2]  = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[3]  = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[4]  = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[5]  = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
 
     // right
-    this->vertices[6]  = glm::i8vec4( 1,  0,  0, 0);
-    this->vertices[7]  = glm::i8vec4( 1, -1, -1, 0);
-    this->vertices[8]  = glm::i8vec4( 1,  1, -1, 0);
-    this->vertices[9]  = glm::i8vec4( 1,  1,  1, 0);
-    this->vertices[10] = glm::i8vec4( 1, -1,  1, 0);
-    this->vertices[11] = glm::i8vec4( 1, -1, -1, 0);
+    this->vertices[6]  = glm::i8vec4( BLOCK_SIZE,           0,           0, 0);
+    this->vertices[7]  = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[8]  = glm::i8vec4( BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[9]  = glm::i8vec4( BLOCK_SIZE,  BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[10] = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[11] = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
 
     // bottom
-    this->vertices[12] = glm::i8vec4( 0, -1,  0, 0);
-    this->vertices[13] = glm::i8vec4(-1, -1, -1, 0);
-    this->vertices[14] = glm::i8vec4( 1, -1, -1, 0);
-    this->vertices[15] = glm::i8vec4( 1, -1,  1, 0);
-    this->vertices[16] = glm::i8vec4(-1, -1,  1, 0);
-    this->vertices[17] = glm::i8vec4(-1, -1, -1, 0);
+    this->vertices[12] = glm::i8vec4(          0, -BLOCK_SIZE,           0, 0);
+    this->vertices[13] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[14] = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[15] = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[16] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[17] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
 
     // top
-    this->vertices[18] = glm::i8vec4( 0,  1,  0, 0);
-    this->vertices[19] = glm::i8vec4(-1,  1, -1, 0);
-    this->vertices[20] = glm::i8vec4(-1,  1,  1, 0);
-    this->vertices[21] = glm::i8vec4( 1,  1,  1, 0);
-    this->vertices[22] = glm::i8vec4( 1,  1, -1, 0);
-    this->vertices[23] = glm::i8vec4(-1,  1, -1, 0);
+    this->vertices[18] = glm::i8vec4(          0,  BLOCK_SIZE,           0, 0);
+    this->vertices[19] = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[20] = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[21] = glm::i8vec4( BLOCK_SIZE,  BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[22] = glm::i8vec4( BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[23] = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
 
     // front
-    this->vertices[24] = glm::i8vec4( 0,  0, -1, 0);
-    this->vertices[25] = glm::i8vec4(-1, -1, -1, 0);
-    this->vertices[26] = glm::i8vec4(-1,  1, -1, 0);
-    this->vertices[27] = glm::i8vec4( 1,  1, -1, 0);
-    this->vertices[28] = glm::i8vec4( 1, -1, -1, 0);
-    this->vertices[29] = glm::i8vec4(-1, -1, -1, 0);
+    this->vertices[24] = glm::i8vec4(          0,           0, -BLOCK_SIZE, 0);
+    this->vertices[25] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[26] = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[27] = glm::i8vec4( BLOCK_SIZE,  BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[28] = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
+    this->vertices[29] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE, -BLOCK_SIZE, 0);
 
     // back
-    this->vertices[30] = glm::i8vec4( 0,  0,  1, 0);
-    this->vertices[31] = glm::i8vec4(-1, -1,  1, 0);
-    this->vertices[32] = glm::i8vec4( 1, -1,  1, 0);
-    this->vertices[33] = glm::i8vec4( 1,  1,  1, 0);
-    this->vertices[34] = glm::i8vec4(-1,  1,  1, 0);
-    this->vertices[35] = glm::i8vec4(-1, -1,  1, 0);
+    this->vertices[30] = glm::i8vec4(          0,           0,  BLOCK_SIZE, 0);
+    this->vertices[31] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[32] = glm::i8vec4( BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[33] = glm::i8vec4( BLOCK_SIZE,  BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[34] = glm::i8vec4(-BLOCK_SIZE,  BLOCK_SIZE,  BLOCK_SIZE, 0);
+    this->vertices[35] = glm::i8vec4(-BLOCK_SIZE, -BLOCK_SIZE,  BLOCK_SIZE, 0);
 
     // left
     this->normals[0]   = glm::i8vec4(-1,  0,  0, 0);

@@ -31,24 +31,6 @@
 #include "ResourceManager.h"
 #include "Block.h"
 
-#define BLOCKGAME_ATTRIB_VERTEX 0
-#define BLOCKGAME_ATTRIB_NORMAL 1
-
-#define BLOCKGAME_LEFT              0x0
-#define BLOCKGAME_RIGHT             0x1
-#define BLOCKGAME_BOTTOM            0x2
-#define BLOCKGAME_TOP               0x3
-#define BLOCKGAME_FRONT             0x4
-#define BLOCKGAME_BACK              0x5
-#define BLOCKGAME_LEFTBOTTOMFRONT   0x6
-#define BLOCKGAME_LEFTBOTTOMBACK    0x7
-#define BLOCKGAME_LEFTTOPFRONT      0x8
-#define BLOCKGAME_LEFTTOPBACK       0x9
-#define BLOCKGAME_RIGHTBOTTOMFRONT  0xA
-#define BLOCKGAME_RIGHTBOTTOMBACK   0xB
-#define BLOCKGAME_RIGHTTOPFRONT     0xC
-#define BLOCKGAME_RIGHTTOPBACK      0xD
-
 class BlockGame
 {
 protected:
@@ -62,7 +44,7 @@ protected:
     glm::mat4 matIdentity;
     glm::mat4 camera;
 
-    Block block;
+    Block blocks[100];
 public:
     static BlockGame * New(void) { return new BlockGame(); }
 

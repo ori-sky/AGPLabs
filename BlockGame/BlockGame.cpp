@@ -80,7 +80,7 @@ bool BlockGame::InitSDL(void)
     fprintf(stderr, "GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // enable vsync
-    SDL_GL_SetSwapInterval(1);
+    //SDL_GL_SetSwapInterval(1);
 
     return true;
 }
@@ -178,9 +178,17 @@ bool BlockGame::Init(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     this->matIdentity = glm::mat4(1.0f);
-    this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
+    this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f * BLOCK_SIZE));
 
-    this->block.Init();
+    for(unsigned char x=0; x<10; ++x)
+    {
+        for(unsigned char y=0; y<10; ++y)
+        {
+            this->blocks[x + y * 10].Init();
+            this->blocks[x + y * 10].SetPosition(x * 2.5f * BLOCK_SIZE,
+                                                 y * 2.5f * BLOCK_SIZE, 0.0f);
+        }
+    }
 
     return true;
 }
@@ -225,7 +233,7 @@ bool BlockGame::HandleSDL(SDL_Event *e)
 
 bool BlockGame::Update(float seconds)
 {
-    const float movement_speed = 3.0f;
+    const float movement_speed = 5.0f * BLOCK_SIZE;
     const float rotation_speed = 90.0f;
 
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
@@ -282,7 +290,7 @@ bool BlockGame::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
+    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 65536.0f);
     glm::mat4 matModelView = this->camera;
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
@@ -293,7 +301,14 @@ bool BlockGame::Draw(void)
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
     //glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
 
-    this->block.Draw(matModelView, u_matObjectModelView);
+
+    for(unsigned char x=0; x<10; ++x)
+    {
+        for(unsigned char y=0; y<10; ++y)
+        {
+            this->blocks[x + y * 10].Draw(matModelView, u_matObjectModelView);
+        }
+    }
 
     SDL_GL_SwapWindow(this->wnd);
 

@@ -28,6 +28,8 @@
 #define BLOCK_ATTRIB_VERTEX 0
 #define BLOCK_ATTRIB_NORMAL 1
 
+#define BLOCK_SIZE 32
+
 class Block : public Object<Block>
 {
 protected:
