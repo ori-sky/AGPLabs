@@ -38,7 +38,7 @@ void main(void)
     float fNDotHV = max(0.0, dot(vNormal, vHalfVector));
 
     // if light hits surface
-    if(fNDotL > 0.2)
+    if(fNDotL > 0.0)
     {
         float fDivisor = 1.0 +
                          fDistance * 0.0 +
