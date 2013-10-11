@@ -38,6 +38,8 @@ protected:
     
     SDL_Window *wnd;
     SDL_GLContext ctx;
+    float width;
+    float height;
 
     GLuint program_id;
 

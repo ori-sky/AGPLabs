@@ -60,7 +60,7 @@ bool BlockGame::InitSDL(void)
 
     this->wnd = SDL_CreateWindow("BlockGame",
                                  SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                 1280, 720,
+                                 this->width, this->height,
                                  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if(!this->wnd)
     {
@@ -167,6 +167,9 @@ bool BlockGame::DestroySDL(void)
 
 bool BlockGame::Init(void)
 {
+    this->width = 1280;
+    this->height = 720;
+
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("basiclighting.vsh", "basiclighting.fsh")) return false;
@@ -226,6 +229,16 @@ bool BlockGame::HandleSDL(SDL_Event *e)
                     this->pressed_keys.erase(i);
                     break;
                 }
+            }
+            break;
+        case SDL_WINDOWEVENT:
+            switch(e->window.event)
+            {
+                case SDL_WINDOWEVENT_RESIZED:
+                    this->width = e->window.data1;
+                    this->height = e->window.data2;
+                    glViewport(0, 0, this->width, this->height);
+                    break;
             }
             break;
     }
@@ -292,7 +305,8 @@ bool BlockGame::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 65536.0f);
+    glm::mat4 matProjection = glm::perspective(35.0f, this->width / this->height,
+                                               1.0f, 65536.0f);
     glm::mat4 matModelView = this->camera;
 
     GLint u_fBlockSize = glGetUniformLocation(this->program_id, "u_fBlockSize");
