@@ -34,9 +34,11 @@ void main(void)
     // normalize the interpolated normal
     vec3 vNormal = normalize(v_vNormal);
 
-    // if light hits surface
     float fNDotL = dot(vNormal, vLightDir);
-    if(fNDotL > 0.0)
+    float fNDotHV = max(0.0, dot(vNormal, vHalfVector));
+
+    // if light hits surface
+    if(fNDotL > 0.2)
     {
         float fDivisor = 1.0 +
                          fDistance * 0.0 +
@@ -46,13 +48,15 @@ void main(void)
         float fAttenuation = 1.0 / fDivisor;
         vFinalDiffuse = fAttenuation * vDiffuse * fNDotL;
 
-        float fNDotHV = max(0.0, dot(vNormal, vHalfVector));
         vFinalSpecular = vSpecular * pow(fNDotHV, 1024.0);
     }
 
     // toon effect
-    vColor += round(vFinalDiffuse * 29.0) / 29.0;
+    vColor += round(vFinalDiffuse * 19.0) / 19.0;
     vColor += round(vFinalSpecular * 7.0) / 7.0;
+
+    vColor *= round((int(gl_FragCoord.x) % 9) / 5.0);
+    vColor *= round((int(gl_FragCoord.y) % 9) / 5.0);
 
     o_vColor = vec4(vColor, 1.0);
 }

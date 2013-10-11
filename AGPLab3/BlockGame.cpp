@@ -16,6 +16,28 @@
 
 #include "BlockGame.h"
 
+void BlockGame::PrintShaderError(GLint shader)
+{
+    GLint max_len = 0;
+    GLint log_len = 0;
+    unsigned char is_shader = glIsShader(shader);
+
+    if(is_shader) glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &max_len);
+    else glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &max_len);
+
+    if(max_len > 0)
+    {
+        GLchar *message = (GLchar *)malloc(sizeof(GLchar) * max_len);
+
+        if(is_shader) glGetShaderInfoLog(shader, max_len, &log_len, message);
+        else glGetProgramInfoLog(shader, max_len, &log_len, message);
+
+        fprintf(stderr, "%s\n", message);
+        free(message);
+    }
+}
+
+
 bool BlockGame::InitSDL(void)
 {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -132,7 +154,7 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
     if(!compile_status)
     {
         fprintf(stderr, "glCompileShader(v_id): error\n");
-        //print_shader_error(v_id);
+        this->PrintShaderError(v_id);
         return false;
     }
 
@@ -141,7 +163,7 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
     if(!compile_status)
     {
         fprintf(stderr, "glCompileShader(f_id): error\n");
-        //print_shader_error(f_id);
+        this->PrintShaderError(f_id);
         return false;
     }
 
