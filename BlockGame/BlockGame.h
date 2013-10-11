@@ -31,6 +31,9 @@
 #include "ResourceManager.h"
 #include "Block.h"
 
+#define GRID_X 100
+#define GRID_Z 100
+
 class BlockGame
 {
 protected:
@@ -46,9 +49,10 @@ protected:
     glm::mat4 matIdentity;
     glm::mat4 camera;
 
-    Block blocks[100];
+    Block blocks[GRID_X * GRID_Z];
 public:
     static BlockGame * New(void) { return new BlockGame(); }
+    void PrintShaderError(GLint shader);
 
     bool running;
 

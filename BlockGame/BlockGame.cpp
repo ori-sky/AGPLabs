@@ -16,6 +16,27 @@
 
 #include "BlockGame.h"
 
+void BlockGame::PrintShaderError(GLint shader)
+{
+    GLint max_len = 0;
+    GLint log_len = 0;
+    unsigned char is_shader = glIsShader(shader);
+
+    if(is_shader) glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &max_len);
+    else glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &max_len);
+
+    if(max_len > 0)
+    {
+        GLchar *message = (GLchar *)malloc(sizeof(GLchar) * max_len);
+
+        if(is_shader) glGetShaderInfoLog(shader, max_len, &log_len, message);
+        else glGetProgramInfoLog(shader, max_len, &log_len, message);
+
+        fprintf(stderr, "%s\n", message);
+        free(message);
+    }
+}
+
 bool BlockGame::InitSDL(void)
 {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -132,7 +153,7 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
     if(!compile_status)
     {
         fprintf(stderr, "glCompileShader(v_id): error\n");
-        //print_shader_error(v_id);
+        this->PrintShaderError(v_id);
         return false;
     }
 
@@ -141,7 +162,7 @@ bool BlockGame::InitShaders(const char *v_path, const char *f_path)
     if(!compile_status)
     {
         fprintf(stderr, "glCompileShader(f_id): error\n");
-        //print_shader_error(f_id);
+        this->PrintShaderError(f_id);
         return false;
     }
 
@@ -185,13 +206,13 @@ bool BlockGame::Init(void)
     this->camera = glm::translate(this->camera, glm::vec3(-15.0f * BLOCK_SIZE, -5.0f * BLOCK_SIZE, 5.0f * BLOCK_SIZE));
     this->camera = glm::rotate(this->matIdentity, 180.0f, glm::vec3(0, 1, 0)) * this->camera;
 
-    for(unsigned char x=0; x<10; ++x)
+    for(unsigned char x=0; x<GRID_X; ++x)
     {
-        for(unsigned char z=0; z<10; ++z)
+        for(unsigned char z=0; z<GRID_Z; ++z)
         {
-            this->blocks[x + z * 10].Init();
-            this->blocks[x + z * 10].SetPosition(x * 2.5f * BLOCK_SIZE, 0.0f,
-                                                 z * 2.5f * BLOCK_SIZE);
+            this->blocks[x + z * GRID_X].Init();
+            this->blocks[x + z * GRID_X].SetPosition(x * 2.0f * BLOCK_SIZE, 0.0f,
+                                                     z * 2.0f * BLOCK_SIZE);
         }
     }
 
@@ -318,11 +339,11 @@ bool BlockGame::Draw(void)
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
 
-    for(unsigned char x=0; x<10; ++x)
+    for(unsigned char x=0; x<GRID_X; ++x)
     {
-        for(unsigned char z=0; z<10; ++z)
+        for(unsigned char z=0; z<GRID_Z; ++z)
         {
-            this->blocks[x + z * 10].Draw(matModelView, u_matObjectModelView);
+            this->blocks[x + z * GRID_X].Draw(matModelView, u_matObjectModelView);
         }
     }
 
