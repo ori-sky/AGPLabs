@@ -178,15 +178,17 @@ bool BlockGame::Init(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     this->matIdentity = glm::mat4(1.0f);
-    this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f * BLOCK_SIZE));
+    this->camera = this->matIdentity;
+    this->camera = glm::translate(this->camera, glm::vec3(-15.0f * BLOCK_SIZE, -5.0f * BLOCK_SIZE, 5.0f * BLOCK_SIZE));
+    this->camera = glm::rotate(this->matIdentity, 180.0f, glm::vec3(0, 1, 0)) * this->camera;
 
     for(unsigned char x=0; x<10; ++x)
     {
-        for(unsigned char y=0; y<10; ++y)
+        for(unsigned char z=0; z<10; ++z)
         {
-            this->blocks[x + y * 10].Init();
-            this->blocks[x + y * 10].SetPosition(x * 2.5f * BLOCK_SIZE,
-                                                 y * 2.5f * BLOCK_SIZE, 0.0f);
+            this->blocks[x + z * 10].Init();
+            this->blocks[x + z * 10].SetPosition(x * 2.5f * BLOCK_SIZE, 0.0f,
+                                                 z * 2.5f * BLOCK_SIZE);
         }
     }
 
@@ -293,20 +295,20 @@ bool BlockGame::Draw(void)
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 65536.0f);
     glm::mat4 matModelView = this->camera;
 
+    GLint u_fBlockSize = glGetUniformLocation(this->program_id, "u_fBlockSize");
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
     GLint u_matObjectModelView = glGetUniformLocation(this->program_id, "u_matObjectModelView");
 
+    glUniform1f(u_fBlockSize, BLOCK_SIZE);
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
-    //glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
-
 
     for(unsigned char x=0; x<10; ++x)
     {
-        for(unsigned char y=0; y<10; ++y)
+        for(unsigned char z=0; z<10; ++z)
         {
-            this->blocks[x + y * 10].Draw(matModelView, u_matObjectModelView);
+            this->blocks[x + z * 10].Draw(matModelView, u_matObjectModelView);
         }
     }
 

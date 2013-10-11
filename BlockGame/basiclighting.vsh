@@ -1,16 +1,17 @@
 #version 150
 precision highp float;
 
+uniform float u_fBlockSize;
 uniform mat4 u_matProjection;
 uniform mat4 u_matModelView;
 uniform mat4 u_matObjectModelView;
 
 in ivec3 a_vVertex;
 in ivec3 a_vNormal;
+
 smooth out vec4 v_vVertex;
 smooth out vec3 v_vNormal;
-
-smooth out vec4 v_vEyeCameraPosition;
+flat out vec4 v_vEyeCameraPosition;
 
 void main(void)
 {
