@@ -37,7 +37,6 @@ void BlockGame::PrintShaderError(GLint shader)
     }
 }
 
-
 bool BlockGame::InitSDL(void)
 {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
