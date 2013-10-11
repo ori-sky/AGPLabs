@@ -18,6 +18,8 @@
 
 Block::Block(void)
 {
+    this->position = glm::vec3(0.0);
+
     // left
     this->vertices[0]  = glm::i8vec4(-1,  0,  0, 0);
     this->vertices[1]  = glm::i8vec4(-1, -1, -1, 0);
@@ -135,8 +137,11 @@ bool Block::Init(void)
     return true;
 }
 
-bool Block::Draw(void)
+bool Block::Draw(glm::mat4 matModelView, GLint u_matModelView)
 {
+    matModelView = glm::translate(matModelView, this->position);
+    glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
+
     GLint firsts[] = {0, 6, 12, 18, 24, 30};
     GLint counts[] = {6, 6, 6, 6, 6, 6};
 

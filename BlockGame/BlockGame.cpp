@@ -285,17 +285,15 @@ bool BlockGame::Draw(void)
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
     glm::mat4 matModelView = this->camera;
 
-    glm::mat4 matObjectModelView = matModelView;//glm::rotate(matModelView, this->obj_rotation, glm::vec3(0, 1, 0));
-
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
     GLint u_matObjectModelView = glGetUniformLocation(this->program_id, "u_matObjectModelView");
 
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
-    glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
+    //glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
 
-    this->block.Draw();
+    this->block.Draw(matModelView, u_matObjectModelView);
 
     SDL_GL_SwapWindow(this->wnd);
 

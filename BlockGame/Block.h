@@ -17,6 +17,9 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/type_precision.hpp>
 
 #include "glcommon.h"
@@ -28,12 +31,12 @@
 class Block : public Object<Block>
 {
 protected:
-    glm::i8vec4 vertices[36];
-    glm::i8vec4 normals[36];
-
     GLuint vao;
     GLuint vbo_vertex;
     GLuint vbo_normal;
+
+    glm::i8vec4 vertices[36];
+    glm::i8vec4 normals[36];
 
     glm::vec3 position;
 public:
@@ -52,7 +55,7 @@ public:
     void SetPositionZ(float z) { this->position.z = z; }
 
     bool Init(void);
-    bool Draw(void);
+    bool Draw(glm::mat4 matModelView, GLint u_matModelView);
 };
 
 #endif
