@@ -35,9 +35,22 @@ protected:
     GLuint vbo_vertex;
     GLuint vbo_normal;
 
-    // TODO: position
+    glm::vec3 position;
 public:
     Block(void);
+
+    glm::vec3 GetPosition(void) { return this->position; }
+    glm::vec3 * GetPositionRef(void) { return &this->position; }
+    float GetPositionX(void) { return this->position.x; }
+    float GetPositionY(void) { return this->position.y; }
+    float GetPositionZ(void) { return this->position.z; }
+
+    void SetPosition(glm::vec3 position) { this->position = position; }
+    void SetPosition(float x, float y, float z) { this->position = glm::vec3(x, y, z); }
+    void SetPositionX(float x) { this->position.x = x; }
+    void SetPositionY(float y) { this->position.y = y; }
+    void SetPositionZ(float z) { this->position.z = z; }
+
     bool Init(void);
     bool Draw(void);
 };
