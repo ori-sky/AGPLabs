@@ -51,12 +51,16 @@ void main(void)
         vFinalSpecular = vSpecular * pow(fNDotHV, 1024.0);
     }
 
-    // toon effect
+    // toon shading
     vColor += round(vFinalDiffuse * 19.0) / 19.0;
-    vColor += round(vFinalSpecular * 7.0) / 7.0;
 
-    vColor *= round((int(gl_FragCoord.x) % 9) / 5.0);
-    vColor *= round((int(gl_FragCoord.y) % 9) / 5.0);
+    // scan blocks
+    vColor *= round((int(gl_FragCoord.x) % 37) / 23.0);
+    vColor *= round((int(gl_FragCoord.y) % 37) / 23.0);
+    vColor /= 2.0;
+
+    // more toon shading
+    vColor += round(vFinalSpecular * 7.0) / 7.0;
 
     o_vColor = vec4(vColor, 1.0);
 }
