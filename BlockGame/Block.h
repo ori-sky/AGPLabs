@@ -41,23 +41,81 @@ protected:
     glm::i8vec4 normals[36];
 
     glm::vec3 position;
+    glm::mat4 mat;
 public:
     Block(void);
 
-    glm::vec3 GetPosition(void) { return this->position; }
-    glm::vec3 * GetPositionRef(void) { return &this->position; }
-    float GetPositionX(void) { return this->position.x; }
-    float GetPositionY(void) { return this->position.y; }
-    float GetPositionZ(void) { return this->position.z; }
+    inline GLuint GetVAO(void)
+    {
+        return this->vao;
+    }
+    inline glm::i8vec4 * GetVertices(void)
+    {
+        return this->vertices;
+    }
 
-    void SetPosition(glm::vec3 position) { this->position = position; }
-    void SetPosition(float x, float y, float z) { this->position = glm::vec3(x, y, z); }
-    void SetPositionX(float x) { this->position.x = x; }
-    void SetPositionY(float y) { this->position.y = y; }
-    void SetPositionZ(float z) { this->position.z = z; }
+    inline glm::i8vec4 * GetNormals(void)
+    {
+        return this->normals;
+    }
 
-    bool Init(void);
-    bool Draw(glm::mat4 matModelView, GLint u_matModelView);
+    inline glm::vec3 GetPosition(void) { return this->position; }
+    inline glm::vec3 * GetPositionRef(void) { return &this->position; }
+    inline float GetPositionX(void) { return this->position.x; }
+    inline float GetPositionY(void) { return this->position.y; }
+    inline float GetPositionZ(void) { return this->position.z; }
+
+    inline void UpdateMatrix(void)
+    {
+        this->mat = glm::mat4(1.0f);
+        this->mat = glm::translate(this->mat, this->position);
+    }
+
+    inline void SetPosition(glm::vec3 position)
+    {
+        this->position = position;
+        this->UpdateMatrix();
+    }
+    inline void SetPosition(float x, float y, float z)
+    {
+        this->SetPosition(glm::vec3(x, y, z));
+    }
+    inline void SetPositionX(float x)
+    {
+        this->position.x = x;
+        this->UpdateMatrix();
+    }
+    inline void SetPositionY(float y)
+    {
+        this->position.y = y;
+        this->UpdateMatrix();
+    }
+    inline void SetPositionZ(float z)
+    {
+        this->position.z = z;
+        this->UpdateMatrix();
+    }
+
+    bool Init(GLuint vao);
+
+    inline bool Draw(GLint u_matModelView)
+    {
+        glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(this->mat));
+
+        /*
+        for(unsigned int i=0; i<6; ++i)
+        {
+            glDrawArrays(GL_TRIANGLE_FAN, 6 * i, 6);
+        }
+        */
+
+        // this is faster
+        GLint firsts[] = {0, 6, 12, 18, 24, 30};
+        GLint counts[] = {6, 6, 6, 6, 6, 6};
+        glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts / sizeof(GLint));
+
+        return true;
+    }
 };
 
 #endif

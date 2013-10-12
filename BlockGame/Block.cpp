@@ -117,10 +117,11 @@ Block::Block(void)
     this->normals[35]  = glm::i8vec4( 0,  0,  1, 0);
 }
 
-bool Block::Init(void)
+bool Block::Init(GLuint vao)
 {
-    glGenVertexArrays(1, &this->vao);
-    glBindVertexArray(this->vao);
+    this->vao = vao;
+    //glGenVertexArrays(1, &this->vao);
+    //glBindVertexArray(this->vao);
 
     glGenBuffers(1, &this->vbo_vertex);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertex);
@@ -133,20 +134,6 @@ bool Block::Init(void)
     glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
     glVertexAttribIPointer(BLOCK_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
     glEnableVertexAttribArray(BLOCK_ATTRIB_NORMAL);
-
-    return true;
-}
-
-bool Block::Draw(glm::mat4 matModelView, GLint u_matModelView)
-{
-    matModelView = glm::translate(matModelView, this->position);
-    glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
-
-    GLint firsts[] = {0, 6, 12, 18, 24, 30};
-    GLint counts[] = {6, 6, 6, 6, 6, 6};
-
-    glBindVertexArray(this->vao);
-    glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
 
     return true;
 }

@@ -206,11 +206,17 @@ bool BlockGame::Init(void)
     this->camera = glm::translate(this->camera, glm::vec3(-15.0f * BLOCK_SIZE, -5.0f * BLOCK_SIZE, 5.0f * BLOCK_SIZE));
     this->camera = glm::rotate(this->matIdentity, 180.0f, glm::vec3(0, 1, 0)) * this->camera;
 
+    GLint u_fBlockSize = glGetUniformLocation(this->program_id, "u_fBlockSize");
+    glUniform1f(u_fBlockSize, BLOCK_SIZE);
+
     for(unsigned char x=0; x<GRID_X; ++x)
     {
         for(unsigned char z=0; z<GRID_Z; ++z)
         {
-            this->blocks[x + z * GRID_X].Init();
+            VAO *vao = this->vao_manager.GetVAOFor(this->blocks[x + z * GRID_X].GetVertices());
+            glBindVertexArray(vao->id);
+
+            this->blocks[x + z * GRID_X].Init(vao->id);
             this->blocks[x + z * GRID_X].SetPosition(x * 2.0f * BLOCK_SIZE, 0.0f,
                                                      z * 2.0f * BLOCK_SIZE);
         }
@@ -326,25 +332,25 @@ bool BlockGame::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, this->width / this->height,
-                                               1.0f, 65536.0f);
-    glm::mat4 matModelView = this->camera;
-
-    GLint u_fBlockSize = glGetUniformLocation(this->program_id, "u_fBlockSize");
+    glm::mat4 matProjection = glm::perspective(35.0f, this->width / this->height, 1.0f, 65536.0f);
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
-    GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
-    GLint u_matObjectModelView = glGetUniformLocation(this->program_id, "u_matObjectModelView");
-
-    glUniform1f(u_fBlockSize, BLOCK_SIZE);
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
-    glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
 
-    for(unsigned char x=0; x<GRID_X; ++x)
+    GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
+    glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(this->camera));
+
+    GLint u_matObject = glGetUniformLocation(this->program_id, "u_matObject");
+
+    GLuint bound_vao = 0;
+    for(unsigned int i=0; i<GRID_X*GRID_Z; ++i)
     {
-        for(unsigned char z=0; z<GRID_Z; ++z)
+        GLuint current_vao = this->blocks[i].GetVAO();
+        if(current_vao != bound_vao)
         {
-            this->blocks[x + z * GRID_X].Draw(matModelView, u_matObjectModelView);
+            glBindVertexArray(current_vao);
+            bound_vao = current_vao;
         }
+        this->blocks[i].Draw(u_matObject);
     }
 
     SDL_GL_SwapWindow(this->wnd);

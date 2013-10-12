@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <SDL.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -29,6 +30,7 @@
 
 #include "glcommon.h"
 #include "ResourceManager.h"
+#include "VAOManager.h"
 #include "Block.h"
 
 #define GRID_X 100
@@ -37,6 +39,8 @@
 class BlockGame
 {
 protected:
+    VAOManager vao_manager;
+
     std::vector<SDL_Keycode> pressed_keys;
     
     SDL_Window *wnd;
@@ -50,6 +54,7 @@ protected:
     glm::mat4 camera;
 
     Block blocks[GRID_X * GRID_Z];
+    std::vector<GLuint> vaos;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
     void PrintShaderError(GLint shader);
