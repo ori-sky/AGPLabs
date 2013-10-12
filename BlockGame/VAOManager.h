@@ -40,23 +40,24 @@ public:
 
     inline VAO * GetVAOFor(glm::i8vec4 *vertices)
     {
-        for(std::vector<VAO *>::iterator it=this->vaos.begin(); it!=this->vaos.end(); ++it)
+        for(unsigned long i=0; i<this->vaos.size(); ++i)
         {
             bool match = true;
             for(unsigned char v=0; v<36; ++v)
             {
-                if((*it)->vertices[v] != vertices[v])
+                if(this->vaos[i]->vertices[v] != vertices[v])
                 {
                     match = false;
                     break;
                 }
             }
 
-            if(match) return (*it);
+            if(match) return this->vaos[i];
         }
 
         VAO *vao = new VAO();
-        vao->vertices = vertices;
+        vao->vertices = (glm::i8vec4 *)malloc(sizeof(glm::i8vec4) * 36);
+        memcpy(vao->vertices, vertices, sizeof(glm::i8vec4) * 36);
         glGenVertexArrays(1, &vao->id);
 
         this->vaos.push_back(vao);

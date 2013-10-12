@@ -33,8 +33,8 @@
 #include "VAOManager.h"
 #include "Block.h"
 
-#define GRID_X 100
-#define GRID_Z 100
+#define GRID_X 500
+#define GRID_Z 500
 
 class BlockGame
 {
@@ -53,8 +53,7 @@ protected:
     glm::mat4 matIdentity;
     glm::mat4 camera;
 
-    Block blocks[GRID_X * GRID_Z];
-    std::vector<GLuint> vaos;
+    Block *blocks;
 public:
     static BlockGame * New(void) { return new BlockGame(); }
     void PrintShaderError(GLint shader);

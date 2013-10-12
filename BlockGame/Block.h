@@ -112,7 +112,7 @@ public:
         // this is faster
         GLint firsts[] = {0, 6, 12, 18, 24, 30};
         GLint counts[] = {6, 6, 6, 6, 6, 6};
-        glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts / sizeof(GLint));
+        glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
 
         return true;
     }
