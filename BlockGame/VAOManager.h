@@ -38,12 +38,12 @@ class VAOManager
 public:
     std::vector<VAO *> vaos;
 
-    inline VAO * GetVAOFor(glm::i8vec4 *vertices)
+    inline VAO * GetVAOFor(glm::i8vec4 *vertices, unsigned long size)
     {
         for(unsigned long i=0; i<this->vaos.size(); ++i)
         {
             bool match = true;
-            for(unsigned char v=0; v<36; ++v)
+            for(unsigned long v=0; v<size; ++v)
             {
                 if(this->vaos[i]->vertices[v] != vertices[v])
                 {
@@ -56,8 +56,8 @@ public:
         }
 
         VAO *vao = new VAO();
-        vao->vertices = (glm::i8vec4 *)malloc(sizeof(glm::i8vec4) * 36);
-        memcpy(vao->vertices, vertices, sizeof(glm::i8vec4) * 36);
+        vao->vertices = (glm::i8vec4 *)malloc(sizeof(glm::i8vec4) * size);
+        memcpy(vao->vertices, vertices, sizeof(glm::i8vec4) * size);
         glGenVertexArrays(1, &vao->id);
 
         this->vaos.push_back(vao);

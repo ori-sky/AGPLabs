@@ -209,24 +209,28 @@ bool BlockGame::Init(void)
     GLint u_fBlockSize = glGetUniformLocation(this->program_id, "u_fBlockSize");
     glUniform1f(u_fBlockSize, BLOCK_SIZE);
 
-    printf("size: %lu", sizeof(Block) * GRID_X * GRID_Z);
-    this->blocks = new Block[GRID_X * GRID_Z];
+    printf("size: %lu", sizeof(Block) * GRID_TOTAL);
+    this->blocks = new Block[GRID_TOTAL];
 
     for(unsigned long x=0; x<GRID_X; ++x)
     {
-        for(unsigned long z=0; z<GRID_Z; ++z)
+        for(unsigned long y=0; y<GRID_Y; ++y)
         {
-            VAO *vao = this->vao_manager.GetVAOFor(this->blocks[x + z * GRID_X].GetVertices());
-            glBindVertexArray(vao->id);
+            for(unsigned long z=0; z<GRID_Z; ++z)
+            {
+                VAO *vao = this->vao_manager.GetVAOFor(this->blocks[x + y * GRID_X + z * GRID_X * GRID_Y].GetVertices(), 36);
+                glBindVertexArray(vao->id);
 
-            this->blocks[x + z * GRID_X].Init(vao->id);
-            this->blocks[x + z * GRID_X].SetPosition(x * 2.0f * BLOCK_SIZE, 0.0f,
-                                                     z * 2.0f * BLOCK_SIZE);
+                this->blocks[x + y * GRID_X + z * GRID_X * GRID_Y].Init(vao->id);
+                this->blocks[x + y * GRID_X + z * GRID_X * GRID_Y].SetPosition(x * 2.0f * BLOCK_SIZE,
+                                                                               y * 2.0f * BLOCK_SIZE,
+                                                                               z * 2.0f * BLOCK_SIZE);
+            }
         }
     }
 
     // change first block
-    glm::i8vec4 *vertices = this->blocks[0].GetVertices();
+    //glm::i8vec4 *vertices = this->blocks[0].GetVertices();
 
     return true;
 }
@@ -348,7 +352,7 @@ bool BlockGame::Draw(void)
     GLint u_matObject = glGetUniformLocation(this->program_id, "u_matObject");
 
     GLuint bound_vao = 0;
-    for(unsigned long i=0; i<GRID_X*GRID_Z; ++i)
+    for(unsigned long i=0; i<GRID_TOTAL; ++i)
     {
         GLuint current_vao = this->blocks[i].GetVAO();
         if(current_vao != bound_vao)

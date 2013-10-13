@@ -32,11 +32,14 @@
 #include "ResourceManager.h"
 #include "VAOManager.h"
 #include "Block.h"
+#include "Chunk.h"
 
-#define GRID_X 500
-#define GRID_Z 500
+#define GRID_X 64
+#define GRID_Y 8
+#define GRID_Z 64
+#define GRID_TOTAL (GRID_X * GRID_Y * GRID_Z)
 
-class BlockGame
+class BlockGame : Object<BlockGame>
 {
 protected:
     VAOManager vao_manager;
@@ -54,8 +57,8 @@ protected:
     glm::mat4 camera;
 
     Block *blocks;
+    Chunk *chunks;
 public:
-    static BlockGame * New(void) { return new BlockGame(); }
     void PrintShaderError(GLint shader);
 
     bool running;
