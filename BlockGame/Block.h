@@ -30,6 +30,17 @@
 
 #define BLOCK_SIZE 32
 
+class NewBlock : public Object<NewBlock>
+{
+    // TODO: find a way to make this significantly smaller
+    // maybe calculate surface normals in the Chunk
+    // no need to keep the normal data stored
+    // maybe only store the 14 vertices too
+
+    glm::i8vec4 vertices[36];
+    glm::i8vec4 normals[36];
+};
+
 class Block : public Object<Block>
 {
 protected:

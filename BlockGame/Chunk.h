@@ -26,19 +26,20 @@
 #include "Object.h"
 #include "Block.h"
 
-#define CHUNK_X 64
-#define CHUNK_Y 64
-#define CHUNK_Z 64
+#define CHUNK_X 32
+#define CHUNK_Y 32
+#define CHUNK_Z 32
+#define CHUNK_TOTAL (CHUNK_X * CHUNK_Y * CHUNK_Z)
 
 class Chunk : Object<Chunk>
 {
 protected:
-    Block *blocks;
+    NewBlock *blocks;
     glm::vec3 position;
 public:
     Chunk(glm::vec3 position = glm::vec3(0.0)) : position(position)
     {
-        this->blocks = new Block[CHUNK_X * CHUNK_Y * CHUNK_Z];
+        this->blocks = new NewBlock[CHUNK_TOTAL];
     }
 
     ~Chunk()
@@ -46,12 +47,12 @@ public:
         delete[] blocks;
     }
 
-    inline Block * Get(unsigned long i) const
+    inline NewBlock * Get(unsigned long i) const
     {
         return &this->blocks[i];
     }
 
-    inline Block * Get(unsigned long x, unsigned long y, unsigned long z) const
+    inline NewBlock * Get(unsigned long x, unsigned long y, unsigned long z) const
     {
         return Get(x + y * CHUNK_X + z * CHUNK_X * CHUNK_Y);
     }

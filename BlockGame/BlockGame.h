@@ -34,9 +34,9 @@
 #include "Block.h"
 #include "Chunk.h"
 
-#define GRID_X 64
+#define GRID_X 8
 #define GRID_Y 8
-#define GRID_Z 64
+#define GRID_Z 8
 #define GRID_TOTAL (GRID_X * GRID_Y * GRID_Z)
 
 class BlockGame : Object<BlockGame>

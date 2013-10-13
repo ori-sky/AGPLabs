@@ -209,7 +209,6 @@ bool BlockGame::Init(void)
     GLint u_fBlockSize = glGetUniformLocation(this->program_id, "u_fBlockSize");
     glUniform1f(u_fBlockSize, BLOCK_SIZE);
 
-    printf("size: %lu", sizeof(Block) * GRID_TOTAL);
     this->blocks = new Block[GRID_TOTAL];
 
     for(unsigned long x=0; x<GRID_X; ++x)
@@ -228,6 +227,10 @@ bool BlockGame::Init(void)
             }
         }
     }
+
+    printf("size: %lu", sizeof(NewBlock));
+    //return false;
+    //this->chunks = new Chunk[GRID_TOTAL];
 
     // change first block
     //glm::i8vec4 *vertices = this->blocks[0].GetVertices();
