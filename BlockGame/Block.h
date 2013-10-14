@@ -47,8 +47,14 @@ class NewBlock : public Object<NewBlock>
      * packed to reduce size
      * add 1 to ensure we have enough bytes in the case of the last byte not being fully used
      */
-    char vertices[(BLOCK_VERTEX_COMPONENT_BITS * 3 * 14) / 8 + 1];
-};
+    unsigned char vertices[(BLOCK_VERTEX_COMPONENT_BITS * 3 * 14) / 8 + 1];
+
+    // block type id from 0 to 65535
+    unsigned short type;
+
+    // pointer to extra data
+    void *data;
+} __attribute__((packed));
 
 class Block : public Object<Block>
 {

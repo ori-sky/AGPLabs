@@ -228,9 +228,11 @@ bool BlockGame::Init(void)
         }
     }
 
-    printf("size: %lu\n", sizeof(NewBlock));
+    printf("block: %lu\n", sizeof(NewBlock));
+    printf("chunk: %lu\n", sizeof(NewBlock) * CHUNK_TOTAL);
+    printf("grid:  %lu\n", sizeof(NewBlock) * CHUNK_TOTAL * GRID_TOTAL);
     //return false;
-    //this->chunks = new Chunk[GRID_TOTAL];
+    this->chunks = new Chunk[GRID_TOTAL];
 
     // change first block
     //glm::i8vec4 *vertices = this->blocks[0].GetVertices();
