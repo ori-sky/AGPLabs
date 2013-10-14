@@ -228,7 +228,7 @@ bool BlockGame::Init(void)
         }
     }
 
-    printf("size: %lu", sizeof(NewBlock));
+    printf("size: %lu\n", sizeof(NewBlock));
     //return false;
     //this->chunks = new Chunk[GRID_TOTAL];
 
