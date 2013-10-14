@@ -30,6 +30,8 @@
 
 #define BLOCK_SIZE 32
 
+#define BLOCK_VERTEX_COMPONENT_BITS 5
+
 class NewBlock : public Object<NewBlock>
 {
     // TODO: find a way to make this significantly smaller
@@ -37,9 +39,15 @@ class NewBlock : public Object<NewBlock>
     // no need to keep the normal data stored
     // maybe only store the 14 vertices too
 
-    glm::i8vec4 vertices[36];
-    glm::i8vec4 normals[36];
-};
+    //glm::i8vec3 vertices[14];
+
+    /* 5 bits per component
+     * 15 bits per vertex
+     * 14 vertices
+     * packed to reduce size
+     * add 1 to ensure we have enough bytes in the case of the last byte not being fully used
+     */
+    char vertices[(BLOCK_VERTEX_COMPONENT_BITS * 3 * 14) / 8 + 1};
 
 class Block : public Object<Block>
 {
