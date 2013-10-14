@@ -47,7 +47,8 @@ class NewBlock : public Object<NewBlock>
      * packed to reduce size
      * add 1 to ensure we have enough bytes in the case of the last byte not being fully used
      */
-    char vertices[(BLOCK_VERTEX_COMPONENT_BITS * 3 * 14) / 8 + 1};
+    char vertices[(BLOCK_VERTEX_COMPONENT_BITS * 3 * 14) / 8 + 1];
+};
 
 class Block : public Object<Block>
 {
