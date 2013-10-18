@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>AGPLab4.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>BlockGame.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -28,6 +33,11 @@
 			<true/>
 		</dict>
 		<key>7F4502CA17F5A1C5008A54D2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7FB582BC18115148002C1795</key>
 		<dict>
 			<key>primary</key>
 			<true/>

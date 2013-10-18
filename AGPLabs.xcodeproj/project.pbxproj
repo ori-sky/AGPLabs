@@ -23,6 +23,16 @@
 		7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
 		7F4502EF17F647FE008A54D2 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E717F5C622008A54D2 /* minimal.vsh */; };
 		7F4502F017F64801008A54D2 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E817F5C62E008A54D2 /* minimal.fsh */; };
+		7FB582C218115149002C1795 /* AGPLab4.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FB582C118115149002C1795 /* AGPLab4.1 */; };
+		7FB582D1181151B3002C1795 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582C8181151B3002C1795 /* Game.cpp */; };
+		7FB582D2181151B3002C1795 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CA181151B3002C1795 /* main.cpp */; };
+		7FB582D3181151B3002C1795 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CC181151B3002C1795 /* ResourceManager.cpp */; };
+		7FB582D4181151B3002C1795 /* envmap.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CE181151B3002C1795 /* envmap.fsh */; };
+		7FB582D5181151B3002C1795 /* envmap.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CF181151B3002C1795 /* envmap.vsh */; };
+		7FB582D718115325002C1795 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
+		7FB582D818115327002C1795 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
+		7FB582DA18115363002C1795 /* envmap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FB582CF181151B3002C1795 /* envmap.vsh */; };
+		7FB582DB1811536B002C1795 /* envmap.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FB582CE181151B3002C1795 /* envmap.fsh */; };
 		7FC4003817F6F4110066CEA2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
 		7FE07DF017FEABBA00007251 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE07DEF17FEABBA00007251 /* main.cpp */; };
 		7FE07DF217FEABBA00007251 /* BlockGame.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DF117FEABBA00007251 /* BlockGame.1 */; };
@@ -77,6 +87,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7FB582BB18115148002C1795 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				7FB582C218115149002C1795 /* AGPLab4.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		7FB582D918115353002C1795 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				7FB582DB1811536B002C1795 /* envmap.fsh in CopyFiles */,
+				7FB582DA18115363002C1795 /* envmap.vsh in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7FE07DEB17FEABBA00007251 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -119,6 +150,16 @@
 		7F4502E317F5C487008A54D2 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7F4502E717F5C622008A54D2 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
 		7F4502E817F5C62E008A54D2 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
+		7FB582BD18115148002C1795 /* AGPLab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGPLab4; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FB582C118115149002C1795 /* AGPLab4.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab4.1; sourceTree = "<group>"; };
+		7FB582C8181151B3002C1795 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
+		7FB582C9181151B3002C1795 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		7FB582CA181151B3002C1795 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7FB582CB181151B3002C1795 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		7FB582CC181151B3002C1795 /* ResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
+		7FB582CD181151B3002C1795 /* ResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
+		7FB582CE181151B3002C1795 /* envmap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = envmap.fsh; sourceTree = "<group>"; };
+		7FB582CF181151B3002C1795 /* envmap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = envmap.vsh; sourceTree = "<group>"; };
 		7FC4003717F6F4110066CEA2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		7FE07DED17FEABBA00007251 /* BlockGame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BlockGame; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE07DEF17FEABBA00007251 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -150,6 +191,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7FB582BA18115148002C1795 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FB582D718115325002C1795 /* OpenGL.framework in Frameworks */,
+				7FB582D818115327002C1795 /* SDL2.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7FE07DEA17FEABBA00007251 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -165,13 +215,13 @@
 		7F21781B18080B8500FA332F /* AGPLab3 */ = {
 			isa = PBXGroup;
 			children = (
-				7F21782318080BE300FA332F /* toon.fsh */,
-				7F21782418080BE300FA332F /* toon.vsh */,
 				7F21782518080BE300FA332F /* BlockGame.cpp */,
 				7F21782618080BE300FA332F /* BlockGame.h */,
 				7F21781C18080B8500FA332F /* main.cpp */,
 				7F21782718080BE300FA332F /* ResourceManager.cpp */,
 				7F21782818080BE300FA332F /* ResourceManager.h */,
+				7F21782318080BE300FA332F /* toon.fsh */,
+				7F21782418080BE300FA332F /* toon.vsh */,
 				7F21783018080C2600FA332F /* Supporting Files */,
 			);
 			path = AGPLab3;
@@ -191,6 +241,7 @@
 				7F4502CD17F5A1C5008A54D2 /* AGPLab1 */,
 				7FE07DEE17FEABBA00007251 /* BlockGame */,
 				7F21781B18080B8500FA332F /* AGPLab3 */,
+				7FB582BE18115149002C1795 /* AGPLab4 */,
 				7F4502D917F5A28C008A54D2 /* Frameworks */,
 				7F4502CC17F5A1C5008A54D2 /* Products */,
 			);
@@ -202,6 +253,7 @@
 				7F4502CB17F5A1C5008A54D2 /* AGPLab1 */,
 				7FE07DED17FEABBA00007251 /* BlockGame */,
 				7F21781A18080B8500FA332F /* AGPLab3 */,
+				7FB582BD18115148002C1795 /* AGPLab4 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -230,6 +282,30 @@
 			isa = PBXGroup;
 			children = (
 				7F4502D017F5A1C5008A54D2 /* AGPLab1.1 */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7FB582BE18115149002C1795 /* AGPLab4 */ = {
+			isa = PBXGroup;
+			children = (
+				7FB582C8181151B3002C1795 /* Game.cpp */,
+				7FB582C9181151B3002C1795 /* Game.h */,
+				7FB582CA181151B3002C1795 /* main.cpp */,
+				7FB582CB181151B3002C1795 /* Object.h */,
+				7FB582CC181151B3002C1795 /* ResourceManager.cpp */,
+				7FB582CD181151B3002C1795 /* ResourceManager.h */,
+				7FB582CE181151B3002C1795 /* envmap.fsh */,
+				7FB582CF181151B3002C1795 /* envmap.vsh */,
+				7FB582D6181151E0002C1795 /* Supporting Files */,
+			);
+			path = AGPLab4;
+			sourceTree = "<group>";
+		};
+		7FB582D6181151E0002C1795 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7FB582C118115149002C1795 /* AGPLab4.1 */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -299,6 +375,24 @@
 			productReference = 7F4502CB17F5A1C5008A54D2 /* AGPLab1 */;
 			productType = "com.apple.product-type.tool";
 		};
+		7FB582BC18115148002C1795 /* AGPLab4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FB582C518115149002C1795 /* Build configuration list for PBXNativeTarget "AGPLab4" */;
+			buildPhases = (
+				7FB582B918115148002C1795 /* Sources */,
+				7FB582BA18115148002C1795 /* Frameworks */,
+				7FB582BB18115148002C1795 /* CopyFiles */,
+				7FB582D918115353002C1795 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AGPLab4;
+			productName = AGPLab4;
+			productReference = 7FB582BD18115148002C1795 /* AGPLab4 */;
+			productType = "com.apple.product-type.tool";
+		};
 		7FE07DEC17FEABBA00007251 /* BlockGame */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7FE07DF517FEABBA00007251 /* Build configuration list for PBXNativeTarget "BlockGame" */;
@@ -341,6 +435,7 @@
 				7F4502CA17F5A1C5008A54D2 /* AGPLab1 */,
 				7FE07DEC17FEABBA00007251 /* BlockGame */,
 				7F21781918080B8500FA332F /* AGPLab3 */,
+				7FB582BC18115148002C1795 /* AGPLab4 */,
 			);
 		};
 /* End PBXProject section */
@@ -363,6 +458,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F4502CF17F5A1C5008A54D2 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FB582B918115148002C1795 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FB582D5181151B3002C1795 /* envmap.vsh in Sources */,
+				7FB582D3181151B3002C1795 /* ResourceManager.cpp in Sources */,
+				7FB582D4181151B3002C1795 /* envmap.fsh in Sources */,
+				7FB582D1181151B3002C1795 /* Game.cpp in Sources */,
+				7FB582D2181151B3002C1795 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +613,36 @@
 			};
 			name = Release;
 		};
+		7FB582C318115149002C1795 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/lib";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7FB582C418115149002C1795 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/include";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/lib";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		7FE07DF317FEABBA00007251 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -546,6 +683,7 @@
 				7F21782218080B8500FA332F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7F4502C617F5A1C5008A54D2 /* Build configuration list for PBXProject "AGPLabs" */ = {
 			isa = XCConfigurationList;
@@ -564,6 +702,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		7FB582C518115149002C1795 /* Build configuration list for PBXNativeTarget "AGPLab4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FB582C318115149002C1795 /* Debug */,
+				7FB582C418115149002C1795 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		7FE07DF517FEABBA00007251 /* Build configuration list for PBXNativeTarget "BlockGame" */ = {
 			isa = XCConfigurationList;
