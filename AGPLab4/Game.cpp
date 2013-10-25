@@ -385,6 +385,10 @@ bool Game::Init(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
+    GLfloat aniso;
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0,
                  texture->format->BytesPerPixel == 3 ? GL_RGB : GL_RGBA,
                  GL_UNSIGNED_BYTE, texture->pixels);
