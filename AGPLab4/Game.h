@@ -44,6 +44,7 @@
 
 #define GAME_ATTRIB_VERTEX 0
 #define GAME_ATTRIB_NORMAL 1
+#define GAME_ATTRIB_TEXCOORD 2
 
 class Game
 {
@@ -58,6 +59,8 @@ protected:
     GLuint vao;
     GLuint vbo_vertex;
     GLuint vbo_normal;
+    GLuint vbo_texcoord;
+    GLuint tex;
 
     glm::mat4 matIdentity;
     glm::mat4 camera;

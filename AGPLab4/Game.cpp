@@ -171,9 +171,8 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(this->program_id, f_id);
 
     glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex");
-    //glBindAttribLocation(p_id, ATTRIB_COLOR, "a_vColor");
-    //glBindAttribLocation(p_id, ATTRIB_NORMAL, "a_vNormal");
-    //glBindAttribLocation(p_id, ATTRIB_TEXCOORD, "a_vTexCoord");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord");
 
     glLinkProgram(this->program_id);
     glUseProgram(this->program_id);
@@ -204,7 +203,7 @@ bool Game::Init(void)
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
     this->obj_rotation = 0;
 
-    static glm::i8vec4 const vertices[] =
+    static const glm::i8vec4 vertices[] =
     {
         // left
         glm::i8vec4(-1,  0,  0, 0),
@@ -255,7 +254,7 @@ bool Game::Init(void)
         glm::i8vec4(-1, -1,  1, 0),
     };
 
-    static glm::i8vec4 const normals[] =
+    static const glm::i8vec4 normals[] =
     {
         // left
         glm::i8vec4(-1,  0,  0, 0),
@@ -304,6 +303,52 @@ bool Game::Init(void)
         glm::i8vec4( 0,  0,  1, 0),
         glm::i8vec4( 0,  0,  1, 0),
         glm::i8vec4( 0,  0,  1, 0),
+    };
+
+    static const glm::vec2 texcoords[] =
+    {
+        // left
+        glm::vec2(0.5, 0.5),
+        glm::vec2(0,   0),
+        glm::vec2(0,   1),
+        glm::vec2(1,   1),
+        glm::vec2(1,   0),
+        glm::vec2(0,   0),
+
+        glm::vec2(0.5, 0.5),
+        glm::vec2(0,   0),
+        glm::vec2(0,   1),
+        glm::vec2(1,   1),
+        glm::vec2(1,   0),
+        glm::vec2(0,   0),
+
+        glm::vec2(0.5, 0.5),
+        glm::vec2(0,   0),
+        glm::vec2(0,   1),
+        glm::vec2(1,   1),
+        glm::vec2(1,   0),
+        glm::vec2(0,   0),
+
+        glm::vec2(0.5, 0.5),
+        glm::vec2(0,   0),
+        glm::vec2(0,   1),
+        glm::vec2(1,   1),
+        glm::vec2(1,   0),
+        glm::vec2(0,   0),
+
+        glm::vec2(0.5, 0.5),
+        glm::vec2(0,   0),
+        glm::vec2(0,   1),
+        glm::vec2(1,   1),
+        glm::vec2(1,   0),
+        glm::vec2(0,   0),
+
+        glm::vec2(0.5, 0.5),
+        glm::vec2(0,   0),
+        glm::vec2(0,   1),
+        glm::vec2(1,   1),
+        glm::vec2(1,   0),
+        glm::vec2(0,   0)
     };
 
     glGenVertexArrays(1, &this->vao);
@@ -320,6 +365,32 @@ bool Game::Init(void)
     glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
     glVertexAttribIPointer(GAME_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
     glEnableVertexAttribArray(GAME_ATTRIB_NORMAL);
+
+    glGenBuffers(1, &this->vbo_texcoord);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_texcoord);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
+    glVertexAttribPointer(GAME_ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(GAME_ATTRIB_TEXCOORD);
+
+    SDL_Surface *texture = SDL_LoadBMP("studdedmetal.bmp");
+
+    glUniform1i(glGetUniformLocation(this->program_id, "u_texture"), 0);
+    glActiveTexture(GL_TEXTURE0);
+
+    glGenTextures(1, &this->tex);
+    glBindTexture(GL_TEXTURE_2D, this->tex);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0,
+                 texture->format->BytesPerPixel == 3 ? GL_RGB : GL_RGBA,
+                 GL_UNSIGNED_BYTE, texture->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    SDL_FreeSurface(texture);
 
     return true;
 }
@@ -375,7 +446,6 @@ bool Game::Update(float seconds)
             case SDLK_ESCAPE:
                 return false;
             case SDLK_w:
-                //this->camera = glm::translate(this->camera, glm::vec3(0, 0, 5.0f * seconds));
                 this->camera = glm::translate(this->matIdentity, glm::vec3(0, 0, movement_speed * seconds)) * this->camera;
                 break;
             case SDLK_s:
@@ -422,7 +492,7 @@ bool Game::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
+    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
     glm::mat4 matModelView = this->camera;
 
     glm::mat4 matObjectModelView = matModelView;//glm::rotate(matModelView, this->obj_rotation, glm::vec3(0, 1, 0));
@@ -435,8 +505,8 @@ bool Game::Draw(void)
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
     glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
 
-    GLint firsts[] = {0, 6, 12, 18, 24, 30};
-    GLint counts[] = {6, 6, 6, 6, 6, 6};
+    const GLint firsts[] = {0, 6, 12, 18, 24, 30};
+    const GLint counts[] = {6, 6, 6, 6, 6, 6};
 
     //glBindVertexArray(this->vao);
     glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));

@@ -7,8 +7,10 @@ uniform mat4 u_matObjectModelView;
 
 in ivec3 a_vVertex;
 in ivec3 a_vNormal;
+in vec2 a_vTexCoord;
 smooth out vec4 v_vVertex;
 smooth out vec3 v_vNormal;
+smooth out vec2 v_vTexCoord;
 
 smooth out vec4 v_vEyeCameraPosition;
 
@@ -27,8 +29,9 @@ void main(void)
     matNormal[2] = u_matObjectModelView[2].xyz;
 
     vec3 vNormal = vec3(a_vNormal);
-
     v_vNormal = normalize(matNormal * normalize(vNormal));
+
+    v_vTexCoord = a_vTexCoord;
 
     gl_Position = u_matProjection * vObjectModelViewVertex;
 }
