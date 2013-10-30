@@ -29,23 +29,40 @@ private:
 
     static GLuint make_buffer(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
     {
+        GLenum err;
         GLuint id;
+
         glGenBuffers(1, &id);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_buffer => glGenBuffers: error: 0x%x\n", err);
+
         glBindBuffer(target, id);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_buffer => glBindBuffer: error: 0x%x\n", err);
+
         glBufferData(target, size, data, usage);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_buffer => glBufferData: error: 0x%x\n", err);
+
         return id;
     }
 
     static void make_vbo(GLsizeiptr size, const GLvoid *data, GLuint program_id,
                          const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type)
     {
+        GLenum err;
+
         Drawable::make_buffer(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+
         GLint attrib_id = glGetAttribLocation(program_id, attrib_name);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: error: 0x%x\n", err);
+        if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: attribute is not active in program\n");
+
         glVertexAttribPointer(attrib_id, attrib_size, attrib_type, GL_FALSE, 0, NULL);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glVertexAttribPointer: error: 0x%x\n", err);
+
         glEnableVertexAttribArray(attrib_id);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glEnableVertexAttribArray: error: 0x%x\n", err);
     }
 protected:
-    virtual unsigned int make(glm::vec3 *vertices,
+    virtual unsigned int Make(glm::vec3 *vertices,
                               glm::vec3 *normals,
                               glm::vec3 *tangents,
                               glm::vec3 *bitangents,
@@ -53,16 +70,24 @@ protected:
 public:
     void Init(GLuint program_id)
     {
+        GLenum err;
+
         glm::vec3 *vertices   = NULL;
         glm::vec3 *normals    = NULL;
         glm::vec3 *tangents   = NULL;
         glm::vec3 *bitangents = NULL;
         glm::vec2 *texcoords  = NULL;
 
-        unsigned int num = this->make(vertices, normals, tangents, bitangents, texcoords);
+        // clear errors
+        while(glGetError() != GL_NO_ERROR);
+
+        unsigned int num = this->Make(vertices, normals, tangents, bitangents, texcoords);
 
         glGenVertexArrays(1, &this->vao);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Init => glGenVertexArrays: error: 0x%x\n", err);
+
         glBindVertexArray(this->vao);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Init => glBindVertexArray: error: 0x%x\n", err);
 
         make_vbo(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT);
         make_vbo(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT);
@@ -79,7 +104,10 @@ public:
 
     virtual void Draw(void)
     {
+        GLenum err;
+
         glBindVertexArray(this->vao);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glBindVertexArray: error: 0x%x\n", err);
     }
 };
 
