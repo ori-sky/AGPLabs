@@ -485,8 +485,8 @@ bool Game::HandleSDL(SDL_Event *e)
 
 bool Game::Update(float seconds)
 {
-    const float movement_speed = 3.0f;
-    const float rotation_speed = 90.0f;
+    const float movement_speed = 1.0f;
+    const float rotation_speed = 50.0f;
 
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
         i!=this->pressed_keys.end(); ++i)

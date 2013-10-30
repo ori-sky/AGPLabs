@@ -13,6 +13,7 @@ smooth out vec3 v_vNormal;
 smooth out vec2 v_vTexCoord;
 
 smooth out vec4 v_vEyeCameraPosition;
+smooth out mat3 v_matNormal;
 
 void main(void)
 {
@@ -27,6 +28,7 @@ void main(void)
     matNormal[0] = u_matObjectModelView[0].xyz;
     matNormal[1] = u_matObjectModelView[1].xyz;
     matNormal[2] = u_matObjectModelView[2].xyz;
+    v_matNormal = matNormal;
 
     vec3 vNormal = vec3(a_vNormal);
     v_vNormal = normalize(matNormal * normalize(vNormal));
