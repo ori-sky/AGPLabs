@@ -28,7 +28,7 @@ void main(void)
     vec3 vDiffuse = vec3(0.0, 0.8, 1.0);
     vec3 vSpecular = vec3(0.6, 0.9, 1.0);
 
-    float fShininess = 32.0;
+    float fShininess = 64.0;
 
     //vec4 vLightPos = vec4(3.0, 5.0, 3.0, 1.0);
     vec4 vLightPos = vec4(0.0);
@@ -62,7 +62,7 @@ void main(void)
                          fDistance * 0.05 +
                          pow(fDistance, 2.0) * 0.01 +
                          pow(fDistance, 3.0) * 0.002 +
-                         pow(fDistance, 4.0) * 0.01;
+                         pow(fDistance, 4.0) * 0.002;
         float fAttenuation = 1.0 / fDivisor;
         vFinalDiffuse = fAttenuation * vDiffuse * fNDotL;
 
