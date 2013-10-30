@@ -9,6 +9,8 @@ EXECUTABLE=AGPLab4
 
 all: $(SRCS) $(EXECUTABLE)
 
+again: clean all
+
 clean:
 	rm -f $(OBJS) $(EXECUTABLE)
 
