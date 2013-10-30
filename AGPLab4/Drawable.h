@@ -17,9 +17,7 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
-#include "Object.h"
-
-class Drawable : public Object<Drawable>
+class Drawable
 {
 private:
     GLuint vao;
@@ -51,11 +49,16 @@ protected:
                               glm::vec3 *normals,
                               glm::vec3 *tangents,
                               glm::vec3 *bitangents,
-                              glm::vec3 *texcoords);
+                              glm::vec2 *texcoords) = 0;
 public:
     void Init(GLuint program_id)
     {
-        glm::vec3 *vertices, *normals, *tangents, *bitangents, *texcoords;
+        glm::vec3 *vertices   = NULL;
+        glm::vec3 *normals    = NULL;
+        glm::vec3 *tangents   = NULL;
+        glm::vec3 *bitangents = NULL;
+        glm::vec2 *texcoords  = NULL;
+
         unsigned int num = this->make(vertices, normals, tangents, bitangents, texcoords);
 
         glGenVertexArrays(1, &this->vao);
@@ -66,6 +69,17 @@ public:
         make_vbo(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT);
         make_vbo(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT);
         make_vbo(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT);
+
+        delete[] vertices;
+        delete[] normals;
+        delete[] tangents;
+        delete[] bitangents;
+        delete[] texcoords;
+    }
+
+    virtual void Draw(void)
+    {
+        glBindVertexArray(this->vao);
     }
 };
 
