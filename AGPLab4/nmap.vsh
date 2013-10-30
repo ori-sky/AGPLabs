@@ -5,19 +5,25 @@ uniform mat4 u_matProjection;
 uniform mat4 u_matModelView;
 uniform mat4 u_matObjectModelView;
 
-in ivec3 a_vVertex;
-in ivec3 a_vNormal;
-in vec2 a_vTexCoord;
+in ivec3 a_vVertex_;
+in ivec3 a_vNormal_;
+in vec2 a_vTexCoord_;
 smooth out vec4 v_vVertex;
 smooth out vec3 v_vNormal;
 smooth out vec2 v_vTexCoord;
+
+in vec3 a_vVertex;
+in vec3 a_vNormal;
+in vec3 a_vTangent;
+in vec3 a_vBitangent;
+in vec2 a_vTexCoord;
 
 smooth out vec4 v_vEyeCameraPosition;
 smooth out mat3 v_matNormal;
 
 void main(void)
 {
-    vec4 vVertex = vec4(a_vVertex, 1.0);
+    vec4 vVertex = vec4(a_vVertex_, 1.0);
     vec4 vModelViewVertex = u_matModelView * vVertex;
     vec4 vObjectModelViewVertex = u_matObjectModelView * vVertex;
 
@@ -30,10 +36,10 @@ void main(void)
     matNormal[2] = u_matObjectModelView[2].xyz;
     v_matNormal = matNormal;
 
-    vec3 vNormal = vec3(a_vNormal);
+    vec3 vNormal = vec3(a_vNormal_);
     v_vNormal = normalize(matNormal * normalize(vNormal));
 
-    v_vTexCoord = a_vTexCoord;
+    v_vTexCoord = a_vTexCoord_;
 
     gl_Position = u_matProjection * vObjectModelViewVertex;
 }

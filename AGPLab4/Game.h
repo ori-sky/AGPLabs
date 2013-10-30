@@ -41,6 +41,7 @@
 #include <glm/gtc/type_precision.hpp>
 
 #include "ResourceManager.h"
+#include "Drawable.h"
 
 #define GAME_ATTRIB_VERTEX 0
 #define GAME_ATTRIB_NORMAL 1
@@ -62,6 +63,7 @@ protected:
     GLuint vbo_texcoord;
     GLuint tex;
     GLuint nmap;
+    GLuint hmap;
 
     glm::mat4 matIdentity;
     glm::mat4 camera;

@@ -3,6 +3,7 @@ precision highp float;
 
 uniform sampler2D u_texture;
 uniform sampler2D u_nmap;
+uniform sampler2D u_hmap;
 
 uniform mat4 u_matProjection;
 uniform mat4 u_matModelView;
@@ -21,17 +22,17 @@ void main(void)
 {
     // test values
 
-    float fTexScale = 1.0;
-
+    vec4 vLightPos = vec4(0.0);
     vec3 vAmbient = vec3(0.05);
-    //vec3 vDiffuse = vec3(1.0);
     vec3 vDiffuse = vec3(0.0, 0.8, 1.0);
-    vec3 vSpecular = vec3(0.6, 0.9, 1.0);
-
+    vec3 vSpecular = vec3(1.0, 1.0, 0.5);
     float fShininess = 64.0;
 
-    //vec4 vLightPos = vec4(3.0, 5.0, 3.0, 1.0);
-    vec4 vLightPos = vec4(0.0);
+    // height mapping
+    vec2 vTexCoord = v_vTexCoord.st;
+    float height = texture(u_hmap, vTexCoord).r;
+    float fHSB = height * 0.04 + 0.02;
+    vTexCoord += normalize(v_vEyeCameraPosition).xy * fHSB;
 
     vec3 vColor = vAmbient;
     vec3 vFinalDiffuse;
@@ -48,9 +49,10 @@ void main(void)
     vec3 vNormal = normalize(v_vNormal);
 
     // make use of normal map
-    vec3 vNMCoord = texture(u_nmap, v_vTexCoord.xy * fTexScale).xyz;
-    vec3 vNMNormal = normalize(normalize(vNMCoord * 2 - vec3(1.0)));
-    vNormal = normalize(vNormal + vNMNormal);
+    vec3 vNMColor = texture(u_nmap, vTexCoord).xyz;
+    //vec3 vNMNormal = normalize(normalize(vNMColor * 2 - vec3(1.0)));
+    //vNormal = normalize(vNormal + vNMNormal);
+    vNormal = vNMColor * 2.0 - 1.0;
 
     float fNDotL = dot(vNormal, vLightDir);
     float fNDotHV = max(0.0, dot(vNormal, vHalfVector));
@@ -72,5 +74,5 @@ void main(void)
     vColor += vFinalDiffuse + vFinalSpecular;
 
     o_vColor = vec4(vColor, 1.0);
-    o_vColor = texture(u_texture, v_vTexCoord.xy * fTexScale) * o_vColor * 1.4;
+    o_vColor = texture(u_texture, vTexCoord) * o_vColor * 1.4;
 }

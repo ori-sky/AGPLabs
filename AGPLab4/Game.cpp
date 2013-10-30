@@ -170,9 +170,9 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(this->program_id, v_id);
     glAttachShader(this->program_id, f_id);
 
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex");
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal");
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex_");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal_");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord_");
 
     glLinkProgram(this->program_id);
     glUseProgram(this->program_id);
@@ -441,6 +441,40 @@ bool Game::Init(void)
     glGenerateMipmap(GL_TEXTURE_2D);
 
     SDL_FreeSurface(nmap);
+
+    // height map
+
+    SDL_Surface *hmap = SDL_LoadBMP("studdedmetal_height.bmp");
+
+    glUniform1i(glGetUniformLocation(this->program_id, "u_hmap"), 2);
+    glActiveTexture(GL_TEXTURE2);
+
+    glGenTextures(1, &this->hmap);
+    glBindTexture(GL_TEXTURE_2D, this->hmap);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+
+    format = 0;
+    switch(hmap->format->BytesPerPixel)
+    {
+        case 3:
+            format = hmap->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
+            break;
+        case 4:
+            format = hmap->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
+            break;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, hmap->w, hmap->h, 0, format,
+                 GL_UNSIGNED_BYTE, hmap->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    SDL_FreeSurface(hmap);
 
     return true;
 }
