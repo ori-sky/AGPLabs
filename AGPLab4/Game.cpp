@@ -203,6 +203,8 @@ bool Game::Init(void)
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
     this->obj_rotation = 0;
 
+    this->cube.Init(this->program_id);
+
     static const glm::i8vec4 vertices[] =
     {
         // left

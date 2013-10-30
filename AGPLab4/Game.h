@@ -41,7 +41,7 @@
 #include <glm/gtc/type_precision.hpp>
 
 #include "ResourceManager.h"
-#include "Drawable.h"
+#include "CubeDrawable.h"
 
 #define GAME_ATTRIB_VERTEX 0
 #define GAME_ATTRIB_NORMAL 1
@@ -68,6 +68,8 @@ protected:
     glm::mat4 matIdentity;
     glm::mat4 camera;
     float obj_rotation;
+
+    CubeDrawable cube;
 public:
     static Game * New(void) { return new Game(); }
     void PrintShaderError(GLint shader);
