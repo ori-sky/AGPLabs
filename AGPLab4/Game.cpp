@@ -594,8 +594,10 @@ bool Game::Draw(void)
     const GLint firsts[] = {0, 6, 12, 18, 24, 30};
     const GLint counts[] = {6, 6, 6, 6, 6, 6};
 
-    //glBindVertexArray(this->vao);
+    glBindVertexArray(this->vao);
     glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
+
+    this->cube.Draw();
 
     SDL_GL_SwapWindow(this->wnd);
 
