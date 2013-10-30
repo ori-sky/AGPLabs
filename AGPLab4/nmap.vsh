@@ -23,7 +23,7 @@ smooth out mat3 v_matNormal;
 
 void main(void)
 {
-    vec4 vVertex = vec4(a_vVertex_, 1.0);
+    vec4 vVertex = vec4(a_vVertex, 1.0);
     vec4 vModelViewVertex = u_matModelView * vVertex;
     vec4 vObjectModelViewVertex = u_matObjectModelView * vVertex;
 
@@ -36,10 +36,10 @@ void main(void)
     matNormal[2] = u_matObjectModelView[2].xyz;
     v_matNormal = matNormal;
 
-    vec3 vNormal = vec3(a_vNormal_);
+    vec3 vNormal = vec3(a_vNormal);
     v_vNormal = normalize(matNormal * normalize(vNormal));
 
-    v_vTexCoord = a_vTexCoord_;
+    v_vTexCoord = a_vTexCoord;
 
     gl_Position = u_matProjection * vObjectModelViewVertex;
 }

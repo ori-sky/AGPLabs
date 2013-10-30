@@ -170,9 +170,9 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(this->program_id, v_id);
     glAttachShader(this->program_id, f_id);
 
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex_");
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal_");
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord_");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal");
+    glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord");
 
     glLinkProgram(this->program_id);
     glUseProgram(this->program_id);
@@ -205,106 +205,106 @@ bool Game::Init(void)
 
     this->cube.Init(this->program_id);
 
-    static const glm::i8vec4 vertices[] =
+    static const glm::vec3 vertices[] =
     {
         // left
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
+        glm::vec3(-1,  0,  0),
+        glm::vec3(-1, -1, -1),
+        glm::vec3(-1, -1,  1),
+        glm::vec3(-1,  1,  1),
+        glm::vec3(-1,  1, -1),
+        glm::vec3(-1, -1, -1),
 
         // right
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
+        glm::vec3( 1,  0,  0),
+        glm::vec3( 1, -1, -1),
+        glm::vec3( 1,  1, -1),
+        glm::vec3( 1,  1,  1),
+        glm::vec3( 1, -1,  1),
+        glm::vec3( 1, -1, -1),
 
         // bottom
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
+        glm::vec3( 0, -1,  0),
+        glm::vec3(-1, -1, -1),
+        glm::vec3( 1, -1, -1),
+        glm::vec3( 1, -1,  1),
+        glm::vec3(-1, -1,  1),
+        glm::vec3(-1, -1, -1),
 
         // top
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
+        glm::vec3( 0,  1,  0),
+        glm::vec3(-1,  1, -1),
+        glm::vec3(-1,  1,  1),
+        glm::vec3( 1,  1,  1),
+        glm::vec3( 1,  1, -1),
+        glm::vec3(-1,  1, -1),
 
         // front
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
-        glm::i8vec4(-1,  1, -1, 0),
-        glm::i8vec4( 1,  1, -1, 0),
-        glm::i8vec4( 1, -1, -1, 0),
-        glm::i8vec4(-1, -1, -1, 0),
+        glm::vec3( 0,  0, -1),
+        glm::vec3(-1, -1, -1),
+        glm::vec3(-1,  1, -1),
+        glm::vec3( 1,  1, -1),
+        glm::vec3( 1, -1, -1),
+        glm::vec3(-1, -1, -1),
 
         // back
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
-        glm::i8vec4( 1, -1,  1, 0),
-        glm::i8vec4( 1,  1,  1, 0),
-        glm::i8vec4(-1,  1,  1, 0),
-        glm::i8vec4(-1, -1,  1, 0),
+        glm::vec3( 0,  0,  1),
+        glm::vec3(-1, -1,  1),
+        glm::vec3( 1, -1,  1),
+        glm::vec3( 1,  1,  1),
+        glm::vec3(-1,  1,  1),
+        glm::vec3(-1, -1,  1),
     };
 
-    static const glm::i8vec4 normals[] =
+    static const glm::vec3 normals[] =
     {
         // left
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
-        glm::i8vec4(-1,  0,  0, 0),
+        glm::vec3(-1,  0,  0),
+        glm::vec3(-1,  0,  0),
+        glm::vec3(-1,  0,  0),
+        glm::vec3(-1,  0,  0),
+        glm::vec3(-1,  0,  0),
+        glm::vec3(-1,  0,  0),
 
         // right
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
-        glm::i8vec4( 1,  0,  0, 0),
+        glm::vec3( 1,  0,  0),
+        glm::vec3( 1,  0,  0),
+        glm::vec3( 1,  0,  0),
+        glm::vec3( 1,  0,  0),
+        glm::vec3( 1,  0,  0),
+        glm::vec3( 1,  0,  0),
 
         // bottom
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
-        glm::i8vec4( 0, -1,  0, 0),
+        glm::vec3( 0, -1,  0),
+        glm::vec3( 0, -1,  0),
+        glm::vec3( 0, -1,  0),
+        glm::vec3( 0, -1,  0),
+        glm::vec3( 0, -1,  0),
+        glm::vec3( 0, -1,  0),
 
         // top
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
-        glm::i8vec4( 0,  1,  0, 0),
+        glm::vec3( 0,  1,  0),
+        glm::vec3( 0,  1,  0),
+        glm::vec3( 0,  1,  0),
+        glm::vec3( 0,  1,  0),
+        glm::vec3( 0,  1,  0),
+        glm::vec3( 0,  1,  0),
 
         // front
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
-        glm::i8vec4( 0,  0, -1, 0),
+        glm::vec3( 0,  0, -1),
+        glm::vec3( 0,  0, -1),
+        glm::vec3( 0,  0, -1),
+        glm::vec3( 0,  0, -1),
+        glm::vec3( 0,  0, -1),
+        glm::vec3( 0,  0, -1),
 
         // back
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
-        glm::i8vec4( 0,  0,  1, 0),
+        glm::vec3( 0,  0,  1),
+        glm::vec3( 0,  0,  1),
+        glm::vec3( 0,  0,  1),
+        glm::vec3( 0,  0,  1),
+        glm::vec3( 0,  0,  1),
+        glm::vec3( 0,  0,  1),
     };
 
     static const glm::vec2 texcoords[] =
@@ -359,13 +359,13 @@ bool Game::Init(void)
     glGenBuffers(1, &this->vbo_vertex);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertex);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribIPointer(GAME_ATTRIB_VERTEX, 4, GL_BYTE, 0, NULL);
+    glVertexAttribPointer(GAME_ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(GAME_ATTRIB_VERTEX);
 
     glGenBuffers(1, &this->vbo_normal);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo_normal);
     glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-    glVertexAttribIPointer(GAME_ATTRIB_NORMAL, 4, GL_BYTE, 0, NULL);
+    glVertexAttribPointer(GAME_ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(GAME_ATTRIB_NORMAL);
 
     glGenBuffers(1, &this->vbo_texcoord);
