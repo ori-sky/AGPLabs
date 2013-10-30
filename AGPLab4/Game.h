@@ -61,6 +61,7 @@ protected:
     GLuint vbo_normal;
     GLuint vbo_texcoord;
     GLuint tex;
+    GLuint nmap;
 
     glm::mat4 matIdentity;
     glm::mat4 camera;

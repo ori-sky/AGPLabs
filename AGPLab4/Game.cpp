@@ -191,7 +191,7 @@ bool Game::Init(void)
 {
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
-    if(!this->InitShaders("envmap.vsh", "envmap.fsh")) return false;
+    if(!this->InitShaders("nmap.vsh", "nmap.fsh")) return false;
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -372,6 +372,8 @@ bool Game::Init(void)
     glVertexAttribPointer(GAME_ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(GAME_ATTRIB_TEXCOORD);
 
+    // texture
+
     SDL_Surface *texture = SDL_LoadBMP("studdedmetal.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_texture"), 0);
@@ -389,12 +391,56 @@ bool Game::Init(void)
     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0,
-                 texture->format->BytesPerPixel == 3 ? GL_RGB : GL_RGBA,
+    GLenum format = 0;
+    switch(texture->format->BytesPerPixel)
+    {
+        case 3:
+            format = texture->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
+            break;
+        case 4:
+            format = texture->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
+            break;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0, format,
                  GL_UNSIGNED_BYTE, texture->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     SDL_FreeSurface(texture);
+
+    // normal map
+
+    SDL_Surface *nmap = SDL_LoadBMP("studdedmetal_normal.bmp");
+
+    glUniform1i(glGetUniformLocation(this->program_id, "u_nmap"), 1);
+    glActiveTexture(GL_TEXTURE1);
+
+    glGenTextures(1, &this->nmap);
+    glBindTexture(GL_TEXTURE_2D, this->nmap);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+
+    format = 0;
+    switch(nmap->format->BytesPerPixel)
+    {
+        case 3:
+            format = nmap->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
+            break;
+        case 4:
+            format = nmap->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
+            break;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, nmap->w, nmap->h, 0, format,
+                 GL_UNSIGNED_BYTE, nmap->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    SDL_FreeSurface(nmap);
 
     return true;
 }
