@@ -3,7 +3,7 @@ precision highp float;
 
 uniform sampler2D u_texture;
 uniform sampler2D u_nmap;
-uniform sampler2D u_hmap;
+uniform sampler2D u_glossmap;
 
 uniform mat4 u_matProjection;
 uniform mat4 u_matModelView;
@@ -33,9 +33,9 @@ void main(void)
     // attenuation
     float fDivisor = 1.0 +
                      fDistance * 0.05 +
-                     pow(fDistance, 2.0) * 0.01 +
-                     pow(fDistance, 3.0) * 0.002 +
-                     pow(fDistance, 4.0) * 0.002;
+                     pow(fDistance, 2.0) * 0.03 +
+                     pow(fDistance, 3.0) * 0.01 +
+                     pow(fDistance, 4.0) * 0.00;
     float fAttenuation = 1.0 / fDivisor;
 
     // ambient
@@ -52,6 +52,7 @@ void main(void)
         vec3 vHalf = normalize(vLight + normalize(v_vEye));
         float fNDotH = max(0.0, dot(vNormal, vHalf));
         vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 64.0) * fAttenuation;
+        vSpecular *= texture(u_glossmap, vTexCoord);
     }
 
     // texture

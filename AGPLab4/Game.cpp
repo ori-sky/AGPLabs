@@ -376,7 +376,7 @@ bool Game::Init(void)
 
     // texture
 
-    SDL_Surface *texture = SDL_LoadBMP("studdedmetal.bmp");
+    SDL_Surface *texture = SDL_LoadBMP("stone.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_texture"), 0);
     glActiveTexture(GL_TEXTURE0);
@@ -412,7 +412,7 @@ bool Game::Init(void)
 
     // normal map
 
-    SDL_Surface *nmap = SDL_LoadBMP("studdedmetal_normal.bmp");
+    SDL_Surface *nmap = SDL_LoadBMP("stone_normal.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_nmap"), 1);
     glActiveTexture(GL_TEXTURE1);
@@ -443,6 +443,40 @@ bool Game::Init(void)
     glGenerateMipmap(GL_TEXTURE_2D);
 
     SDL_FreeSurface(nmap);
+
+    // gloss map
+
+    SDL_Surface *glossmap = SDL_LoadBMP("stone_gloss.bmp");
+
+    glUniform1i(glGetUniformLocation(this->program_id, "u_glossmap"), 2);
+    glActiveTexture(GL_TEXTURE2);
+
+    glGenTextures(1, &this->glossmap);
+    glBindTexture(GL_TEXTURE_2D, this->glossmap);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+
+    format = 0;
+    switch(glossmap->format->BytesPerPixel)
+    {
+        case 3:
+            format = glossmap->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
+            break;
+        case 4:
+            format = glossmap->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
+            break;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, glossmap->w, glossmap->h, 0, format,
+                 GL_UNSIGNED_BYTE, glossmap->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    SDL_FreeSurface(glossmap);
 
     return true;
 }
