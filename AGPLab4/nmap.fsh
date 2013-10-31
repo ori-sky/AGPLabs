@@ -9,12 +9,13 @@ uniform mat4 u_matProjection;
 uniform mat4 u_matModelView;
 uniform mat4 u_matObjectModelView;
 
-smooth in vec4 v_vVertex;
+smooth in vec3 v_vVertex;
 smooth in vec3 v_vNormal;
+smooth in vec3 v_vTangent;
+smooth in vec3 v_vBitangent;
 smooth in vec2 v_vTexCoord;
-
 smooth in vec4 v_vEyeCameraPosition;
-smooth in mat3 v_matNormal;
+smooth in mat3 matTBN;
 
 out vec4 o_vColor;
 
@@ -25,7 +26,7 @@ void main(void)
     vec4 vLightPos = vec4(0.0);
     vec3 vAmbient = vec3(0.05);
     vec3 vDiffuse = vec3(0.0, 0.8, 1.0);
-    vec3 vSpecular = vec3(1.0, 1.0, 0.5);
+    vec3 vSpecular = vec3(0.8, 1.0, 1.0);
     float fShininess = 64.0;
 
     // texcoord
