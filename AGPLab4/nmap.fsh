@@ -28,11 +28,13 @@ void main(void)
     vec3 vSpecular = vec3(1.0, 1.0, 0.5);
     float fShininess = 64.0;
 
-    // height mapping
+    // texcoord
     vec2 vTexCoord = v_vTexCoord.st;
-    float height = texture(u_hmap, vTexCoord).r;
+
+    // height mapping
+    /*float height = texture(u_hmap, vTexCoord).r;
     float fHSB = height * 0.04 + 0.02;
-    vTexCoord += normalize(v_vEyeCameraPosition).xy * fHSB;
+    vTexCoord += normalize(v_vEyeCameraPosition).xy * fHSB;*/
 
     vec3 vColor = vAmbient;
     vec3 vFinalDiffuse;
@@ -49,10 +51,8 @@ void main(void)
     vec3 vNormal = normalize(v_vNormal);
 
     // make use of normal map
-    vec3 vNMColor = texture(u_nmap, vTexCoord).xyz;
-    //vec3 vNMNormal = normalize(normalize(vNMColor * 2 - vec3(1.0)));
-    //vNormal = normalize(vNormal + vNMNormal);
-    vNormal = vNMColor * 2.0 - 1.0;
+    /*vec3 vNMColor = texture(u_nmap, vTexCoord).xyz;
+    vNormal = vNMColor * 2.0 - 1.0;*/
 
     float fNDotL = dot(vNormal, vLightDir);
     float fNDotHV = max(0.0, dot(vNormal, vHalfVector));
