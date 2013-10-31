@@ -17,19 +17,15 @@ smooth in vec3 v_vEye;
 
 out vec4 o_vColor;
 
-/*void main(void)
-{
-    vec2 vTexCoord = v_vTexCoord.st;
-    float height = texture(u_nmap, vTexCoord).r;
-    float fHSB = height * 0.04 + 0.02;
-    vTexCoord += normalize(v_vEyeVec).xy * fHSB;
-
-    o_vColor = texture(u_texture, vTexCoord);
-}*/
-
 void main(void)
 {
-    vec3 vNormal = texture(u_nmap, v_vTexCoord.st).rgb * 2.0 - 1.0;
+    // height mapping
+    vec2 vTexCoord = v_vTexCoord.st;
+    float height = texture(u_nmap, vTexCoord).a * -1;
+    float fHSB = height * 0.04 + 0.02;
+    vTexCoord += normalize(v_vEye).xy * fHSB;
+
+    vec3 vNormal = texture(u_nmap, vTexCoord).rgb * 2.0 - 1.0;
 
     float fDistance = length(v_vLight);
     vec3 vLight = normalize(v_vLight);
@@ -59,7 +55,7 @@ void main(void)
     }
 
     // texture
-    vec3 vTexColor = texture(u_texture, v_vTexCoord.st).rgb;
+    vec3 vTexColor = texture(u_texture, vTexCoord).rgb;
 
     // output
     o_vColor = vec4(vAmbient + vDiffuse * vTexColor + vSpecular, 1.0);
