@@ -123,15 +123,29 @@ protected:
 
         for(int i=0; i<24; i+=4)
         {
-            glm::vec3 vU = (*vertices)[i + 1] - (*vertices)[i];
-            glm::vec3 vV = (*vertices)[i + 2] - (*vertices)[i];
+            glm::vec3 deltaPos1 = (*vertices)[i + 1] - (*vertices)[i];
+            glm::vec3 deltaPos2 = (*vertices)[i + 2] - (*vertices)[i];
+            glm::vec2 deltaUV1 = (*texcoords)[i + 1] - (*texcoords)[i];
+            glm::vec2 deltaUV2 = (*texcoords)[i + 2] - (*texcoords)[i];
 
+            // calculate surface normal
             glm::vec3 normal = glm::vec3(0);
-            normal.x = vU.y * vV.z - vU.z * vV.y;
-            normal.y = vU.z * vV.x - vU.x * vV.z;
-            normal.z = vU.x * vV.y - vU.y * vV.x;
+            normal.x = deltaPos1.y * deltaPos2.z - deltaPos1.z * deltaPos2.y;
+            normal.y = deltaPos1.z * deltaPos2.x - deltaPos1.x * deltaPos2.z;
+            normal.z = deltaPos1.x * deltaPos2.y - deltaPos1.y * deltaPos2.x;
 
-            for(int j=0; j<4; ++j) (*normals)[i + j] = normal;
+            // calculate tangent and bitangent (what is this magic?!)
+            float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+            glm::vec3 tangent   = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+            glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV1.x) * r;
+
+            // put everything into the buffers
+            for(int j=0; j<4; ++j)
+            {
+                (*normals   )[i + j] = normal;
+                (*tangents  )[i + j] = tangent;
+                (*bitangents)[i + j] = bitangent;
+            }
         }
 
         return num;
