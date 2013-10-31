@@ -58,7 +58,7 @@ void main(void)
     vec3 vTexColor = texture(u_texture, vTexCoord).rgb;
 
     // use texture as specular map too
-    vSpecular *= fHSB / 2.0;
+    //vSpecular *= fHSB / 2.0;
 
     // output
     o_vColor = vec4(vAmbient + vDiffuse * vTexColor + vSpecular, 1.0);
