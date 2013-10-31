@@ -22,28 +22,79 @@
 class CubeDrawable : public Drawable
 {
 protected:
-    virtual unsigned int Make(glm::vec3 *vertices,
-                              glm::vec3 *normals,
-                              glm::vec3 *tangents,
-                              glm::vec3 *bitangents,
-                              glm::vec2 *texcoords)
+    virtual unsigned int Make(glm::vec3 **vertices,
+                              glm::vec3 **normals,
+                              glm::vec3 **tangents,
+                              glm::vec3 **bitangents,
+                              glm::vec2 **texcoords)
     {
         /* 4 vertices per face
          * 6 faces per cube
          */
         const unsigned int num = 24;
 
-        vertices   = new glm::vec3[num];
-        normals    = new glm::vec3[num];
-        tangents   = new glm::vec3[num];
-        bitangents = new glm::vec3[num];
-        texcoords  = new glm::vec2[num];
+        *vertices   = new glm::vec3[num];
+        *normals    = new glm::vec3[num];
+        *tangents   = new glm::vec3[num];
+        *bitangents = new glm::vec3[num];
+        *texcoords  = new glm::vec2[num];
 
-        memset(vertices,   0, num * sizeof(glm::vec3));
-        memset(normals,    0, num * sizeof(glm::vec3));
-        memset(tangents,   0, num * sizeof(glm::vec3));
-        memset(bitangents, 0, num * sizeof(glm::vec3));
-        memset(texcoords,  0, num * sizeof(glm::vec2));
+        memset(*vertices,   0, num * sizeof(glm::vec3));
+        memset(*normals,    0, num * sizeof(glm::vec3));
+        memset(*tangents,   0, num * sizeof(glm::vec3));
+        memset(*bitangents, 0, num * sizeof(glm::vec3));
+        memset(*texcoords,  0, num * sizeof(glm::vec2));
+
+        // vertices
+
+        // left
+        (*vertices)[ 0] = glm::vec3(-1, -1, -1);
+        (*vertices)[ 1] = glm::vec3(-1, -1,  1);
+        (*vertices)[ 2] = glm::vec3(-1,  1, -1);
+        (*vertices)[ 3] = glm::vec3(-1,  1,  1);
+
+        // right
+        (*vertices)[ 4] = glm::vec3( 1, -1, -1);
+        (*vertices)[ 5] = glm::vec3( 1,  1, -1);
+        (*vertices)[ 6] = glm::vec3( 1, -1,  1);
+        (*vertices)[ 7] = glm::vec3( 1,  1,  1);
+
+        // bottom
+        (*vertices)[ 8] = glm::vec3(-1, -1, -1);
+        (*vertices)[ 9] = glm::vec3( 1, -1, -1);
+        (*vertices)[10] = glm::vec3(-1, -1,  1);
+        (*vertices)[11] = glm::vec3( 1, -1,  1);
+
+        // top
+        (*vertices)[12] = glm::vec3(-1,  1, -1);
+        (*vertices)[13] = glm::vec3(-1,  1,  1);
+        (*vertices)[14] = glm::vec3( 1,  1, -1);
+        (*vertices)[15] = glm::vec3( 1,  1,  1);
+
+        // front
+        (*vertices)[16] = glm::vec3(-1, -1, -1);
+        (*vertices)[17] = glm::vec3(-1,  1, -1);
+        (*vertices)[18] = glm::vec3( 1, -1, -1);
+        (*vertices)[19] = glm::vec3( 1,  1, -1);
+
+        // back
+        (*vertices)[20] = glm::vec3(-1, -1,  1);
+        (*vertices)[21] = glm::vec3( 1, -1,  1);
+        (*vertices)[22] = glm::vec3(-1,  1,  1);
+        (*vertices)[23] = glm::vec3( 1,  1,  1);
+
+        for(int i=0; i<24; i+=4)
+        {
+            glm::vec3 vU = (*vertices)[i + 1] - (*vertices)[i];
+            glm::vec3 vV = (*vertices)[i + 2] - (*vertices)[i];
+
+            glm::vec3 normal = glm::vec3(0);
+            normal.x = vU.y * vV.z - vU.z * vV.y;
+            normal.y = vU.z * vV.x - vU.x * vV.z;
+            normal.z = vU.x * vV.y - vU.y * vV.x;
+
+            for(int j=0; j<4; ++j) (*normals)[i + j] = normal;
+        }
 
         return num;
     }
@@ -59,7 +110,6 @@ public:
 
         glMultiDrawArrays(GL_TRIANGLE_STRIP, firsts, counts, sizeof(firsts) / sizeof(GLint));
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "CubeDrawable::Draw => glMultiDrawArrays: error: 0x%x\n", err);
-
     }
 };
 
