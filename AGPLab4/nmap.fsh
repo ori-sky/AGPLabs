@@ -43,7 +43,7 @@ void main(void)
 
     // diffuse
     float fNDotL = max(0.0, dot(vNormal, vLight));
-    vec3 vDiffuse = vec3(0.0, 0.9, 1.0) * fNDotL * fAttenuation;
+    vec3 vDiffuse = vec3(0.8, 0.75, 0.7) * fNDotL * fAttenuation;
 
     // specular
     vec3 vSpecular = vec3(0.0);
@@ -51,11 +51,14 @@ void main(void)
     {
         vec3 vHalf = normalize(vLight + normalize(v_vEye));
         float fNDotH = max(0.0, dot(vNormal, vHalf));
-        vSpecular = vec3(0.5, 1.0, 1.0) * pow(fNDotH, 64.0) * fAttenuation;
+        vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 64.0) * fAttenuation;
     }
 
     // texture
     vec3 vTexColor = texture(u_texture, vTexCoord).rgb;
+
+    // use texture as specular map too
+    vSpecular *= fHSB / 2.0;
 
     // output
     o_vColor = vec4(vAmbient + vDiffuse * vTexColor + vSpecular, 1.0);
