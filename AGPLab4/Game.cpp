@@ -521,8 +521,8 @@ bool Game::HandleSDL(SDL_Event *e)
 
 bool Game::Update(float seconds)
 {
-    const float movement_speed = 1.0f;
-    const float rotation_speed = 50.0f;
+    const float movement_speed = 2.0f;
+    const float rotation_speed = 70.0f;
 
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
         i!=this->pressed_keys.end(); ++i)
@@ -595,7 +595,7 @@ bool Game::Draw(void)
     const GLint counts[] = {6, 6, 6, 6, 6, 6};
 
     glBindVertexArray(this->vao);
-    glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
+    //glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
 
     this->cube.Draw();
 
