@@ -53,7 +53,7 @@ private:
 
         GLint attrib_id = glGetAttribLocation(program_id, attrib_name);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: error: 0x%x\n", err);
-        if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: attribute is not active in program\n");
+        if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: attribute \"%s\" is not active in program\n", attrib_name);
 
         glVertexAttribPointer(attrib_id, attrib_size, attrib_type, GL_FALSE, 0, NULL);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glVertexAttribPointer: error: 0x%x\n", err);
@@ -62,11 +62,11 @@ private:
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glEnableVertexAttribArray: error: 0x%x\n", err);
     }
 protected:
-    virtual unsigned int Make(glm::vec3 *vertices,
-                              glm::vec3 *normals,
-                              glm::vec3 *tangents,
-                              glm::vec3 *bitangents,
-                              glm::vec2 *texcoords) = 0;
+    virtual unsigned int Make(glm::vec3 **vertices,
+                              glm::vec3 **normals,
+                              glm::vec3 **tangents,
+                              glm::vec3 **bitangents,
+                              glm::vec2 **texcoords) = 0;
 public:
     void Init(GLuint program_id)
     {
@@ -81,7 +81,7 @@ public:
         // clear errors
         while(glGetError() != GL_NO_ERROR);
 
-        unsigned int num = this->Make(vertices, normals, tangents, bitangents, texcoords);
+        unsigned int num = this->Make(&vertices, &normals, &tangents, &bitangents, &texcoords);
 
         glGenVertexArrays(1, &this->vao);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Init => glGenVertexArrays: error: 0x%x\n", err);
