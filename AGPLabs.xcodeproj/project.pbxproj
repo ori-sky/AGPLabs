@@ -24,16 +24,19 @@
 		7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
 		7F4502EF17F647FE008A54D2 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E717F5C622008A54D2 /* minimal.vsh */; };
 		7F4502F017F64801008A54D2 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E817F5C62E008A54D2 /* minimal.fsh */; };
+		7F4C774218236DAD00D73C7F /* nmap.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 7F4C774018236DAD00D73C7F /* nmap.fsh */; };
+		7F4C774318236DAD00D73C7F /* nmap.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 7F4C774118236DAD00D73C7F /* nmap.vsh */; };
+		7F4C774418236DB300D73C7F /* stone.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C773D18236D9A00D73C7F /* stone.bmp */; };
+		7F4C774518236DB500D73C7F /* stone_normal.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C773C18236D9A00D73C7F /* stone_normal.bmp */; };
+		7F4C774618236DBB00D73C7F /* nmap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C774118236DAD00D73C7F /* nmap.vsh */; };
+		7F4C774718236DBF00D73C7F /* stone_gloss.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C773B18236D9A00D73C7F /* stone_gloss.bmp */; };
+		7F4C774818236DC900D73C7F /* nmap.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C774018236DAD00D73C7F /* nmap.fsh */; };
 		7FB582C218115149002C1795 /* AGPLab4.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FB582C118115149002C1795 /* AGPLab4.1 */; };
 		7FB582D1181151B3002C1795 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582C8181151B3002C1795 /* Game.cpp */; };
 		7FB582D2181151B3002C1795 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CA181151B3002C1795 /* main.cpp */; };
 		7FB582D3181151B3002C1795 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CC181151B3002C1795 /* ResourceManager.cpp */; };
-		7FB582D4181151B3002C1795 /* envmap.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CE181151B3002C1795 /* envmap.fsh */; };
-		7FB582D5181151B3002C1795 /* envmap.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 7FB582CF181151B3002C1795 /* envmap.vsh */; };
 		7FB582D718115325002C1795 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
 		7FB582D818115327002C1795 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
-		7FB582DA18115363002C1795 /* envmap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FB582CF181151B3002C1795 /* envmap.vsh */; };
-		7FB582DB1811536B002C1795 /* envmap.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FB582CE181151B3002C1795 /* envmap.fsh */; };
 		7FC4003817F6F4110066CEA2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC4003717F6F4110066CEA2 /* SDL2.framework */; };
 		7FE07DF017FEABBA00007251 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FE07DEF17FEABBA00007251 /* main.cpp */; };
 		7FE07DF217FEABBA00007251 /* BlockGame.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7FE07DF117FEABBA00007251 /* BlockGame.1 */; };
@@ -104,8 +107,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				7FB582DB1811536B002C1795 /* envmap.fsh in CopyFiles */,
-				7FB582DA18115363002C1795 /* envmap.vsh in CopyFiles */,
+				7F4C774618236DBB00D73C7F /* nmap.vsh in CopyFiles */,
+				7F4C774818236DC900D73C7F /* nmap.fsh in CopyFiles */,
+				7F4C774418236DB300D73C7F /* stone.bmp in CopyFiles */,
+				7F4C774518236DB500D73C7F /* stone_normal.bmp in CopyFiles */,
+				7F4C774718236DBF00D73C7F /* stone_gloss.bmp in CopyFiles */,
 				7F0323C4181155DB00A899C1 /* studdedmetal.bmp in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +159,13 @@
 		7F4502E317F5C487008A54D2 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7F4502E717F5C622008A54D2 /* minimal.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.vsh; sourceTree = "<group>"; };
 		7F4502E817F5C62E008A54D2 /* minimal.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = minimal.fsh; sourceTree = "<group>"; };
+		7F4C773B18236D9A00D73C7F /* stone_gloss.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = stone_gloss.bmp; sourceTree = "<group>"; };
+		7F4C773C18236D9A00D73C7F /* stone_normal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = stone_normal.bmp; sourceTree = "<group>"; };
+		7F4C773D18236D9A00D73C7F /* stone.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = stone.bmp; sourceTree = "<group>"; };
+		7F4C773E18236DA200D73C7F /* CubeDrawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CubeDrawable.h; sourceTree = "<group>"; };
+		7F4C773F18236DA200D73C7F /* Drawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
+		7F4C774018236DAD00D73C7F /* nmap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = nmap.fsh; sourceTree = "<group>"; };
+		7F4C774118236DAD00D73C7F /* nmap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = nmap.vsh; sourceTree = "<group>"; };
 		7FB582BD18115148002C1795 /* AGPLab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGPLab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB582C118115149002C1795 /* AGPLab4.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab4.1; sourceTree = "<group>"; };
 		7FB582C8181151B3002C1795 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
@@ -161,8 +174,6 @@
 		7FB582CB181151B3002C1795 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		7FB582CC181151B3002C1795 /* ResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
 		7FB582CD181151B3002C1795 /* ResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
-		7FB582CE181151B3002C1795 /* envmap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = envmap.fsh; sourceTree = "<group>"; };
-		7FB582CF181151B3002C1795 /* envmap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = envmap.vsh; sourceTree = "<group>"; };
 		7FC4003717F6F4110066CEA2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		7FE07DED17FEABBA00007251 /* BlockGame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BlockGame; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE07DEF17FEABBA00007251 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -218,8 +229,11 @@
 		7F0323C3181155C900A899C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				7FB582CE181151B3002C1795 /* envmap.fsh */,
-				7FB582CF181151B3002C1795 /* envmap.vsh */,
+				7F4C774018236DAD00D73C7F /* nmap.fsh */,
+				7F4C774118236DAD00D73C7F /* nmap.vsh */,
+				7F4C773B18236D9A00D73C7F /* stone_gloss.bmp */,
+				7F4C773C18236D9A00D73C7F /* stone_normal.bmp */,
+				7F4C773D18236D9A00D73C7F /* stone.bmp */,
 				7F0323C2181155C500A899C1 /* studdedmetal.bmp */,
 			);
 			name = Resources;
@@ -302,6 +316,8 @@
 		7FB582BE18115149002C1795 /* AGPLab4 */ = {
 			isa = PBXGroup;
 			children = (
+				7F4C773E18236DA200D73C7F /* CubeDrawable.h */,
+				7F4C773F18236DA200D73C7F /* Drawable.h */,
 				7FB582C8181151B3002C1795 /* Game.cpp */,
 				7FB582C9181151B3002C1795 /* Game.h */,
 				7FB582CA181151B3002C1795 /* main.cpp */,
@@ -477,11 +493,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FB582D5181151B3002C1795 /* envmap.vsh in Sources */,
 				7FB582D3181151B3002C1795 /* ResourceManager.cpp in Sources */,
-				7FB582D4181151B3002C1795 /* envmap.fsh in Sources */,
+				7F4C774318236DAD00D73C7F /* nmap.vsh in Sources */,
 				7FB582D1181151B3002C1795 /* Game.cpp in Sources */,
 				7FB582D2181151B3002C1795 /* main.cpp in Sources */,
+				7F4C774218236DAD00D73C7F /* nmap.fsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
