@@ -166,6 +166,7 @@
 		7F4C773F18236DA200D73C7F /* Drawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		7F4C774018236DAD00D73C7F /* nmap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = nmap.fsh; sourceTree = "<group>"; };
 		7F4C774118236DAD00D73C7F /* nmap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = nmap.vsh; sourceTree = "<group>"; };
+		7FAD199E1823B05500007D5A /* studdedmetal_normal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = studdedmetal_normal.bmp; sourceTree = "<group>"; };
 		7FB582BD18115148002C1795 /* AGPLab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGPLab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB582C118115149002C1795 /* AGPLab4.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab4.1; sourceTree = "<group>"; };
 		7FB582C8181151B3002C1795 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
@@ -235,6 +236,7 @@
 				7F4C773C18236D9A00D73C7F /* stone_normal.bmp */,
 				7F4C773D18236D9A00D73C7F /* stone.bmp */,
 				7F0323C2181155C500A899C1 /* studdedmetal.bmp */,
+				7FAD199E1823B05500007D5A /* studdedmetal_normal.bmp */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

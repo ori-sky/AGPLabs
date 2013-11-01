@@ -201,178 +201,8 @@ bool Game::Init(void)
 
     this->matIdentity = glm::mat4(1.0f);
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
-    this->obj_rotation = 0;
 
     this->cube.Init(this->program_id);
-
-    static const glm::vec3 vertices[] =
-    {
-        // left
-        glm::vec3(-1,  0,  0),
-        glm::vec3(-1, -1, -1),
-        glm::vec3(-1, -1,  1),
-        glm::vec3(-1,  1,  1),
-        glm::vec3(-1,  1, -1),
-        glm::vec3(-1, -1, -1),
-
-        // right
-        glm::vec3( 1,  0,  0),
-        glm::vec3( 1, -1, -1),
-        glm::vec3( 1,  1, -1),
-        glm::vec3( 1,  1,  1),
-        glm::vec3( 1, -1,  1),
-        glm::vec3( 1, -1, -1),
-
-        // bottom
-        glm::vec3( 0, -1,  0),
-        glm::vec3(-1, -1, -1),
-        glm::vec3( 1, -1, -1),
-        glm::vec3( 1, -1,  1),
-        glm::vec3(-1, -1,  1),
-        glm::vec3(-1, -1, -1),
-
-        // top
-        glm::vec3( 0,  1,  0),
-        glm::vec3(-1,  1, -1),
-        glm::vec3(-1,  1,  1),
-        glm::vec3( 1,  1,  1),
-        glm::vec3( 1,  1, -1),
-        glm::vec3(-1,  1, -1),
-
-        // front
-        glm::vec3( 0,  0, -1),
-        glm::vec3(-1, -1, -1),
-        glm::vec3(-1,  1, -1),
-        glm::vec3( 1,  1, -1),
-        glm::vec3( 1, -1, -1),
-        glm::vec3(-1, -1, -1),
-
-        // back
-        glm::vec3( 0,  0,  1),
-        glm::vec3(-1, -1,  1),
-        glm::vec3( 1, -1,  1),
-        glm::vec3( 1,  1,  1),
-        glm::vec3(-1,  1,  1),
-        glm::vec3(-1, -1,  1),
-    };
-
-    static const glm::vec3 normals[] =
-    {
-        // left
-        glm::vec3(-1,  0,  0),
-        glm::vec3(-1,  0,  0),
-        glm::vec3(-1,  0,  0),
-        glm::vec3(-1,  0,  0),
-        glm::vec3(-1,  0,  0),
-        glm::vec3(-1,  0,  0),
-
-        // right
-        glm::vec3( 1,  0,  0),
-        glm::vec3( 1,  0,  0),
-        glm::vec3( 1,  0,  0),
-        glm::vec3( 1,  0,  0),
-        glm::vec3( 1,  0,  0),
-        glm::vec3( 1,  0,  0),
-
-        // bottom
-        glm::vec3( 0, -1,  0),
-        glm::vec3( 0, -1,  0),
-        glm::vec3( 0, -1,  0),
-        glm::vec3( 0, -1,  0),
-        glm::vec3( 0, -1,  0),
-        glm::vec3( 0, -1,  0),
-
-        // top
-        glm::vec3( 0,  1,  0),
-        glm::vec3( 0,  1,  0),
-        glm::vec3( 0,  1,  0),
-        glm::vec3( 0,  1,  0),
-        glm::vec3( 0,  1,  0),
-        glm::vec3( 0,  1,  0),
-
-        // front
-        glm::vec3( 0,  0, -1),
-        glm::vec3( 0,  0, -1),
-        glm::vec3( 0,  0, -1),
-        glm::vec3( 0,  0, -1),
-        glm::vec3( 0,  0, -1),
-        glm::vec3( 0,  0, -1),
-
-        // back
-        glm::vec3( 0,  0,  1),
-        glm::vec3( 0,  0,  1),
-        glm::vec3( 0,  0,  1),
-        glm::vec3( 0,  0,  1),
-        glm::vec3( 0,  0,  1),
-        glm::vec3( 0,  0,  1),
-    };
-
-    static const glm::vec2 texcoords[] =
-    {
-        // left
-        glm::vec2(0.5, 0.5),
-        glm::vec2(0,   0),
-        glm::vec2(0,   1),
-        glm::vec2(1,   1),
-        glm::vec2(1,   0),
-        glm::vec2(0,   0),
-
-        glm::vec2(0.5, 0.5),
-        glm::vec2(0,   0),
-        glm::vec2(0,   1),
-        glm::vec2(1,   1),
-        glm::vec2(1,   0),
-        glm::vec2(0,   0),
-
-        glm::vec2(0.5, 0.5),
-        glm::vec2(0,   0),
-        glm::vec2(0,   1),
-        glm::vec2(1,   1),
-        glm::vec2(1,   0),
-        glm::vec2(0,   0),
-
-        glm::vec2(0.5, 0.5),
-        glm::vec2(0,   0),
-        glm::vec2(0,   1),
-        glm::vec2(1,   1),
-        glm::vec2(1,   0),
-        glm::vec2(0,   0),
-
-        glm::vec2(0.5, 0.5),
-        glm::vec2(0,   0),
-        glm::vec2(0,   1),
-        glm::vec2(1,   1),
-        glm::vec2(1,   0),
-        glm::vec2(0,   0),
-
-        glm::vec2(0.5, 0.5),
-        glm::vec2(0,   0),
-        glm::vec2(0,   1),
-        glm::vec2(1,   1),
-        glm::vec2(1,   0),
-        glm::vec2(0,   0)
-    };
-
-    glGenVertexArrays(1, &this->vao);
-    glBindVertexArray(this->vao);
-
-    glGenBuffers(1, &this->vbo_vertex);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertex);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(GAME_ATTRIB_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glEnableVertexAttribArray(GAME_ATTRIB_VERTEX);
-
-    glGenBuffers(1, &this->vbo_normal);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_normal);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-    glVertexAttribPointer(GAME_ATTRIB_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    glEnableVertexAttribArray(GAME_ATTRIB_NORMAL);
-
-    glGenBuffers(1, &this->vbo_texcoord);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_texcoord);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
-    glVertexAttribPointer(GAME_ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-    glEnableVertexAttribArray(GAME_ATTRIB_TEXCOORD);
 
     // texture
 
@@ -580,8 +410,7 @@ bool Game::Draw(void)
 
     glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
     glm::mat4 matModelView = this->camera;
-
-    glm::mat4 matObjectModelView = matModelView;//glm::rotate(matModelView, this->obj_rotation, glm::vec3(0, 1, 0));
+    glm::mat4 matObjectModelView = matModelView;
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
@@ -590,12 +419,6 @@ bool Game::Draw(void)
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
     glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
-
-    const GLint firsts[] = {0, 6, 12, 18, 24, 30};
-    const GLint counts[] = {6, 6, 6, 6, 6, 6};
-
-    glBindVertexArray(this->vao);
-    //glMultiDrawArrays(GL_TRIANGLE_FAN, firsts, counts, sizeof(firsts) / sizeof(GLint));
 
     this->cube.Draw();
 

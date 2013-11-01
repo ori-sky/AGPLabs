@@ -57,17 +57,12 @@ protected:
 
     GLuint program_id;
 
-    GLuint vao;
-    GLuint vbo_vertex;
-    GLuint vbo_normal;
-    GLuint vbo_texcoord;
     GLuint tex;
     GLuint nmap;
     GLuint glossmap;
 
     glm::mat4 matIdentity;
     glm::mat4 camera;
-    float obj_rotation;
 
     CubeDrawable cube;
 public:
