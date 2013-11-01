@@ -52,7 +52,7 @@ void main(void)
         vec3 vHalf = normalize(vLight + normalize(v_vEye));
         float fNDotH = max(0.0, dot(vNormal, vHalf));
         vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 64.0) * fAttenuation;
-        vSpecular *= texture(u_glossmap, vTexCoord);
+        vSpecular *= texture(u_glossmap, vTexCoord).rgb;
     }
 
     // texture
