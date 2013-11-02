@@ -376,7 +376,7 @@ bool Game::Init(void)
 
     // texture
 
-    SDL_Surface *texture = SDL_LoadBMP("stone.bmp");
+    SDL_Surface *texture = SDL_LoadBMP("studdedmetal.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_texture"), 0);
     glActiveTexture(GL_TEXTURE0);
@@ -412,7 +412,7 @@ bool Game::Init(void)
 
     // normal map
 
-    SDL_Surface *nmap = SDL_LoadBMP("stone_normal.bmp");
+    SDL_Surface *nmap = SDL_LoadBMP("studdedmetal_normal.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_nmap"), 1);
     glActiveTexture(GL_TEXTURE1);
@@ -446,7 +446,7 @@ bool Game::Init(void)
 
     // gloss map
 
-    SDL_Surface *glossmap = SDL_LoadBMP("stone_gloss.bmp");
+    SDL_Surface *glossmap = SDL_LoadBMP("studdedmetal.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_glossmap"), 2);
     glActiveTexture(GL_TEXTURE2);
