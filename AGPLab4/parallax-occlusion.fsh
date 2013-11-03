@@ -11,9 +11,9 @@ uniform mat4 u_matObjectModelView;
 
 smooth in vec3 v_vNormal;
 smooth in vec2 v_vTexCoord;
-smooth in vec3 v_vEyeCameraPosition;
-smooth in vec3 v_vLight;
-smooth in vec3 v_vEye;
+
+smooth in vec3 v_vTLight;
+smooth in vec3 v_vTEye;
 
 out vec4 o_vColor;
 
@@ -23,12 +23,12 @@ void main(void)
     vec2 vTexCoord = v_vTexCoord.st;
     float height = texture(u_nmap, vTexCoord).a * -1;
     float fHSB = height * 0.04 + 0.02;
-    vTexCoord += normalize(v_vEye).xy * fHSB;
+    vTexCoord += normalize(v_vTEye).xy * fHSB;
 
     vec3 vNormal = texture(u_nmap, vTexCoord).rgb * 2.0 - 1.0;
 
-    float fDistance = length(v_vLight);
-    vec3 vLight = normalize(v_vLight);
+    float fDistance = length(v_vTLight);
+    vec3 vLight = normalize(v_vTLight);
 
     // attenuation
     float fDivisor = 1.0 +
@@ -49,7 +49,7 @@ void main(void)
     vec3 vSpecular = vec3(0.0);
     if(fNDotL > 0.0)
     {
-        vec3 vHalf = normalize(vLight + normalize(v_vEye));
+        vec3 vHalf = normalize(vLight + normalize(v_vTEye));
         float fNDotH = max(0.0, dot(vNormal, vHalf));
         vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 64.0) * fAttenuation;
         vSpecular *= texture(u_glossmap, vTexCoord).rgb;
