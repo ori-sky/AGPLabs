@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7F0323C4181155DB00A899C1 /* studdedmetal.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F0323C2181155C500A899C1 /* studdedmetal.bmp */; };
+		7F13E8511826A62F00A7A599 /* parallax-occlusion.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */; };
+		7F13E8521826A63300A7A599 /* parallax-occlusion.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */; };
 		7F2178151808044800FA332F /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F2178121808044800FA332F /* Block.cpp */; };
 		7F21781D18080B8500FA332F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F21781C18080B8500FA332F /* main.cpp */; };
 		7F21781F18080B8500FA332F /* AGPLab3.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F21781E18080B8500FA332F /* AGPLab3.1 */; };
@@ -24,8 +26,6 @@
 		7F4502E417F5C487008A54D2 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F4502E317F5C487008A54D2 /* OpenGL.framework */; };
 		7F4502EF17F647FE008A54D2 /* minimal.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E717F5C622008A54D2 /* minimal.vsh */; };
 		7F4502F017F64801008A54D2 /* minimal.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4502E817F5C62E008A54D2 /* minimal.fsh */; };
-		7F4C774218236DAD00D73C7F /* nmap.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 7F4C774018236DAD00D73C7F /* nmap.fsh */; };
-		7F4C774318236DAD00D73C7F /* nmap.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 7F4C774118236DAD00D73C7F /* nmap.vsh */; };
 		7F4C774418236DB300D73C7F /* stone.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C773D18236D9A00D73C7F /* stone.bmp */; };
 		7F4C774518236DB500D73C7F /* stone_normal.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C773C18236D9A00D73C7F /* stone_normal.bmp */; };
 		7F4C774618236DBB00D73C7F /* nmap.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F4C774118236DAD00D73C7F /* nmap.vsh */; };
@@ -107,6 +107,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				7F13E8521826A63300A7A599 /* parallax-occlusion.vsh in CopyFiles */,
+				7F13E8511826A62F00A7A599 /* parallax-occlusion.fsh in CopyFiles */,
 				7F4C774618236DBB00D73C7F /* nmap.vsh in CopyFiles */,
 				7F4C774818236DC900D73C7F /* nmap.fsh in CopyFiles */,
 				7F4C774418236DB300D73C7F /* stone.bmp in CopyFiles */,
@@ -141,6 +143,8 @@
 
 /* Begin PBXFileReference section */
 		7F0323C2181155C500A899C1 /* studdedmetal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = studdedmetal.bmp; sourceTree = "<group>"; };
+		7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "parallax-occlusion.fsh"; sourceTree = "<group>"; };
+		7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "parallax-occlusion.vsh"; sourceTree = "<group>"; };
 		7F2178121808044800FA332F /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
 		7F2178131808044800FA332F /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
 		7F2178141808044800FA332F /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
@@ -230,6 +234,8 @@
 		7F0323C3181155C900A899C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */,
+				7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */,
 				7F4C774018236DAD00D73C7F /* nmap.fsh */,
 				7F4C774118236DAD00D73C7F /* nmap.vsh */,
 				7F4C773B18236D9A00D73C7F /* stone_gloss.bmp */,
@@ -496,10 +502,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FB582D3181151B3002C1795 /* ResourceManager.cpp in Sources */,
-				7F4C774318236DAD00D73C7F /* nmap.vsh in Sources */,
 				7FB582D1181151B3002C1795 /* Game.cpp in Sources */,
 				7FB582D2181151B3002C1795 /* main.cpp in Sources */,
-				7F4C774218236DAD00D73C7F /* nmap.fsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

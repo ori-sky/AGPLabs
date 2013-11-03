@@ -191,7 +191,7 @@ bool Game::Init(void)
 {
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
-    if(!this->InitShaders("nmap.vsh", "nmap.fsh")) return false;
+    if(!this->InitShaders("parallax-occlusion.vsh", "parallax-occlusion.fsh")) return false;
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
