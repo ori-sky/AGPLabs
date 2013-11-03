@@ -19,9 +19,9 @@ smooth out vec3 v_vTEye;
 
 void main(void)
 {
-    vec4 v4Vertex = vec4(a_vVertex, 1.0);
-    vec4 vModelViewVertex = u_matModelView * v4Vertex;
-    vec4 vObjectModelViewVertex = u_matObjectModelView * v4Vertex;
+    vec4 vVertex = vec4(a_vVertex, 1.0);
+    vec4 vModelViewVertex = u_matModelView * vVertex;
+    vec4 vObjectModelViewVertex = u_matObjectModelView * vVertex;
 
     mat3 matNormal;
     matNormal[0] = u_matObjectModelView[0].xyz;
