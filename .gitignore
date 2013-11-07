@@ -1,5 +1,6 @@
 .*.swp
 *~
+.~*
 *.o
 AGPLab1/AGPLab1
 AGPLab3/AGPLab3
