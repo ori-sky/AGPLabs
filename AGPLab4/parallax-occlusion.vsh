@@ -13,9 +13,11 @@ in vec2 a_vTexCoord;
 
 smooth out vec3 v_vNormal;
 smooth out vec2 v_vTexCoord;
+smooth out vec3 v_vEye;
 
 smooth out vec3 v_vTLight;
 smooth out vec3 v_vTEye;
+smooth out vec3 v_vTNormal;
 
 void main(void)
 {
@@ -29,16 +31,18 @@ void main(void)
     matNormal[2] = u_matObjectModelView[2].xyz;
     v_vNormal = normalize(matNormal * normalize(a_vNormal));
 
-    mat3 matWorldToTangent;
-    matWorldToTangent[0] = matNormal * normalize(a_vTangent);
-    matWorldToTangent[1] = matNormal * normalize(a_vBitangent);
-    matWorldToTangent[2] = matNormal * normalize(a_vNormal);
-    mat3 matTangentToWorld = transpose(matWorldToTangent);
+    mat3 matTangentToWorld;
+    matTangentToWorld[0] = matNormal * normalize(a_vTangent);
+    matTangentToWorld[1] = matNormal * normalize(a_vBitangent);
+    matTangentToWorld[2] = matNormal * normalize(a_vNormal);
+    mat3 matWorldToTangent = transpose(matTangentToWorld);
 
     vec3 vEye = vec3(vObjectModelViewVertex);
+    v_vEye = vEye;
 
-    v_vTLight = (vec3(0.0) - vEye) * matWorldToTangent;
-    v_vTEye = -vEye * matWorldToTangent;
+    v_vTLight = matWorldToTangent * (vec3(0.0) - vEye);
+    v_vTEye = matWorldToTangent * -vEye;
+    v_vTNormal = matWorldToTangent * v_vNormal;
 
     v_vTexCoord = a_vTexCoord;
     gl_Position = u_matProjection * vObjectModelViewVertex;
