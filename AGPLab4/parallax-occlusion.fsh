@@ -21,16 +21,16 @@ out vec4 o_vColor;
 
 void main(void)
 {
-    /*vec3 vL = normalize(v_vTLight);
+    vec3 vL = normalize(v_vTLight);
     vec3 vE = normalize(v_vTEye);
     vec3 vN = normalize(v_vTNormal);
 
     // parallax occlusion
     float fParallaxLimit = -length(v_vTEye.xy) / v_vTEye.z;
-    fParallaxLimit *= 0.1; // scale
+    fParallaxLimit *= 0.02; // scale
 
-    vec2 vOffset = normalize(v_vTEye.xy);
-    vec2 vMaxOffset = vOffset * fParallaxLimit;
+    vec2 vOffsetDir = normalize(v_vTEye.xy);
+    vec2 vMaxOffset = vOffsetDir * fParallaxLimit;
 
     int nNumSamples = int(mix(20, 4, dot(vE, vN)));
     float fStepSize = 1.0 / float(nNumSamples);
@@ -41,8 +41,8 @@ void main(void)
     float fCurrRayHeight = 1.0;
     vec2 vCurrOffset = vec2(0.0);
     vec2 vLastOffset = vec2(0.0);
+    float fLastSampledHeight = 1.0;
     float fCurrSampledHeight = 1.0;
-    float fLastSampledHeight = 0.0;
     int nCurrSample = 0;
 
     // for each sample
@@ -52,10 +52,10 @@ void main(void)
         if(fCurrSampledHeight > fCurrRayHeight)
         {
             float delta1 = fCurrSampledHeight - fCurrRayHeight;
-            float delta2 = (fCurrRayHeight + fStepSize) + fLastSampledHeight;
+            float delta2 = (fCurrRayHeight + fStepSize) - fLastSampledHeight;
 
             float ratio = delta1 / (delta1 + delta2);
-            vCurrOffset = (ratio) * vLastOffset + (1 - ratio) * vCurrOffset;
+            vCurrOffset = (ratio) * vLastOffset + (1.0 - ratio) * vCurrOffset;
             nCurrSample = nNumSamples + 1;
         }
         else
@@ -74,16 +74,18 @@ void main(void)
     //o_vColor = vec4(1 - fLastSampledHeight, 1 - fCurrSampledHeight, 0.0, 1.0);
     //return;
 
-    float fHSB = -1 * (fCurrSampledHeight) * 0.04 + 0.02;
-    //vTexCoord += normalize(v_vTEye).xy * fHSB;*/
+    //float fHSB = -1 * (fCurrSampledHeight) * 0.04 + 0.02;
+    //vTexCoord += normalize(v_vTEye).xy * fHSB;
+
+
 
     // height mapping
 
-    vec2 vTexCoord = v_vTexCoord.st;
+    /*vec2 vTexCoord = v_vTexCoord.st;
 
     float height = texture(u_nmap, vTexCoord).a * -1;
     float fHSB = height * 0.04 + 0.02;
-    vTexCoord += normalize(v_vTEye).xy * fHSB;
+    vTexCoord += normalize(v_vTEye).xy * fHSB;*/
 
     // normal mapping
     vec3 vNormal = texture(u_nmap, vTexCoord).rgb * 2.0 - 1.0;
