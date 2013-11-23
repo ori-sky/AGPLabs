@@ -206,7 +206,7 @@ bool Game::Init(void)
 
     // texture
 
-    SDL_Surface *texture = SDL_LoadBMP("studdedmetal.bmp");
+    SDL_Surface *texture = SDL_LoadBMP("stone.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_texture"), 0);
     glActiveTexture(GL_TEXTURE0);
@@ -242,7 +242,7 @@ bool Game::Init(void)
 
     // normal map
 
-    SDL_Surface *nmap = SDL_LoadBMP("studdedmetal_normal.bmp");
+    SDL_Surface *nmap = SDL_LoadBMP("stone_normal.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_nmap"), 1);
     glActiveTexture(GL_TEXTURE1);
@@ -276,7 +276,7 @@ bool Game::Init(void)
 
     // gloss map
 
-    SDL_Surface *glossmap = SDL_LoadBMP("studdedmetal.bmp");
+    SDL_Surface *glossmap = SDL_LoadBMP("stone_gloss.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_glossmap"), 2);
     glActiveTexture(GL_TEXTURE2);
@@ -351,7 +351,7 @@ bool Game::HandleSDL(SDL_Event *e)
 
 bool Game::Update(float seconds)
 {
-    const float movement_speed = 2.0f;
+    const float movement_speed = 1.5f;
     const float rotation_speed = 70.0f;
 
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
@@ -408,7 +408,7 @@ bool Game::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
+    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 0.01f, 100.0f);
     glm::mat4 matModelView = this->camera;
     glm::mat4 matObjectModelView = matModelView;
 
