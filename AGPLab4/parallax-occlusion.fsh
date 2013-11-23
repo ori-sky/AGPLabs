@@ -27,12 +27,12 @@ void main(void)
 
     // parallax occlusion
     float fParallaxLimit = -length(v_vTEye.xy) / v_vTEye.z;
-    fParallaxLimit *= 0.02; // scale
+    fParallaxLimit *= 0.05; // scale
 
     vec2 vOffsetDir = normalize(v_vTEye.xy);
     vec2 vMaxOffset = vOffsetDir * fParallaxLimit;
 
-    int nNumSamples = int(mix(20, 4, dot(vE, vN)));
+    int nNumSamples = int(mix(60, 30, dot(vE, vN)));
     float fStepSize = 1.0 / float(nNumSamples);
 
     vec2 dx = dFdx(v_vTexCoord.st);
@@ -45,10 +45,12 @@ void main(void)
     float fCurrSampledHeight = 1.0;
     int nCurrSample = 0;
 
+    vec2 vTexCoord = v_vTexCoord.st * 1;
+
     // for each sample
     while(nCurrSample < nNumSamples)
     {
-        fCurrSampledHeight = textureGrad(u_nmap, v_vTexCoord.st, dx, dy).a;
+        fCurrSampledHeight = textureGrad(u_nmap, vTexCoord + vCurrOffset, dx, dy).a;
         if(fCurrSampledHeight > fCurrRayHeight)
         {
             float delta1 = fCurrSampledHeight - fCurrRayHeight;
@@ -68,14 +70,7 @@ void main(void)
         }
     }
 
-
-    vec2 vTexCoord = v_vTexCoord + vCurrOffset;
-
-    //o_vColor = vec4(1 - fLastSampledHeight, 1 - fCurrSampledHeight, 0.0, 1.0);
-    //return;
-
-    //float fHSB = -1 * (fCurrSampledHeight) * 0.04 + 0.02;
-    //vTexCoord += normalize(v_vTEye).xy * fHSB;
+    vTexCoord += vCurrOffset;
 
 
 
@@ -85,7 +80,7 @@ void main(void)
 
     float height = texture(u_nmap, vTexCoord).a * -1;
     float fHSB = height * 0.04 + 0.02;
-    vTexCoord += normalize(v_vTEye).xy * fHSB;*/
+    vTexCoord += normalize(v_vTEye).xy * fHSB * -1;*/
 
     // normal mapping
     vec3 vNormal = texture(u_nmap, vTexCoord).rgb * 2.0 - 1.0;
@@ -114,7 +109,7 @@ void main(void)
     {
         vec3 vHalf = normalize(vLight + normalize(v_vTEye));
         float fNDotH = max(0.0, dot(vNormal, vHalf));
-        vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 64.0) * fAttenuation;
+        vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 16.0) * fAttenuation;
         vSpecular *= texture(u_glossmap, vTexCoord).rgb;
     }
 
