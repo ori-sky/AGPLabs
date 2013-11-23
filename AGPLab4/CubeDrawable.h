@@ -71,13 +71,13 @@ protected:
         (*vertices)[14] = glm::vec3( 1,  1, -1);
         (*vertices)[15] = glm::vec3( 1,  1,  1);
 
-        // front
+        // back
         (*vertices)[16] = glm::vec3(-1, -1, -1);
         (*vertices)[17] = glm::vec3(-1,  1, -1);
         (*vertices)[18] = glm::vec3( 1, -1, -1);
         (*vertices)[19] = glm::vec3( 1,  1, -1);
 
-        // back
+        // front
         (*vertices)[20] = glm::vec3(-1, -1,  1);
         (*vertices)[21] = glm::vec3( 1, -1,  1);
         (*vertices)[22] = glm::vec3(-1,  1,  1);
@@ -109,17 +109,17 @@ protected:
         (*texcoords)[14] = glm::vec2(1, 0);
         (*texcoords)[15] = glm::vec2(1, 1);
 
-        // front
-        (*texcoords)[16] = glm::vec2(0, 0);
-        (*texcoords)[17] = glm::vec2(0, 1);
-        (*texcoords)[18] = glm::vec2(1, 0);
-        (*texcoords)[19] = glm::vec2(1, 1);
-
         // back
-        (*texcoords)[20] = glm::vec2(0, 0);
+        (*texcoords)[16] = glm::vec2(1, 0);
+        (*texcoords)[17] = glm::vec2(1, 1);
+        (*texcoords)[18] = glm::vec2(0, 0);
+        (*texcoords)[19] = glm::vec2(0, 1);
+
+        // front
+        (*texcoords)[20] = glm::vec2(1, 1);
         (*texcoords)[21] = glm::vec2(0, 1);
         (*texcoords)[22] = glm::vec2(1, 0);
-        (*texcoords)[23] = glm::vec2(1, 1);
+        (*texcoords)[23] = glm::vec2(0, 0);
 
         for(int i=0; i<24; i+=4)
         {
