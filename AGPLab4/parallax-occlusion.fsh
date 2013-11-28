@@ -19,20 +19,28 @@ smooth in vec3 v_vTNormal;
 
 out vec4 o_vColor;
 
+const float fParallaxScale = 0.15;
+const float fParallaxMaxSamples = 250;
+const float fParallaxMinSamples = 20;
+
 void main(void)
 {
+    // initial texcoord
+    vec2 vTexCoord = v_vTexCoord.st;
+
+    // parallax occlusion mapping
+
     vec3 vL = normalize(v_vTLight);
     vec3 vE = normalize(v_vTEye);
     vec3 vN = normalize(v_vTNormal);
 
-    // parallax occlusion
     float fParallaxLimit = -length(v_vTEye.xy) / v_vTEye.z;
-    fParallaxLimit *= 0.05; // scale
+    fParallaxLimit *= fParallaxScale; // scale
 
     vec2 vOffsetDir = normalize(v_vTEye.xy);
     vec2 vMaxOffset = vOffsetDir * fParallaxLimit;
 
-    int nNumSamples = int(mix(60, 30, dot(vE, vN)));
+    int nNumSamples = int(mix(fParallaxMaxSamples, fParallaxMinSamples, dot(vE, vN)));
     float fStepSize = 1.0 / float(nNumSamples);
 
     vec2 dx = dFdx(v_vTexCoord.st);
@@ -44,8 +52,6 @@ void main(void)
     float fLastSampledHeight = 1.0;
     float fCurrSampledHeight = 1.0;
     int nCurrSample = 0;
-
-    vec2 vTexCoord = v_vTexCoord.st * 1;
 
     // for each sample
     while(nCurrSample < nNumSamples)
@@ -72,18 +78,13 @@ void main(void)
 
     vTexCoord += vCurrOffset;
 
-
-
-    // height mapping
-
-    /*vec2 vTexCoord = v_vTexCoord.st;
-
-    float height = texture(u_nmap, vTexCoord).a * -1;
-    float fHSB = height * 0.04 + 0.02;
-    vTexCoord += normalize(v_vTEye).xy * fHSB * -1;*/
-
     // normal mapping
     vec3 vNormal = texture(u_nmap, vTexCoord).rgb * 2.0 - 1.0;
+
+    // convert normal from texture coords to OpenGL coords
+    // texture coords are top-left based
+    // OpenGL coords are bottom-left based
+    vNormal.y *= -1;
 
     float fDistance = length(v_vTLight);
     vec3 vLight = normalize(v_vTLight);
