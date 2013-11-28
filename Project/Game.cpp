@@ -191,7 +191,7 @@ bool Game::Init(void)
 {
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
-    if(!this->InitShaders("parallax-occlusion.vsh", "parallax-occlusion.fsh")) return false;
+    if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -208,7 +208,7 @@ bool Game::Init(void)
 
     SDL_Surface *texture = SDL_LoadBMP("stone.bmp");
 
-    glUniform1i(glGetUniformLocation(this->program_id, "u_texture"), 0);
+    glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0);
     glActiveTexture(GL_TEXTURE0);
 
     glGenTextures(1, &this->tex);
@@ -244,7 +244,7 @@ bool Game::Init(void)
 
     SDL_Surface *nmap = SDL_LoadBMP("four_NM_height.bmp");
 
-    glUniform1i(glGetUniformLocation(this->program_id, "u_nmap"), 1);
+    glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1);
     glActiveTexture(GL_TEXTURE1);
 
     glGenTextures(1, &this->nmap);
@@ -278,7 +278,7 @@ bool Game::Init(void)
 
     SDL_Surface *glossmap = SDL_LoadBMP("stone_gloss.bmp");
 
-    glUniform1i(glGetUniformLocation(this->program_id, "u_glossmap"), 2);
+    glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2);
     glActiveTexture(GL_TEXTURE2);
 
     glGenTextures(1, &this->glossmap);

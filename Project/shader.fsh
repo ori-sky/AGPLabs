@@ -1,9 +1,9 @@
 #version 150
 precision highp float;
 
-uniform sampler2D u_texture;
-uniform sampler2D u_nmap;
-uniform sampler2D u_glossmap;
+uniform sampler2D u_sDiffuse;
+uniform sampler2D u_sNormalHeight;
+uniform sampler2D u_sSpecular;
 
 uniform mat4 u_matProjection;
 uniform mat4 u_matModelView;
@@ -23,40 +23,29 @@ const float fParallaxScale = 0.15;
 const float fParallaxMaxSamples = 250;
 const float fParallaxMinSamples = 20;
 
-void main(void)
+vec2 parallax_occlusion_mapping(sampler2D sMap, vec2 vTexCoord, vec3 vEye, vec3 vNormal, float fScale, float fMaxSamples, float fMinSamples)
 {
-    // initial texcoord
-    vec2 vTexCoord = v_vTexCoord.st;
+    float fParallaxLimit = -length(vEye.xy) / vEye.z * fScale;
 
-    // parallax occlusion mapping
-
-    vec3 vL = normalize(v_vTLight);
-    vec3 vE = normalize(v_vTEye);
-    vec3 vN = normalize(v_vTNormal);
-
-    float fParallaxLimit = -length(v_vTEye.xy) / v_vTEye.z;
-    fParallaxLimit *= fParallaxScale; // scale
-
-    vec2 vOffsetDir = normalize(v_vTEye.xy);
+    vec2 vOffsetDir = normalize(vEye.xy);
     vec2 vMaxOffset = vOffsetDir * fParallaxLimit;
 
-    int nNumSamples = int(mix(fParallaxMaxSamples, fParallaxMinSamples, dot(vE, vN)));
+    float fEDotN = dot(normalize(vEye), vNormal);
+    int nNumSamples = int(mix(fMaxSamples, fMinSamples, fEDotN));
     float fStepSize = 1.0 / float(nNumSamples);
 
-    vec2 dx = dFdx(v_vTexCoord.st);
-    vec2 dy = dFdy(v_vTexCoord.st);
+    vec2 dx = dFdx(vTexCoord);
+    vec2 dy = dFdy(vTexCoord);
 
-    float fCurrRayHeight = 1.0;
     vec2 vCurrOffset = vec2(0.0);
     vec2 vLastOffset = vec2(0.0);
+    float fCurrRayHeight = 1.0;
     float fLastSampledHeight = 1.0;
     float fCurrSampledHeight = 1.0;
-    int nCurrSample = 0;
 
-    // for each sample
-    while(nCurrSample < nNumSamples)
+    for(int nCurrSample=0; nCurrSample<nNumSamples;)
     {
-        fCurrSampledHeight = textureGrad(u_nmap, vTexCoord + vCurrOffset, dx, dy).a;
+        fCurrSampledHeight = textureGrad(sMap, vTexCoord + vCurrOffset, dx, dy).a;
         if(fCurrSampledHeight > fCurrRayHeight)
         {
             float delta1 = fCurrSampledHeight - fCurrRayHeight;
@@ -76,22 +65,34 @@ void main(void)
         }
     }
 
-    vTexCoord += vCurrOffset;
+    return vTexCoord + vCurrOffset;
+}
 
-    // normal mapping
-    vec3 vNormal = texture(u_nmap, vTexCoord).rgb * 2.0 - 1.0;
+vec3 normal_mapping(sampler2D sMap, vec2 vTexCoord)
+{
+    vec3 vNormal = texture(sMap, vTexCoord).rgb * 2.0 - 1.0;
 
     // convert normal from texture coords to OpenGL coords
     // texture coords are top-left based
     // OpenGL coords are bottom-left based
     vNormal.y *= -1;
 
+    return vNormal;
+}
+
+void main(void)
+{
+    // parallax occlusion mapping
+    vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 128, 16);
+
+    // normal mapping
+    vec3 vNormal = normal_mapping(u_sNormalHeight, vTexCoord);
+
     float fDistance = length(v_vTLight);
     vec3 vLight = normalize(v_vTLight);
 
     // attenuation
-    float fDivisor = 1.0 +
-                     fDistance * 0.05 +
+    float fDivisor = 1.0 +     fDistance * 0.05 +
                      pow(fDistance, 2.0) * 0.03 +
                      pow(fDistance, 3.0) * 0.01 +
                      pow(fDistance, 4.0) * 0.00;
@@ -111,11 +112,11 @@ void main(void)
         vec3 vHalf = normalize(vLight + normalize(v_vTEye));
         float fNDotH = max(0.0, dot(vNormal, vHalf));
         vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 16.0) * fAttenuation;
-        vSpecular *= texture(u_glossmap, vTexCoord).rgb;
+        vSpecular *= texture(u_sSpecular, vTexCoord).rgb;
     }
 
     // texture
-    vec3 vTexColor = texture(u_texture, vTexCoord).rgb;
+    vec3 vTexColor = texture(u_sDiffuse, vTexCoord).rgb;
 
     // output
     o_vColor = vec4(vAmbient + vDiffuse * vTexColor + vSpecular, 1.0);
