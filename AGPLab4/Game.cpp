@@ -242,7 +242,7 @@ bool Game::Init(void)
 
     // normal map
 
-    SDL_Surface *nmap = SDL_LoadBMP("stone_normal.bmp");
+    SDL_Surface *nmap = SDL_LoadBMP("four_NM_height.bmp");
 
     glUniform1i(glGetUniformLocation(this->program_id, "u_nmap"), 1);
     glActiveTexture(GL_TEXTURE1);
