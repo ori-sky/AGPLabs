@@ -200,6 +200,8 @@ bool Game::Init(void)
     if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
 
     LightingManager::Init();
+    LightingManager::light_types[0].vDiffuse = glm::vec3(1.0f, 0.5f, 0);
+    LightingManager::MakeLight(0, true, 0, glm::vec4(2, 2, 2, 1));
     LightingManager::UploadAll(this->program_id);
 
     glEnable(GL_DEPTH_TEST);
