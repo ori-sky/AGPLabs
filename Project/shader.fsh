@@ -21,7 +21,7 @@ const int NUM_LIGHT_TYPES = 16;
 const int NUM_LIGHTS = 16;
 const int NUM_MATERIALS = 64;
 
-struct LightType
+layout(std140) struct LightType
 {
     vec3 vAmbient;
     vec3 vDiffuse;
@@ -33,7 +33,7 @@ struct LightType
 };
 uniform LightType u_LightTypes[NUM_LIGHT_TYPES];
 
-struct Light
+layout(std140) struct Light
 {
     bool bActive;
     int nType;
@@ -41,7 +41,7 @@ struct Light
 };
 uniform Light u_Lights[NUM_LIGHTS];
 
-struct Material
+layout(std140) struct Material
 {
     vec3 vAmbient;
     vec3 vDiffuse;
@@ -65,7 +65,9 @@ smooth in vec3 v_vTNormal;
 
 out vec4 o_vColor;
 
-vec2 parallax_occlusion_mapping(sampler2D sMap, vec2 vTexCoord, vec3 vEye, vec3 vNormal, float fScale, float fMaxSamples, float fMinSamples)
+vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
+                                in vec3 vEye, in vec3 vNormal,
+                                in float fScale, in float fMaxSamples, in float fMinSamples)
 {
     float fParallaxLimit = -length(vEye.xy) / vEye.z * fScale;
 
@@ -110,7 +112,7 @@ vec2 parallax_occlusion_mapping(sampler2D sMap, vec2 vTexCoord, vec3 vEye, vec3 
     return vTexCoord + vCurrOffset;
 }
 
-vec3 normal_mapping(sampler2D sMap, vec2 vTexCoord)
+vec3 normal_mapping(in sampler2D sMap, in vec2 vTexCoord)
 {
     vec3 vNormal = texture(sMap, vTexCoord).rgb * 2.0 - 1.0;
 
@@ -122,9 +124,28 @@ vec3 normal_mapping(sampler2D sMap, vec2 vTexCoord)
     return vNormal;
 }
 
-vec3 lighting()
+vec3 diffuse_lighting(void)
 {
-    return vec3(0);
+    vec3 vColor = vec3(0);
+    bool bFirst = true;
+
+    for(int i=0; i<NUM_LIGHTS; ++i)
+    {
+        if(u_Lights[i].bActive == false) continue;
+
+        // only set initial color to (1,1,1) if at least one light is active
+        // otherwise, color remains at (0,0,0)
+        if(bFirst == true)
+        {
+            bFirst = false;
+            vColor = vec3(1);
+        }
+
+        int type = u_Lights[i].nType;
+        vColor *= u_LightTypes[type].vDiffuse;
+    }
+
+    return vColor;
 }
 
 void main(void)
@@ -151,7 +172,8 @@ void main(void)
 
     // diffuse
     float fNDotL = max(0.0, dot(vNormal, vLight));
-    vec3 vDiffuse = vec3(0.8, 0.75, 0.7) * fNDotL * fAttenuation;
+    //vec3 vDiffuse = vec3(0.8, 0.75, 0.7) * fNDotL * fAttenuation;
+    vec3 vDiffuse = diffuse_lighting();
 
     // specular
     vec3 vSpecular = vec3(0.0);
