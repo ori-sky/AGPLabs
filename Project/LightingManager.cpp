@@ -22,30 +22,75 @@ Material LightingManager::materials[NUM_MATERIALS];
 
 void LightingManager::Init(void)
 {
-    for(int i=0; i<NUM_LIGHT_TYPES; ++i)
+    for(unsigned int i=0; i<NUM_LIGHT_TYPES; ++i)
     {
         light_types[i].vAmbient = glm::vec3(0);
-        LightingManager::light_types[i].vDiffuse = glm::vec3(1);
-        LightingManager::light_types[i].vSpecular = glm::vec3(1);
-        LightingManager::light_types[i].fAttenuationConst = 1;
-        LightingManager::light_types[i].fAttenuationLinear = 0;
-        LightingManager::light_types[i].fAttenuationQuadratic = 0.2f;
-        LightingManager::light_types[i].fAttenuationCubic = 0;
+        light_types[i].vDiffuse = glm::vec3(1);
+        light_types[i].vSpecular = glm::vec3(1);
+        light_types[i].fAttenuationConst = 1;
+        light_types[i].fAttenuationLinear = 0;
+        light_types[i].fAttenuationQuadratic = 0.2f;
+        light_types[i].fAttenuationCubic = 0;
     }
 
-    for(int i=0; i<NUM_LIGHTS; ++i)
+    for(unsigned int i=0; i<NUM_LIGHTS; ++i)
     {
-        LightingManager::lights[i].bActive = 0;
-        LightingManager::lights[i].nType = 0;
-        LightingManager::lights[i].vPosition = glm::vec4(0, 0, 0, 1);
+        lights[i].bActive = 0;
+        lights[i].nType = 0;
+        lights[i].vPosition = glm::vec4(0, 0, 0, 1);
     }
 
-    for(int i=0; i<NUM_MATERIALS; ++i)
+    for(unsigned int i=0; i<NUM_MATERIALS; ++i)
     {
-        LightingManager::materials[i].vAmbient = glm::vec3(0);
-        LightingManager::materials[i].vDiffuse = glm::vec3(1);
-        LightingManager::materials[i].vSpecular = glm::vec3(1);
-        LightingManager::materials[i].fShininess = 64;
-        LightingManager::materials[i].fGlow = 0;
+        materials[i].vAmbient = glm::vec3(0);
+        materials[i].vDiffuse = glm::vec3(1);
+        materials[i].vSpecular = glm::vec3(1);
+        materials[i].fShininess = 64;
+        materials[i].fGlow = 0;
     }
+}
+
+void LightingManager::UploadLightType(GLuint program_id, unsigned int index)
+{
+    // build reference to first member of struct
+    char str[64];
+    str[sizeof(str) - 1] = 0;
+    snprintf(str, sizeof(str), "u_LightTypes[%u].vAmbient", index);
+
+    GLint loc = glGetUniformLocation(program_id, str);
+    glProgramUniform3fv(program_id, loc + 0, 1, glm::value_ptr(light_types[index].vAmbient));
+    glProgramUniform3fv(program_id, loc + 1, 1, glm::value_ptr(light_types[index].vDiffuse));
+    glProgramUniform3fv(program_id, loc + 2, 1, glm::value_ptr(light_types[index].vSpecular));
+    glProgramUniform1f(program_id, loc + 3, light_types[index].fAttenuationConst);
+    glProgramUniform1f(program_id, loc + 4, light_types[index].fAttenuationLinear);
+    glProgramUniform1f(program_id, loc + 5, light_types[index].fAttenuationQuadratic);
+    glProgramUniform1f(program_id, loc + 6, light_types[index].fAttenuationCubic);
+}
+
+void LightingManager::UploadLight(GLuint program_id, unsigned int index)
+{
+    // build reference to first member of struct
+    char str[64];
+    str[sizeof(str) - 1] = 0;
+    snprintf(str, sizeof(str), "u_Lights[%u].bActive", index);
+
+    GLint loc = glGetUniformLocation(program_id, str);
+    glProgramUniform1i(program_id, loc + 0, lights[index].bActive);
+    glProgramUniform1i(program_id, loc + 1, lights[index].nType);
+    glProgramUniform4fv(program_id, loc + 2, 1, glm::value_ptr(lights[index].vPosition));
+}
+
+void LightingManager::UploadMaterial(GLuint program_id, unsigned int index)
+{
+    // build reference to first member of struct
+    char str[64];
+    str[sizeof(str) - 1] = 0;
+    snprintf(str, sizeof(str), "u_Materials[%u].vAmbient", index);
+
+    GLint loc = glGetUniformLocation(program_id, str);
+    glProgramUniform3fv(program_id, loc + 0, 1, glm::value_ptr(materials[index].vAmbient));
+    glProgramUniform3fv(program_id, loc + 1, 1, glm::value_ptr(materials[index].vDiffuse));
+    glProgramUniform3fv(program_id, loc + 2, 1, glm::value_ptr(materials[index].vSpecular));
+    glProgramUniform1f(program_id, loc + 3, materials[index].fShininess);
+    glProgramUniform1f(program_id, loc + 4, materials[index].fGlow);
 }

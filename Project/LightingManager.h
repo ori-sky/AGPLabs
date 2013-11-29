@@ -58,6 +58,40 @@ public:
     static Material materials[NUM_MATERIALS];
 
     static void Init(void);
+    static void UploadLightType(GLuint program_id, unsigned int index);
+    static void UploadLight(GLuint program_id, unsigned int index);
+    static void UploadMaterial(GLuint program_id, unsigned int index);
+
+    static inline void UploadLightTypes(GLuint program_id)
+    {
+        for(unsigned int i=0; i<NUM_LIGHT_TYPES; ++i)
+        {
+            UploadLightType(program_id, i);
+        }
+    }
+
+    static inline void UploadLights(GLuint program_id)
+    {
+        for(unsigned int i=0; i<NUM_LIGHTS; ++i)
+        {
+            UploadLight(program_id, i);
+        }
+    }
+
+    static inline void UploadMaterials(GLuint program_id)
+    {
+        for(unsigned int i=0; i<NUM_MATERIALS; ++i)
+        {
+            UploadMaterial(program_id, i);
+        }
+    }
+
+    static inline void UploadAll(GLuint program_id)
+    {
+        UploadLightTypes(program_id);
+        UploadLights(program_id);
+        UploadMaterials(program_id);
+    }
 };
 
 #endif

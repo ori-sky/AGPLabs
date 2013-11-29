@@ -200,6 +200,7 @@ bool Game::Init(void)
     if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
 
     LightingManager::Init();
+    LightingManager::UploadAll(this->program_id);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
