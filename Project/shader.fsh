@@ -141,9 +141,9 @@ void main(void)
     vec3 vLight = normalize(v_vTLight);
 
     // attenuation
-    float fDivisor = 1.0 +     fDistance * 0.05 +
-                     pow(fDistance, 2.0) * 0.03 +
-                     pow(fDistance, 3.0) * 0.01;
+    float fDivisor = 1.0 +     fDistance * 0.0 +
+                     pow(fDistance, 2.0) * 0.2 +
+                     pow(fDistance, 3.0) * 0.0;
     float fAttenuation = 1.0 / fDivisor;
 
     // ambient

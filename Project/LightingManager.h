@@ -17,10 +17,47 @@
 #ifndef LIGHTINGMANAGER_H
 #define LIGHTINGMANAGER_H
 
+#include "common.h"
+
+#define NUM_LIGHT_TYPES 16
+#define NUM_LIGHTS 16
+#define NUM_MATERIALS 64
+
+struct LightType
+{
+    glm::vec3 vAmbient;
+    glm::vec3 vDiffuse;
+    glm::vec3 vSpecular;
+    GLfloat fAttenuationConst;
+    GLfloat fAttenuationLinear;
+    GLfloat fAttenuationQuadratic;
+    GLfloat fAttenuationCubic;
+};
+
+struct Light
+{
+    GLint bActive;
+    GLint nType;
+    glm::vec4 vPosition;
+};
+
+struct Material
+{
+    glm::vec3 vAmbient;
+    glm::vec3 vDiffuse;
+    glm::vec3 vSpecular;
+    GLfloat fShininess;
+    GLfloat fGlow;
+};
+
 class LightingManager
 {
 public:
-    // TODO
+    static LightType light_types[NUM_LIGHT_TYPES];
+    static Light lights[NUM_LIGHTS];
+    static Material materials[NUM_MATERIALS];
+
+    static void Init(void);
 };
 
 #endif

@@ -16,6 +16,9 @@
 
 #include "ResourceManager.h"
 
+#include "stdio.h"
+#include "stdlib.h"
+
 char * ResourceManager::Load(const char *path, long *len)
 {
     char *buffer = NULL;

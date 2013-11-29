@@ -199,6 +199,8 @@ bool Game::Init(void)
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
 
+    LightingManager::Init();
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);

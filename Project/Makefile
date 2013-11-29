@@ -3,7 +3,7 @@ CXXFLAGS=-g -c -Wall -static-libstdc++ -I../include
 LIBPATHS=-L../lib/x86 -L../lib/x64
 LDFLAGS=-g $(LIBPATHS) -lSDL2 -lGLEW -lrt -ldl -lpthread -lGL
 
-SRCS=main.cpp Game.cpp ResourceManager.cpp
+SRCS=main.cpp Game.cpp ResourceManager.cpp LightingManager.cpp
 OBJS=$(SRCS:.cpp=.o)
 EXECUTABLE=Project
 
