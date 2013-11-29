@@ -19,10 +19,6 @@ smooth in vec3 v_vTNormal;
 
 out vec4 o_vColor;
 
-const float fParallaxScale = 0.15;
-const float fParallaxMaxSamples = 250;
-const float fParallaxMinSamples = 20;
-
 vec2 parallax_occlusion_mapping(sampler2D sMap, vec2 vTexCoord, vec3 vEye, vec3 vNormal, float fScale, float fMaxSamples, float fMinSamples)
 {
     float fParallaxLimit = -length(vEye.xy) / vEye.z * fScale;
@@ -78,6 +74,11 @@ vec3 normal_mapping(sampler2D sMap, vec2 vTexCoord)
     vNormal.y *= -1;
 
     return vNormal;
+}
+
+vec3 diffuse_lighting()
+{
+    return vec3(0);
 }
 
 void main(void)
