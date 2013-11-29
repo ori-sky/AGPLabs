@@ -25,6 +25,7 @@
 
 #include "ResourceManager.h"
 #include "TextureManager.h"
+#include "LightingManager.h"
 #include "CubeDrawable.h"
 
 #define GAME_ATTRIB_VERTEX 0
@@ -38,6 +39,10 @@ protected:
     
     SDL_Window *wnd;
     SDL_GLContext ctx;
+
+    float width;
+    float height;
+    float aspect;
 
     GLuint program_id;
 

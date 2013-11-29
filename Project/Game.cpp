@@ -77,11 +77,14 @@ bool Game::InitSDL(void)
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
+    // set initial aspect ratio
+    this->aspect = this->width / this->height;
+
     // create real window and context
 
     this->wnd = SDL_CreateWindow("Game",
                                  SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                 1280, 720,
+                                 this->width, this->height,
                                  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if(!this->wnd)
     {
@@ -170,7 +173,6 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(this->program_id, v_id);
     glAttachShader(this->program_id, f_id);
 
-    // TODO: use code from BlockGame project to make this better!
     glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex");
     glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal");
     glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord");
@@ -190,6 +192,9 @@ bool Game::DestroySDL(void)
 
 bool Game::Init(void)
 {
+    this->width = 1280;
+    this->height = 720;
+
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
@@ -253,6 +258,17 @@ bool Game::HandleSDL(SDL_Event *e)
                     this->pressed_keys.erase(i);
                     break;
                 }
+            }
+            break;
+        case SDL_WINDOWEVENT:
+            switch(e->window.event)
+            {
+                case SDL_WINDOWEVENT_RESIZED:
+                    this->width = e->window.data1;
+                    this->height = e->window.data2;
+                    this->aspect = this->width / this->height;
+                    glViewport(0, 0, this->width, this->height);
+                    break;
             }
             break;
     }
@@ -319,7 +335,7 @@ bool Game::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, 1280.0f / 720.0f, 0.01f, 100.0f);
+    glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
     glm::mat4 matModelView = this->camera;
     glm::mat4 matObjectModelView = matModelView;
 
