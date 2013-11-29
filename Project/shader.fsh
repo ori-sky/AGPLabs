@@ -35,7 +35,7 @@ uniform LightType u_LightTypes[NUM_LIGHT_TYPES];
 
 struct Light
 {
-    int bActive;
+    bool bActive;
     int nType;
     vec4 vPosition;     // w = 0 means directional light
 };
