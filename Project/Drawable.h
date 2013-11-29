@@ -17,6 +17,8 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
+#include "common.h"
+
 class Drawable
 {
 private:

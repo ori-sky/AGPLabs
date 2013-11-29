@@ -170,6 +170,7 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
     glAttachShader(this->program_id, v_id);
     glAttachShader(this->program_id, f_id);
 
+    // TODO: use code from BlockGame project to make this better!
     glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex");
     glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal");
     glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord");
@@ -204,109 +205,19 @@ bool Game::Init(void)
 
     this->cube.Init(this->program_id);
 
-    // texture
-
-    SDL_Surface *texture = SDL_LoadBMP("stone.bmp");
-
-    glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0);
-    glActiveTexture(GL_TEXTURE0);
-
-    glGenTextures(1, &this->tex);
-    glBindTexture(GL_TEXTURE_2D, this->tex);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
+    // max anisotropy
     GLfloat aniso;
     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
 
-    GLenum format = 0;
-    switch(texture->format->BytesPerPixel)
-    {
-        case 3:
-            format = texture->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
-            break;
-        case 4:
-            format = texture->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
-            break;
-    }
+    // load textures
+    this->tex = TextureManager::LoadBMP("stone.bmp", GL_TEXTURE0, aniso);
+    this->nmap = TextureManager::LoadBMP("four_NM_height.bmp", GL_TEXTURE1, aniso);
+    this->glossmap = TextureManager::LoadBMP("stone_gloss.bmp", GL_TEXTURE2, aniso);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0, format,
-                 GL_UNSIGNED_BYTE, texture->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    SDL_FreeSurface(texture);
-
-    // normal map
-
-    SDL_Surface *nmap = SDL_LoadBMP("four_NM_height.bmp");
-
+    // bind texture units to shader samplers
+    glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0);
     glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1);
-    glActiveTexture(GL_TEXTURE1);
-
-    glGenTextures(1, &this->nmap);
-    glBindTexture(GL_TEXTURE_2D, this->nmap);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
-
-    format = 0;
-    switch(nmap->format->BytesPerPixel)
-    {
-        case 3:
-            format = nmap->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
-            break;
-        case 4:
-            format = nmap->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
-            break;
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, nmap->w, nmap->h, 0, format,
-                 GL_UNSIGNED_BYTE, nmap->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    SDL_FreeSurface(nmap);
-
-    // gloss map
-
-    SDL_Surface *glossmap = SDL_LoadBMP("stone_gloss.bmp");
-
     glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2);
-    glActiveTexture(GL_TEXTURE2);
-
-    glGenTextures(1, &this->glossmap);
-    glBindTexture(GL_TEXTURE_2D, this->glossmap);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
-
-    format = 0;
-    switch(glossmap->format->BytesPerPixel)
-    {
-        case 3:
-            format = glossmap->format->Rmask == 0xFF ? GL_RGB : GL_BGR;
-            break;
-        case 4:
-            format = glossmap->format->Rmask == 0xFF ? GL_RGBA : GL_BGRA;
-            break;
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, glossmap->w, glossmap->h, 0, format,
-                 GL_UNSIGNED_BYTE, glossmap->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    SDL_FreeSurface(glossmap);
 
     return true;
 }

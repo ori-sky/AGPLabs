@@ -21,26 +21,10 @@
 #include <string.h>
 #include <vector>
 
-#include <SDL.h>
-
-#if defined(_WIN32) || defined(__linux__)
-#define GLEW_STATIC
-#include <GL/glew.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#include <OpenGL/gl3.h>
-#include <OpenGL/gl3ext.h>
-#endif
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/type_precision.hpp>
+#include "common.h"
 
 #include "ResourceManager.h"
+#include "TextureManager.h"
 #include "CubeDrawable.h"
 
 #define GAME_ATTRIB_VERTEX 0

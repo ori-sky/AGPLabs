@@ -232,6 +232,9 @@
 		7F8A8E6518487B1800248801 /* studdedmetal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = studdedmetal.bmp; sourceTree = "<group>"; };
 		7F8A8E6818487B8500248801 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		7F8A8E7418487C6200248801 /* four_NM_height.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = four_NM_height.bmp; sourceTree = "<group>"; };
+		7F8A8E771848B5DA00248801 /* LightingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightingManager.h; sourceTree = "<group>"; };
+		7F8A8E791848B6FA00248801 /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
+		7F8A8E7A1848B7B000248801 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		7FAD199E1823B05500007D5A /* studdedmetal_normal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = studdedmetal_normal.bmp; sourceTree = "<group>"; };
 		7FB582BD18115148002C1795 /* AGPLab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGPLab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB582C118115149002C1795 /* AGPLab4.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab4.1; sourceTree = "<group>"; };
@@ -398,14 +401,17 @@
 		7F8A8E4B184879E700248801 /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				7F8A8E7A1848B7B000248801 /* common.h */,
 				7F8A8E5518487AC800248801 /* CubeDrawable.h */,
 				7F8A8E5618487AC800248801 /* Drawable.h */,
 				7F8A8E6818487B8500248801 /* Game.cpp */,
 				7F8A8E5718487AC800248801 /* Game.h */,
+				7F8A8E771848B5DA00248801 /* LightingManager.h */,
 				7F8A8E4C184879E700248801 /* main.cpp */,
 				7F8A8E5818487AC800248801 /* Object.h */,
 				7F8A8E5918487AC800248801 /* ResourceManager.cpp */,
 				7F8A8E5A18487AC800248801 /* ResourceManager.h */,
+				7F8A8E791848B6FA00248801 /* TextureManager.h */,
 				7F8A8E5D18487AE200248801 /* Resources */,
 				7F8A8E5C18487AD900248801 /* Supporting Files */,
 			);
