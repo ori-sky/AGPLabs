@@ -1,13 +1,43 @@
 #version 150
 precision highp float;
 
+const int NUM_LIGHT_TYPES = 16;
+const int NUM_LIGHTS = 16;
+const int NUM_MATERIALS = 64;
+
+struct LightType
+{
+    vec3 vAmbient;
+    vec3 vDiffuse;
+    vec3 vSpecular;
+    float fAttenuationConst;
+    float fAttenuationLinear;
+    float fAttenuationQuadratic;
+    float fAttenuationCubic;
+};
+uniform LightType u_LightTypes[NUM_LIGHT_TYPES];
+
+struct Light
+{
+    int bActive;
+    int nType;
+    vec4 vPosition;     // w = 0 means directional light
+};
+uniform Light u_Lights[NUM_LIGHTS];
+
+struct Material
+{
+    vec3 vAmbient;
+    vec3 vDiffuse;
+    vec3 vSpecular;
+    float fShininess;   // specular exponent
+    float fGlow;        // luminescence
+};
+uniform Material u_Materials[NUM_MATERIALS];
+
 uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
 uniform sampler2D u_sSpecular;
-
-uniform mat4 u_matProjection;
-uniform mat4 u_matModelView;
-uniform mat4 u_matObjectModelView;
 
 smooth in vec3 v_vNormal;
 smooth in vec2 v_vTexCoord;
@@ -76,7 +106,7 @@ vec3 normal_mapping(sampler2D sMap, vec2 vTexCoord)
     return vNormal;
 }
 
-vec3 diffuse_lighting()
+vec3 lighting()
 {
     return vec3(0);
 }
@@ -84,10 +114,12 @@ vec3 diffuse_lighting()
 void main(void)
 {
     // parallax occlusion mapping
-    vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 128, 16);
+    vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 64, 16);
 
     // normal mapping
     vec3 vNormal = normal_mapping(u_sNormalHeight, vTexCoord);
+
+    // lighting
 
     float fDistance = length(v_vTLight);
     vec3 vLight = normalize(v_vTLight);
@@ -95,8 +127,7 @@ void main(void)
     // attenuation
     float fDivisor = 1.0 +     fDistance * 0.05 +
                      pow(fDistance, 2.0) * 0.03 +
-                     pow(fDistance, 3.0) * 0.01 +
-                     pow(fDistance, 4.0) * 0.00;
+                     pow(fDistance, 3.0) * 0.01;
     float fAttenuation = 1.0 / fDivisor;
 
     // ambient
