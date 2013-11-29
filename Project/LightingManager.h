@@ -36,7 +36,7 @@ struct LightType
 
 struct Light
 {
-    GLint bActive;
+    GLboolean bActive;
     GLint nType;
     glm::vec4 vPosition;
 };
@@ -57,10 +57,58 @@ public:
     static Light lights[NUM_LIGHTS];
     static Material materials[NUM_MATERIALS];
 
-    static void Init(void);
     static void UploadLightType(GLuint program_id, unsigned int index);
     static void UploadLight(GLuint program_id, unsigned int index);
     static void UploadMaterial(GLuint program_id, unsigned int index);
+
+    static inline void MakeLightType(unsigned int index,
+                                     glm::vec3 vAmbient, glm::vec3 vDiffuse, glm::vec3 vSpecular,
+                                     GLfloat fAConst, GLfloat fALinear, GLfloat fAQuad, GLfloat fACubic)
+    {
+        light_types[index].vAmbient = vAmbient;
+        light_types[index].vDiffuse = vDiffuse;
+        light_types[index].vSpecular = vSpecular;
+        light_types[index].fAttenuationConst = fAConst;
+        light_types[index].fAttenuationLinear = fALinear;
+        light_types[index].fAttenuationQuadratic = fAQuad;
+        light_types[index].fAttenuationCubic = fACubic;
+    }
+
+    static inline void MakeLight(unsigned int index, GLboolean bActive, GLuint nType, glm::vec4 vPos)
+    {
+        lights[index].bActive = bActive;
+        lights[index].nType = nType;
+        lights[index].vPosition = vPos;
+    }
+
+    static inline void MakeMaterial(unsigned int index,
+                                    glm::vec3 vAmbient, glm::vec3 vDiffuse, glm::vec3 vSpecular,
+                                    GLfloat fShininess, GLfloat fGlow)
+    {
+        materials[index].vAmbient = vAmbient;
+        materials[index].vDiffuse = vDiffuse;
+        materials[index].vSpecular = vSpecular;
+        materials[index].fShininess = fShininess;
+        materials[index].fGlow = fGlow;
+    }
+
+    static inline void Init(void)
+    {
+        for(unsigned int i=0; i<NUM_LIGHT_TYPES; ++i)
+        {
+            MakeLightType(i, glm::vec3(0), glm::vec3(1), glm::vec3(1), 1, 0, 0.2f, 0);
+        }
+
+        for(unsigned int i=0; i<NUM_LIGHTS; ++i)
+        {
+            MakeLight(i, 0, 0, glm::vec4(0, 0, 0, 1));
+        }
+
+        for(unsigned int i=0; i<NUM_MATERIALS; ++i)
+        {
+            MakeMaterial(i, glm::vec3(0), glm::vec3(1), glm::vec3(1), 64, 0);
+        }
+    }
 
     static inline void UploadLightTypes(GLuint program_id)
     {
