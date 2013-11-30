@@ -50,7 +50,7 @@ void LightingManager::UploadLightType(GLuint program_id, unsigned int index)
     loc = glGetUniformLocation(program_id, str);
     if(loc != -1) glProgramUniform1f(program_id, loc, light_types[index].fAttenuationLinear);
 
-    snprintf(str, sizeof(str), "u_LightTypes[%u].vfAttenuationQuadratic", index);
+    snprintf(str, sizeof(str), "u_LightTypes[%u].fAttenuationQuadratic", index);
     loc = glGetUniformLocation(program_id, str);
     if(loc != -1) glProgramUniform1f(program_id, loc, light_types[index].fAttenuationQuadratic);
 
@@ -82,7 +82,7 @@ void LightingManager::UploadLight(GLuint program_id, unsigned int index)
 
     snprintf(str, sizeof(str), "u_Lights[%u].vPosition", index);
     loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform4fv(program_id, loc + 2, 1, glm::value_ptr(lights[index].vPosition));
+    if(loc != -1) glProgramUniform4fv(program_id, loc, 1, glm::value_ptr(lights[index].vPosition));
 
     GLenum err;
     if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLight: error: 0x%x\n", err);
@@ -119,5 +119,5 @@ void LightingManager::UploadMaterial(GLuint program_id, unsigned int index)
     if(loc != -1) glProgramUniform1f(program_id, loc, materials[index].fGlow);
 
     GLenum err;
-    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLight: error: 0x%x\n", err);
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadMaterial: error: 0x%x\n", err);
 }
