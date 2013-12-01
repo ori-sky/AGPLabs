@@ -213,19 +213,24 @@ bool Game::Init(void)
     LightingManager::light_types[1].fAttenuationQuadratic = 0.05f;
     LightingManager::light_types[2].fAttenuationQuadratic = 0.05f;
 
-    LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
-    LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
-    LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
+    //LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
+    //LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
+    //LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
+    LightingManager::MakeLight(0, true, 0, glm::vec4(0, 1.5,  1, 1));
+    LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
 
     LightingManager::materials[0].fShininess = 64;
-    LightingManager::materials[0].vDiffuse = glm::vec4(1, 0.9f, 0.7f, 1);
+
+    LightingManager::materials[1].fShininess = 8;
+    LightingManager::materials[1].vDiffuse = glm::vec4(1, 0.9f, 0.7f, 1);
 
     LightingManager::UploadAll(this->program_id);
 
     cube_left.Init(program_id);
     cube_right.Init(program_id);
-    cube_left.position = glm::vec3(-1.5f, 0, 0);
-    cube_right.position = glm::vec3(1.5f, 0, 0);
+    cube_left.position = glm::vec3(-2.0f, 0, 0);
+    cube_right.position = glm::vec3(2.0f, 0, 0);
+    cube_right.material_id = 1;
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
