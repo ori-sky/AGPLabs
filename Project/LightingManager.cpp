@@ -20,7 +20,7 @@ LightType LightingManager::light_types[NUM_LIGHT_TYPES];
 Light LightingManager::lights[NUM_LIGHTS];
 Material LightingManager::materials[NUM_MATERIALS];
 
-void LightingManager::UploadLightType(GLuint program_id, unsigned int index)
+void LightingManager::UploadLightTypes(GLuint program_id)
 {
     // clear error
     glGetError();
@@ -36,10 +36,10 @@ void LightingManager::UploadLightType(GLuint program_id, unsigned int index)
     glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
 
     GLenum err;
-    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLightType: error: 0x%x\n", err);
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLightTypes: error: 0x%x\n", err);
 }
 
-void LightingManager::UploadLight(GLuint program_id, unsigned int index)
+void LightingManager::UploadLights(GLuint program_id)
 {
     printf("size=%llu\n", sizeof(GLboolean));
     // clear error
@@ -56,10 +56,10 @@ void LightingManager::UploadLight(GLuint program_id, unsigned int index)
     glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
 
     GLenum err;
-    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLight: error: 0x%x\n", err);
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLights: error: 0x%x\n", err);
 }
 
-void LightingManager::UploadMaterial(GLuint program_id, unsigned int index)
+void LightingManager::UploadMaterials(GLuint program_id)
 {
     // clear error
     glGetError();
@@ -75,5 +75,5 @@ void LightingManager::UploadMaterial(GLuint program_id, unsigned int index)
     glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
 
     GLenum err;
-    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadMaterial: error: 0x%x\n", err);
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadMaterials: error: 0x%x\n", err);
 }
