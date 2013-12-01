@@ -47,11 +47,12 @@ private:
     }
 
     static void make_vbo(GLsizeiptr size, const GLvoid *data, GLuint program_id,
-                         const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type)
+                         const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type,
+                         GLenum usage)
     {
         GLenum err;
 
-        Drawable::make_buffer(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+        Drawable::make_buffer(GL_ARRAY_BUFFER, size, data, usage);
 
         GLint attrib_id = glGetAttribLocation(program_id, attrib_name);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: error: 0x%x\n", err);
@@ -64,6 +65,8 @@ private:
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glEnableVertexAttribArray: error: 0x%x\n", err);
     }
 protected:
+    GLenum usage;
+
     virtual unsigned int Make(glm::vec3 **vertices,
                               glm::vec3 **normals,
                               glm::vec3 **tangents,
@@ -72,6 +75,8 @@ protected:
 public:
     GLint material_id;
     glm::vec3 position;
+
+    Drawable(GLenum usage = GL_STATIC_DRAW) : usage(usage), material_id(0), position(glm::vec3(0)) {}
 
     void Init(GLuint program_id)
     {
@@ -94,21 +99,17 @@ public:
         glBindVertexArray(this->vao);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Init => glBindVertexArray: error: 0x%x\n", err);
 
-        make_vbo(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT);
-        make_vbo(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT);
-        make_vbo(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT);
-        make_vbo(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT);
-        make_vbo(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT);
+        make_vbo(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT, usage);
+        make_vbo(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT, usage);
+        make_vbo(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT, usage);
+        make_vbo(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT, usage);
+        make_vbo(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT, usage);
 
         delete[] vertices;
         delete[] normals;
         delete[] tangents;
         delete[] bitangents;
         delete[] texcoords;
-
-        material_id = 0;
-
-        position = glm::vec3(0);
     }
 
     virtual void Draw(GLuint program_id, GLint u_matModelView, glm::mat4 matModelView)
