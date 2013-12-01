@@ -25,38 +25,15 @@ void LightingManager::UploadLightType(GLuint program_id, unsigned int index)
     // clear error
     glGetError();
 
-    char str[64];
-    str[sizeof(str) - 1] = 0;
+    GLuint binding = 1;
+    GLuint block_index = glGetUniformBlockIndex(program_id, "LightTypesBlock");
+    glUniformBlockBinding(program_id, block_index, binding);
 
-    GLint loc;
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].vAmbient", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform3fv(program_id, loc, 1, glm::value_ptr(light_types[index].vAmbient));
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].vDiffuse", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform3fv(program_id, loc, 1, glm::value_ptr(light_types[index].vDiffuse));
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].vSpecular", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform3fv(program_id, loc, 1, glm::value_ptr(light_types[index].vSpecular));
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].fAttenuationConst", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1f(program_id, loc, light_types[index].fAttenuationConst);
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].fAttenuationLinear", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1f(program_id, loc, light_types[index].fAttenuationLinear);
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].fAttenuationQuadratic", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1f(program_id, loc, light_types[index].fAttenuationQuadratic);
-
-    snprintf(str, sizeof(str), "u_LightTypes[%u].fAttenuationCubic", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1f(program_id, loc, light_types[index].fAttenuationCubic);
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(light_types), light_types, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
 
     GLenum err;
     if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLightType: error: 0x%x\n", err);
@@ -64,25 +41,19 @@ void LightingManager::UploadLightType(GLuint program_id, unsigned int index)
 
 void LightingManager::UploadLight(GLuint program_id, unsigned int index)
 {
+    printf("size=%llu\n", sizeof(GLboolean));
     // clear error
     glGetError();
 
-    char str[64];
-    str[sizeof(str) - 1] = 0;
+    GLuint binding = 2;
+    GLuint block_index = glGetUniformBlockIndex(program_id, "LightsBlock");
+    glUniformBlockBinding(program_id, block_index, binding);
 
-    GLint loc;
-
-    snprintf(str, sizeof(str), "u_Lights[%u].bActive", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1i(program_id, loc, lights[index].bActive);
-
-    snprintf(str, sizeof(str), "u_Lights[%u].nType", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1i(program_id, loc, lights[index].nType);
-
-    snprintf(str, sizeof(str), "u_Lights[%u].vPosition", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform4fv(program_id, loc, 1, glm::value_ptr(lights[index].vPosition));
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(lights), lights, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
 
     GLenum err;
     if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadLight: error: 0x%x\n", err);
@@ -93,30 +64,15 @@ void LightingManager::UploadMaterial(GLuint program_id, unsigned int index)
     // clear error
     glGetError();
 
-    char str[64];
-    str[sizeof(str) - 1] = 0;
+    GLuint binding = 3;
+    GLuint block_index = glGetUniformBlockIndex(program_id, "MaterialsBlock");
+    glUniformBlockBinding(program_id, block_index, binding);
 
-    GLint loc;
-
-    snprintf(str, sizeof(str), "u_Materials[%u].vAmbient", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform3fv(program_id, loc, 1, glm::value_ptr(materials[index].vAmbient));
-
-    snprintf(str, sizeof(str), "u_Materials[%u].vDiffuse", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform3fv(program_id, loc, 1, glm::value_ptr(materials[index].vDiffuse));
-
-    snprintf(str, sizeof(str), "u_Materials[%u].vSpecular", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform3fv(program_id, loc, 1, glm::value_ptr(materials[index].vSpecular));
-
-    snprintf(str, sizeof(str), "u_Materials[%u].fShininess", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1f(program_id, loc, materials[index].fShininess);
-
-    snprintf(str, sizeof(str), "u_Materials[%u].fGlow", index);
-    loc = glGetUniformLocation(program_id, str);
-    if(loc != -1) glProgramUniform1f(program_id, loc, materials[index].fGlow);
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(materials), materials, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
 
     GLenum err;
     if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadMaterial: error: 0x%x\n", err);

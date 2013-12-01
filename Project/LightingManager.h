@@ -25,27 +25,29 @@
 
 struct LightType
 {
-    glm::vec3 vAmbient;
-    glm::vec3 vDiffuse;
-    glm::vec3 vSpecular;
+    glm::vec4 vAmbient;
+    glm::vec4 vDiffuse;
+    glm::vec4 vSpecular;
     GLfloat fAttenuationConst;
     GLfloat fAttenuationLinear;
     GLfloat fAttenuationQuadratic;
-    GLfloat fAttenuationCubic;
+    GLint nReserved1;
 };
 
 struct Light
 {
-    GLboolean bActive;
-    GLint nType;
     glm::vec4 vPosition;
+    GLint nType;
+    GLint bActive;
+    GLint nReserved1;
+    GLint nReserved2;
 };
 
 struct Material
 {
-    glm::vec3 vAmbient;
-    glm::vec3 vDiffuse;
-    glm::vec3 vSpecular;
+    glm::vec4 vAmbient;
+    glm::vec4 vDiffuse;
+    glm::vec4 vSpecular;
     GLfloat fShininess;
     GLfloat fGlow;
 };
@@ -62,8 +64,8 @@ public:
     static void UploadMaterial(GLuint program_id, unsigned int index);
 
     static inline void MakeLightType(unsigned int index,
-                                     glm::vec3 vAmbient, glm::vec3 vDiffuse, glm::vec3 vSpecular,
-                                     GLfloat fAConst, GLfloat fALinear, GLfloat fAQuad, GLfloat fACubic)
+                                     glm::vec4 vAmbient, glm::vec4 vDiffuse, glm::vec4 vSpecular,
+                                     GLfloat fAConst, GLfloat fALinear, GLfloat fAQuad)
     {
         light_types[index].vAmbient = vAmbient;
         light_types[index].vDiffuse = vDiffuse;
@@ -71,18 +73,17 @@ public:
         light_types[index].fAttenuationConst = fAConst;
         light_types[index].fAttenuationLinear = fALinear;
         light_types[index].fAttenuationQuadratic = fAQuad;
-        light_types[index].fAttenuationCubic = fACubic;
     }
 
     static inline void MakeLight(unsigned int index, GLboolean bActive, GLuint nType, glm::vec4 vPos)
     {
-        lights[index].bActive = bActive;
-        lights[index].nType = nType;
         lights[index].vPosition = vPos;
+        lights[index].nType = nType;
+        lights[index].bActive = bActive;
     }
 
     static inline void MakeMaterial(unsigned int index,
-                                    glm::vec3 vAmbient, glm::vec3 vDiffuse, glm::vec3 vSpecular,
+                                    glm::vec4 vAmbient, glm::vec4 vDiffuse, glm::vec4 vSpecular,
                                     GLfloat fShininess, GLfloat fGlow)
     {
         materials[index].vAmbient = vAmbient;
@@ -96,7 +97,7 @@ public:
     {
         for(unsigned int i=0; i<NUM_LIGHT_TYPES; ++i)
         {
-            MakeLightType(i, glm::vec3(0), glm::vec3(1), glm::vec3(1), 1, 0, 0.2f, 0);
+            MakeLightType(i, glm::vec4(0,0,0,1), glm::vec4(1,1,1,1), glm::vec4(1,1,1,1), 1, 0, 0.2f);
         }
 
         for(unsigned int i=0; i<NUM_LIGHTS; ++i)
@@ -106,7 +107,7 @@ public:
 
         for(unsigned int i=0; i<NUM_MATERIALS; ++i)
         {
-            MakeMaterial(i, glm::vec3(0), glm::vec3(1), glm::vec3(1), 64, 0);
+            MakeMaterial(i, glm::vec4(0,0,0,1), glm::vec4(1,1,1,1), glm::vec4(1,1,1,1), 64, 0);
         }
     }
 

@@ -200,9 +200,17 @@ bool Game::Init(void)
     if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
 
     LightingManager::Init();
-    LightingManager::light_types[0].vDiffuse = glm::vec3(1.0f, 0.5f, 0);
-    LightingManager::MakeLight(0, true, 0, glm::vec4(2, 2, 2, 1));
+
+    LightingManager::light_types[0].vDiffuse = glm::vec4(1.0f, 0, 0, 1);
+    LightingManager::light_types[1].vDiffuse = glm::vec4(0, 1.0f, 0, 1);
+    LightingManager::light_types[2].vDiffuse = glm::vec4(0, 0, 1.0f, 1);
+
+    LightingManager::MakeLight(0, true, 0, glm::vec4(1.5, 1.5, 1.5, 1));
+    LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5, 1.5, 1.5, 1));
+    LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
+
     LightingManager::UploadAll(this->program_id);
+
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -342,15 +350,12 @@ bool Game::Draw(void)
 
     glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
     glm::mat4 matModelView = this->camera;
-    glm::mat4 matObjectModelView = matModelView;
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
-    GLint u_matObjectModelView = glGetUniformLocation(this->program_id, "u_matObjectModelView");
 
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
-    glUniformMatrix4fv(u_matObjectModelView, 1, GL_FALSE, glm::value_ptr(matObjectModelView));
 
     this->cube.Draw();
 

@@ -21,40 +21,57 @@ const int NUM_LIGHT_TYPES = 16;
 const int NUM_LIGHTS = 16;
 const int NUM_MATERIALS = 64;
 
-layout(std140) struct LightType
+struct LightType
 {
-    vec3 vAmbient;
-    vec3 vDiffuse;
-    vec3 vSpecular;
+    vec4 vAmbient;
+    vec4 vDiffuse;
+    vec4 vSpecular;
     float fAttenuationConst;
     float fAttenuationLinear;
     float fAttenuationQuadratic;
-    float fAttenuationCubic;
+    int nReserved1;
 };
-uniform LightType u_LightTypes[NUM_LIGHT_TYPES];
 
-layout(std140) struct Light
+struct Light
 {
-    bool bActive;
-    int nType;
     vec4 vPosition;     // w = 0 means directional light
+    int nType;
+    int bActive;
+    int nReserved1;
+    int nReserved2;
 };
-uniform Light u_Lights[NUM_LIGHTS];
 
-layout(std140) struct Material
+struct Material
 {
-    vec3 vAmbient;
-    vec3 vDiffuse;
-    vec3 vSpecular;
+    vec4 vAmbient;
+    vec4 vDiffuse;
+    vec4 vSpecular;
     float fShininess;   // specular exponent
     float fGlow;        // luminescence
 };
-uniform Material u_Materials[NUM_MATERIALS];
+
+layout (std140) uniform LightTypesBlock
+{
+    LightType u_LightTypes[NUM_LIGHT_TYPES];
+};
+
+layout (std140) uniform LightsBlock
+{
+    Light u_Lights[NUM_LIGHTS];
+};
+
+layout (std140) uniform MaterialsBlock
+{
+    Material u_Materials[NUM_MATERIALS];
+};
 
 uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
 uniform sampler2D u_sSpecular;
 
+uniform mat4 u_matModelView;
+
+smooth in vec3 v_vVertex;
 smooth in vec3 v_vNormal;
 smooth in vec2 v_vTexCoord;
 smooth in vec3 v_vEye;
@@ -62,6 +79,8 @@ smooth in vec3 v_vEye;
 smooth in vec3 v_vTLight;
 smooth in vec3 v_vTEye;
 smooth in vec3 v_vTNormal;
+
+smooth in mat3 v_matWorldToTangent;
 
 out vec4 o_vColor;
 
@@ -124,28 +143,42 @@ vec3 normal_mapping(in sampler2D sMap, in vec2 vTexCoord)
     return vNormal;
 }
 
-vec3 diffuse_lighting(void)
+void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vSpecular)
 {
-    vec3 vColor = vec3(0);
-    bool bFirst = true;
+    vAmbient = vec3(0);
+    vDiffuse = vec3(0);
+    vSpecular = vec3(0);
 
     for(int i=0; i<NUM_LIGHTS; ++i)
     {
-        if(u_Lights[i].bActive == false) continue;
-
-        // only set initial color to (1,1,1) if at least one light is active
-        // otherwise, color remains at (0,0,0)
-        if(bFirst == true)
-        {
-            bFirst = false;
-            vColor = vec3(1);
-        }
+        if(u_Lights[i].bActive == 0) continue;
 
         int type = u_Lights[i].nType;
-        vColor *= u_LightTypes[type].vDiffuse;
-    }
 
-    return vColor;
+        vAmbient += u_LightTypes[type].vAmbient.xyz;
+
+        vec3 vLightPos = vec3(u_matModelView * vec4(u_Lights[i].vPosition.xyz, 1));
+        vec3 vAux = v_matWorldToTangent * (vLightPos - v_vVertex);
+
+        vec3 vLightDir = normalize(vAux);
+        float fDistance = length(vAux);
+
+        // attenuation
+        float fDivisor = u_LightTypes[type].fAttenuationConst +
+                         u_LightTypes[type].fAttenuationLinear * fDistance +
+                         u_LightTypes[type].fAttenuationQuadratic * pow(fDistance, 2.0);
+        float fAttenuation = 1.0 / fDivisor;
+
+        float fNDotL = max(0.0, dot(vNormal, vLightDir));
+        vDiffuse += u_LightTypes[type].vDiffuse.xyz * fNDotL * fAttenuation;
+
+        if(fNDotL > 0.0)
+        {
+            vec3 vHalf = normalize(vLightDir + normalize(v_vTEye));
+            float fNDotH = max(0.0, dot(vNormal, vHalf));
+            vSpecular += u_LightTypes[type].vSpecular.xyz * pow(fNDotH, 16.0) * fAttenuation;
+        }
+    }
 }
 
 void main(void)
@@ -157,37 +190,14 @@ void main(void)
     vec3 vNormal = normal_mapping(u_sNormalHeight, vTexCoord);
 
     // lighting
+    vec3 vAmbient, vDiffuse, vSpecular;
+    lighting(vNormal, vAmbient, vDiffuse, vSpecular);
 
-    float fDistance = length(v_vTLight);
-    vec3 vLight = normalize(v_vTLight);
+    vec3 vTexDiffuse = texture(u_sDiffuse, vTexCoord).rgb;
+    vec3 vTexSpecular = texture(u_sSpecular, vTexCoord).rgb;
 
-    // attenuation
-    float fDivisor = 1.0 +     fDistance * 0.0 +
-                     pow(fDistance, 2.0) * 0.2 +
-                     pow(fDistance, 3.0) * 0.0;
-    float fAttenuation = 1.0 / fDivisor;
-
-    // ambient
-    vec3 vAmbient = vec3(0.05);
-
-    // diffuse
-    float fNDotL = max(0.0, dot(vNormal, vLight));
-    //vec3 vDiffuse = vec3(0.8, 0.75, 0.7) * fNDotL * fAttenuation;
-    vec3 vDiffuse = diffuse_lighting();
-
-    // specular
-    vec3 vSpecular = vec3(0.0);
-    if(fNDotL > 0.0)
-    {
-        vec3 vHalf = normalize(vLight + normalize(v_vTEye));
-        float fNDotH = max(0.0, dot(vNormal, vHalf));
-        vSpecular = vec3(0.8, 0.8, 0.8) * pow(fNDotH, 16.0) * fAttenuation;
-        vSpecular *= texture(u_sSpecular, vTexCoord).rgb;
-    }
-
-    // texture
-    vec3 vTexColor = texture(u_sDiffuse, vTexCoord).rgb;
-
-    // output
-    o_vColor = vec4(vAmbient + vDiffuse * vTexColor + vSpecular, 1.0);
+    vec3 vFinalColor = vAmbient +
+                       vDiffuse * vTexDiffuse +
+                       vSpecular * vTexSpecular;
+    o_vColor = vec4(vFinalColor, 1.0);
 }
