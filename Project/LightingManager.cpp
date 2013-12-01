@@ -41,7 +41,6 @@ void LightingManager::UploadLightTypes(GLuint program_id)
 
 void LightingManager::UploadLights(GLuint program_id)
 {
-    printf("size=%llu\n", sizeof(GLboolean));
     // clear error
     glGetError();
 
