@@ -102,9 +102,6 @@ vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
     int nNumSamples = int(mix(fMaxSamples, fMinSamples, fEDotN));
     float fStepSize = 1.0 / float(nNumSamples);
 
-    vec2 dx = dFdx(vTexCoord);
-    vec2 dy = dFdy(vTexCoord);
-
     vec2 vCurrOffset = vec2(0.0);
     vec2 vLastOffset = vec2(0.0);
     float fCurrRayHeight = 1.0;
@@ -113,7 +110,7 @@ vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
 
     for(int nCurrSample=0; nCurrSample<nNumSamples;)
     {
-        fCurrSampledHeight = textureGrad(sMap, vTexCoord + vCurrOffset, dx, dy).a;
+        fCurrSampledHeight = texture(sMap, vTexCoord + vCurrOffset).a;
         if(fCurrSampledHeight > fCurrRayHeight)
         {
             float delta1 = fCurrSampledHeight - fCurrRayHeight;
@@ -121,7 +118,7 @@ vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
 
             float ratio = delta1 / (delta1 + delta2);
             vCurrOffset = (ratio) * vLastOffset + (1.0 - ratio) * vCurrOffset;
-            nCurrSample = nNumSamples + 1;
+            break;
         }
         else
         {

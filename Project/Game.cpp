@@ -256,6 +256,11 @@ bool Game::Init(void)
     glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1);
     glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2);
 
+    // upload projection matrix
+    glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
+    GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
+    glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
+
     return true;
 }
 
@@ -300,6 +305,12 @@ bool Game::HandleSDL(SDL_Event *e)
                     this->height = e->window.data2;
                     this->aspect = this->width / this->height;
                     glViewport(0, 0, this->width, this->height);
+
+                    // upload new projection matrix
+                    glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
+                    GLint u_matProjection = glGetUniformLocation(program_id, "u_matProjection");
+                    glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
+
                     break;
             }
             break;
@@ -367,14 +378,11 @@ bool Game::Draw(void)
     glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
     glm::mat4 matCamera = this->camera;
 
-    GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
     GLint u_matCamera = glGetUniformLocation(this->program_id, "u_matCamera");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
 
-    glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matCamera, 1, GL_FALSE, glm::value_ptr(matCamera));
 
     cube_left.Draw(program_id, u_matModelView, matCamera);
