@@ -201,16 +201,26 @@ bool Game::Init(void)
 
     LightingManager::Init();
 
-    LightingManager::light_types[0].vDiffuse = glm::vec4(1.0f, 0, 0, 1);
-    LightingManager::light_types[1].vDiffuse = glm::vec4(0, 1.0f, 0, 1);
-    LightingManager::light_types[2].vDiffuse = glm::vec4(0, 0, 1.0f, 1);
+    LightingManager::light_types[0].vDiffuse = glm::vec4(1, 0, 0, 1);
+    LightingManager::light_types[1].vDiffuse = glm::vec4(0, 1, 0, 1);
+    LightingManager::light_types[2].vDiffuse = glm::vec4(0, 0, 1, 1);
 
-    LightingManager::MakeLight(0, true, 0, glm::vec4(1.5, 1.5, 1.5, 1));
-    LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5, 1.5, 1.5, 1));
+    LightingManager::light_types[0].vSpecular = glm::vec4(1, 0.5f, 0.5f, 1);
+    LightingManager::light_types[1].vSpecular = glm::vec4(0.5f, 1, 0.5f, 1);
+    LightingManager::light_types[2].vSpecular = glm::vec4(0.5f, 0.5f, 1, 1);
+
+    LightingManager::light_types[0].fAttenuationQuadratic = 0.05f;
+    LightingManager::light_types[1].fAttenuationQuadratic = 0.05f;
+    LightingManager::light_types[2].fAttenuationQuadratic = 0.05f;
+
+    LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
+    LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
     LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
 
-    LightingManager::UploadAll(this->program_id);
+    LightingManager::materials[0].fShininess = 64;
+    LightingManager::materials[0].vDiffuse = glm::vec4(1, 1, 0, 1);
 
+    LightingManager::UploadAll(this->program_id);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -357,7 +367,7 @@ bool Game::Draw(void)
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
 
-    this->cube.Draw();
+    this->cube.Draw(this->program_id);
 
     SDL_GL_SwapWindow(this->wnd);
 

@@ -151,11 +151,11 @@ protected:
         return num;
     }
 public:
-    virtual void Draw(void)
+    virtual void Draw(GLuint program_id)
     {
-        GLenum err;
+        Drawable::Draw(program_id);
 
-        Drawable::Draw();
+        GLenum err;
 
         const GLint firsts[] = {0, 4, 8, 12, 16, 20};
         const GLint counts[] = {4, 4, 4, 4, 4, 4};

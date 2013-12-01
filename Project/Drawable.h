@@ -28,6 +28,7 @@ private:
     GLuint vbo_tangent;
     GLuint vbo_bitangent;
     GLuint vbo_texcoord;
+    GLint material_id;
 
     static GLuint make_buffer(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
     {
@@ -102,11 +103,19 @@ public:
         delete[] tangents;
         delete[] bitangents;
         delete[] texcoords;
+
+        material_id = 0;
     }
 
-    virtual void Draw(void)
+    virtual void Draw(GLuint program_id)
     {
         GLenum err;
+
+        GLint loc = glGetUniformLocation(program_id, "u_nMaterial");
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glGetUniformLocation: error: 0x%x\n", err);
+
+        glUniform1i(loc, this->material_id);
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glUniform1i: error: 0x%x\n", err);
 
         glBindVertexArray(this->vao);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glBindVertexArray: error: 0x%x\n", err);
