@@ -237,6 +237,7 @@
 		7F8A8E791848B6FA00248801 /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureManager.h; sourceTree = "<group>"; };
 		7F8A8E7A1848B7B000248801 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		7F8A8E7B184B7C2200248801 /* LightingManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LightingManager.cpp; sourceTree = "<group>"; };
+		7FAB793E184BA0EC00BEC602 /* ParticlesDrawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticlesDrawable.h; sourceTree = "<group>"; };
 		7FAD199E1823B05500007D5A /* studdedmetal_normal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = studdedmetal_normal.bmp; sourceTree = "<group>"; };
 		7FB582BD18115148002C1795 /* AGPLab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGPLab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB582C118115149002C1795 /* AGPLab4.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = AGPLab4.1; sourceTree = "<group>"; };
@@ -412,6 +413,7 @@
 				7F8A8E771848B5DA00248801 /* LightingManager.h */,
 				7F8A8E4C184879E700248801 /* main.cpp */,
 				7F8A8E5818487AC800248801 /* Object.h */,
+				7FAB793E184BA0EC00BEC602 /* ParticlesDrawable.h */,
 				7F8A8E5918487AC800248801 /* ResourceManager.cpp */,
 				7F8A8E5A18487AC800248801 /* ResourceManager.h */,
 				7F8A8E791848B6FA00248801 /* TextureManager.h */,
@@ -927,6 +929,7 @@
 				7F8A8E51184879E700248801 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7FB582C518115149002C1795 /* Build configuration list for PBXNativeTarget "AGPLab4" */ = {
 			isa = XCConfigurationList;
