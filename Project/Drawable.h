@@ -28,7 +28,6 @@ private:
     GLuint vbo_tangent;
     GLuint vbo_bitangent;
     GLuint vbo_texcoord;
-    GLint material_id;
 
     static GLuint make_buffer(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
     {
@@ -71,6 +70,9 @@ protected:
                               glm::vec3 **bitangents,
                               glm::vec2 **texcoords) = 0;
 public:
+    GLint material_id;
+    glm::vec3 position;
+
     void Init(GLuint program_id)
     {
         GLenum err;
@@ -105,11 +107,17 @@ public:
         delete[] texcoords;
 
         material_id = 0;
+
+        position = glm::vec3(0);
     }
 
-    virtual void Draw(GLuint program_id, glm::mat4 matModelView)
+    virtual void Draw(GLuint program_id, GLint u_matModelView, glm::mat4 matModelView)
     {
         GLenum err;
+
+        matModelView = glm::translate(matModelView, position);
+        glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
+        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glUniformMatrix4fvi: error: 0x%x\n", err);
 
         GLint loc = glGetUniformLocation(program_id, "u_nMaterial");
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glGetUniformLocation: error: 0x%x\n", err);

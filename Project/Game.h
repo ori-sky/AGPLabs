@@ -53,7 +53,8 @@ protected:
     glm::mat4 matIdentity;
     glm::mat4 camera;
 
-    CubeDrawable cube;
+    CubeDrawable cube_left;
+    CubeDrawable cube_right;
 public:
     static Game * New(void) { return new Game(); }
     void PrintShaderError(GLint shader);

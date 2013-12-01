@@ -73,7 +73,7 @@ uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
 uniform sampler2D u_sSpecular;
 
-uniform mat4 u_matModelView;
+uniform mat4 u_matCamera;
 
 smooth in vec3 v_vVertex;
 smooth in vec3 v_vNormal;
@@ -161,7 +161,7 @@ void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vS
 
         vAmbient += u_LightTypes[type].vAmbient.xyz;
 
-        vec3 vLightPos = vec3(u_matModelView * vec4(u_Lights[i].vPosition.xyz, 1));
+        vec3 vLightPos = vec3(u_matCamera * vec4(u_Lights[i].vPosition.xyz, 1));
         vec3 vAux = v_matWorldToTangent * (vLightPos - v_vVertex);
 
         vec3 vLightDir = normalize(vAux);

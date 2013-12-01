@@ -18,6 +18,7 @@
 precision highp float;
 
 uniform mat4 u_matProjection;
+uniform mat4 u_matCamera;
 uniform mat4 u_matModelView;
 
 in vec3 a_vVertex;

@@ -222,6 +222,11 @@ bool Game::Init(void)
 
     LightingManager::UploadAll(this->program_id);
 
+    cube_left.Init(program_id);
+    cube_right.Init(program_id);
+    cube_left.position = glm::vec3(-1.5f, 0, 0);
+    cube_right.position = glm::vec3(1.5f, 0, 0);
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -230,8 +235,6 @@ bool Game::Init(void)
 
     this->matIdentity = glm::mat4(1.0f);
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
-
-    this->cube.Init(this->program_id);
 
     // max anisotropy
     GLfloat aniso;
@@ -359,15 +362,17 @@ bool Game::Draw(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
-    glm::mat4 matModelView = this->camera;
+    glm::mat4 matCamera = this->camera;
 
     GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
+    GLint u_matCamera = glGetUniformLocation(this->program_id, "u_matCamera");
     GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
 
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
-    glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
+    glUniformMatrix4fv(u_matCamera, 1, GL_FALSE, glm::value_ptr(matCamera));
 
-    this->cube.Draw(this->program_id, matModelView);
+    cube_left.Draw(program_id, u_matModelView, matCamera);
+    cube_right.Draw(program_id, u_matModelView, matCamera);
 
     SDL_GL_SwapWindow(this->wnd);
 
