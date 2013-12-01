@@ -228,16 +228,20 @@ bool Game::Init(void)
     LightingManager::UploadAll(this->program_id);
 
     cube_left.Init(program_id);
-    cube_right.Init(program_id);
     cube_left.position = glm::vec3(-2.0f, 0, 0);
+
+    cube_right.Init(program_id);
     cube_right.position = glm::vec3(2.0f, 0, 0);
     cube_right.material_id = 1;
+
+    particles.Init(program_id);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
     this->matIdentity = glm::mat4(1.0f);
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
@@ -250,11 +254,13 @@ bool Game::Init(void)
     this->tex = TextureManager::LoadBMP("stone.bmp", GL_TEXTURE0, aniso);
     this->nmap = TextureManager::LoadBMP("four_NM_height.bmp", GL_TEXTURE1, aniso, false, true);
     this->glossmap = TextureManager::LoadBMP("stone_gloss.bmp", GL_TEXTURE2, aniso);
+    TextureManager::LoadBMP("stone.bmp", GL_TEXTURE3, aniso);
 
     // bind texture units to shader samplers
     glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0);
     glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1);
     glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2);
+    glUniform1i(glGetUniformLocation(this->program_id, "u_sPoints"), 3);
 
     // upload projection matrix
     glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
@@ -387,6 +393,7 @@ bool Game::Draw(void)
 
     cube_left.Draw(program_id, u_matModelView, matCamera);
     cube_right.Draw(program_id, u_matModelView, matCamera);
+    particles.Draw(program_id, u_matModelView, matCamera);
 
     SDL_GL_SwapWindow(this->wnd);
 

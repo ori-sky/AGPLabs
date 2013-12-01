@@ -27,6 +27,7 @@
 #include "TextureManager.h"
 #include "LightingManager.h"
 #include "CubeDrawable.h"
+#include "ParticlesDrawable.h"
 
 #define GAME_ATTRIB_VERTEX 0
 #define GAME_ATTRIB_NORMAL 1
@@ -55,7 +56,9 @@ protected:
 
     CubeDrawable cube_left;
     CubeDrawable cube_right;
+    ParticlesDrawable particles;
 public:
+    Game() : particles(10000) {}
     static Game * New(void) { return new Game(); }
     void PrintShaderError(GLint shader);
 
