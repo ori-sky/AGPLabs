@@ -20,9 +20,11 @@
 class TextureManager
 {
 public:
-    static GLuint LoadBMP(const char *path, GLenum texture_unit, GLfloat aniso)
+    static GLuint LoadBMP(const char *path, GLenum texture_unit, GLfloat aniso,
+                          bool flip_x = false, bool flip_y = false)
     {
         SDL_Surface *texture = SDL_LoadBMP(path);
+        if(flip_x || flip_y) texture = FlipSurface(texture, flip_x, flip_y);
 
         glActiveTexture(texture_unit);
 
@@ -54,6 +56,41 @@ public:
         
         SDL_FreeSurface(texture);
         return id;
+    }
+
+    static Uint32 GetPixel32(SDL_Surface *surface, int x, int y)
+    {
+        Uint32 *pixels = (Uint32 *)surface->pixels;
+        return pixels[(y * surface->w) + x];
+    }
+
+    static void PutPixel32(SDL_Surface *surface, int x, int y, Uint32 pixel)
+    {
+        Uint32 *pixels = (Uint32 *)surface->pixels;
+        pixels[(y * surface->w) + x] = pixel;
+    }
+
+    static SDL_Surface * FlipSurface( SDL_Surface *surface, bool flip_x, bool flip_y)
+    {
+        SDL_Surface *flipped = NULL;
+        flipped = SDL_CreateRGBSurface(SDL_SWSURFACE, surface->w, surface->h, surface->format->BitsPerPixel, surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
+
+        if(SDL_MUSTLOCK(surface)) SDL_LockSurface(surface);
+
+        for(int x=0, rx=flipped->w-1; x<flipped->w; x++, rx--)
+        {
+            for(int y=0, ry=flipped->h-1; y<flipped->h; y++, ry--)
+            {
+                Uint32 pixel = GetPixel32(surface, x, y );
+
+                if(flip_x && flip_y) PutPixel32(flipped, rx, ry, pixel);
+                else if(flip_x) PutPixel32(flipped, rx, y, pixel);
+                else if(flip_y) PutPixel32(flipped, x, ry, pixel);
+            }
+        }
+        
+        if(SDL_MUSTLOCK(surface)) SDL_UnlockSurface(surface);
+        return flipped;
     }
 };
 
