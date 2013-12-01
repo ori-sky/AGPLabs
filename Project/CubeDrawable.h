@@ -151,9 +151,9 @@ protected:
         return num;
     }
 public:
-    virtual void Draw(GLuint program_id)
+    virtual void Draw(GLuint program_id, glm::mat4 matModelView)
     {
-        Drawable::Draw(program_id);
+        Drawable::Draw(program_id, matModelView);
 
         GLenum err;
 

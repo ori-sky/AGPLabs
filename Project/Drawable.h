@@ -107,7 +107,7 @@ public:
         material_id = 0;
     }
 
-    virtual void Draw(GLuint program_id)
+    virtual void Draw(GLuint program_id, glm::mat4 matModelView)
     {
         GLenum err;
 

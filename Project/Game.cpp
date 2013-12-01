@@ -218,7 +218,7 @@ bool Game::Init(void)
     LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
 
     LightingManager::materials[0].fShininess = 64;
-    LightingManager::materials[0].vDiffuse = glm::vec4(1, 1, 0, 1);
+    LightingManager::materials[0].vDiffuse = glm::vec4(1, 0.9f, 0.7f, 1);
 
     LightingManager::UploadAll(this->program_id);
 
@@ -367,7 +367,7 @@ bool Game::Draw(void)
     glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
     glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
 
-    this->cube.Draw(this->program_id);
+    this->cube.Draw(this->program_id, matModelView);
 
     SDL_GL_SwapWindow(this->wnd);
 
