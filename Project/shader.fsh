@@ -48,6 +48,8 @@ struct Material
     vec4 vSpecular;
     float fShininess;   // specular exponent
     float fGlow;        // luminescence
+    int nReserved1;
+    int nReserved2;
 };
 
 layout (std140) uniform LightTypesBlock
@@ -64,6 +66,8 @@ layout (std140) uniform MaterialsBlock
 {
     Material u_Materials[NUM_MATERIALS];
 };
+
+uniform int u_nMaterial;
 
 uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
@@ -176,9 +180,14 @@ void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vS
         {
             vec3 vHalf = normalize(vLightDir + normalize(v_vTEye));
             float fNDotH = max(0.0, dot(vNormal, vHalf));
-            vSpecular += u_LightTypes[type].vSpecular.xyz * pow(fNDotH, 16.0) * fAttenuation;
+            vSpecular += u_LightTypes[type].vSpecular.xyz *
+                         pow(fNDotH, u_Materials[u_nMaterial].fShininess) * fAttenuation;
         }
     }
+
+    vAmbient *= u_Materials[u_nMaterial].vAmbient;
+    vDiffuse *= u_Materials[u_nMaterial].vDiffuse;
+    vSpecular *= u_Materials[u_nMaterial].vSpecular;
 }
 
 void main(void)
