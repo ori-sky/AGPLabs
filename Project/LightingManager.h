@@ -50,6 +50,8 @@ struct Material
     glm::vec4 vSpecular;
     GLfloat fShininess;
     GLfloat fGlow;
+    GLint nReserved1;
+    GLint nReserved2;
 };
 
 class LightingManager
@@ -98,7 +100,7 @@ public:
     {
         for(unsigned int i=0; i<NUM_LIGHT_TYPES; ++i)
         {
-            MakeLightType(i, glm::vec4(0,0,0,1), glm::vec4(1,1,1,1), glm::vec4(1,1,1,1), 1, 0, 0.2f);
+            MakeLightType(i, glm::vec4(0,0,0,1), glm::vec4(1,1,1,1), glm::vec4(1,1,1,1), 1, 0, 0.1f);
         }
 
         for(unsigned int i=0; i<NUM_LIGHTS; ++i)
