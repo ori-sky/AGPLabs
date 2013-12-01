@@ -67,12 +67,14 @@ layout (std140) uniform MaterialsBlock
     Material u_Materials[NUM_MATERIALS];
 };
 
+uniform int u_bPoints;
 uniform int u_nMaterial;
 uniform float u_fExposure;
 
 uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
 uniform sampler2D u_sSpecular;
+uniform sampler2D u_sPoints;
 
 uniform mat4 u_matCamera;
 
@@ -186,7 +188,13 @@ vec3 hdr(in vec3 vColor)
     return 1.0 - exp2(-vColor * u_fExposure);
 }
 
-void main(void)
+void main_points(void)
+{
+    vec2 vTexCoord = gl_PointCoord;
+    o_vColor = vec4(0.1, 0.1, 0.1, 1.0);
+}
+
+void main_geometry(void)
 {
     // parallax occlusion mapping
     vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 64, 8);
@@ -212,4 +220,10 @@ void main(void)
 
     // output
     o_vColor = vec4(vFinalColor, 1.0);
+}
+
+void main(void)
+{
+    if(u_bPoints == 1) main_points();
+    else main_geometry();
 }

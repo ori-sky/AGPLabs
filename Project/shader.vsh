@@ -21,6 +21,8 @@ uniform mat4 u_matProjection;
 uniform mat4 u_matCamera;
 uniform mat4 u_matModelView;
 
+uniform int u_bPoints;
+
 in vec3 a_vVertex;
 in vec3 a_vNormal;
 in vec3 a_vTangent;
@@ -38,7 +40,18 @@ smooth out vec3 v_vTNormal;
 
 smooth out mat3 v_matWorldToTangent;
 
-void main(void)
+void main_points(void)
+{
+    gl_PointSize = 3;
+
+    vec4 vVertex = vec4(a_vVertex, 1.0);
+    vec4 vModelViewVertex = u_matModelView * vVertex;
+    v_vVertex = vec3(vModelViewVertex);
+
+    gl_Position = u_matProjection * vModelViewVertex;
+}
+
+void main_geometry(void)
 {
     vec4 vVertex = vec4(a_vVertex, 1.0);
     vec4 vModelViewVertex = u_matModelView * vVertex;
@@ -60,4 +73,10 @@ void main(void)
 
     v_vTexCoord = a_vTexCoord;
     gl_Position = u_matProjection * vModelViewVertex;
+}
+
+void main(void)
+{
+    if(u_bPoints == 1) main_points();
+    else main_geometry();
 }
