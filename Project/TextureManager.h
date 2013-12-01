@@ -22,11 +22,11 @@ class TextureManager
 public:
     static GLuint LoadBMP(const char *path, GLenum texture_unit, GLfloat aniso)
     {
-        GLuint id;
         SDL_Surface *texture = SDL_LoadBMP(path);
 
         glActiveTexture(texture_unit);
 
+        GLuint id;
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
 
