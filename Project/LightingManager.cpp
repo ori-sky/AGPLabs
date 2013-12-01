@@ -76,3 +76,25 @@ void LightingManager::UploadMaterials(GLuint program_id)
     GLenum err;
     if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "UploadMaterials: error: 0x%x\n", err);
 }
+
+void LightingManager::SetMaterial(GLuint program_id, GLint material_id)
+{
+    GLenum err;
+
+    GLint loc = glGetUniformLocation(program_id, "u_nMaterial");
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "SetMaterial => glGetUniformLocation: error: 0x%x\n", err);
+
+    glUniform1i(loc, material_id);
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "SetMaterial => glUniform1i: error: 0x%x\n", err);
+}
+
+void LightingManager::SetExposure(GLuint program_id, GLfloat exposure)
+{
+    GLenum err;
+
+    GLint loc = glGetUniformLocation(program_id, "u_fExposure");
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "SetExposure => glGetUniformLocation: error: 0x%x\n", err);
+
+    glUniform1f(loc, exposure);
+    if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "SetExposure => glUniform1f: error: 0x%x\n", err);
+}

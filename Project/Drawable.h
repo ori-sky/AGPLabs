@@ -115,15 +115,11 @@ public:
     {
         GLenum err;
 
+        LightingManager::SetMaterial(program_id, material_id);
+
         matModelView = glm::translate(matModelView, position);
         glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glUniformMatrix4fvi: error: 0x%x\n", err);
-
-        GLint loc = glGetUniformLocation(program_id, "u_nMaterial");
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glGetUniformLocation: error: 0x%x\n", err);
-
-        glUniform1i(loc, this->material_id);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glUniform1i: error: 0x%x\n", err);
 
         glBindVertexArray(this->vao);
         if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glBindVertexArray: error: 0x%x\n", err);

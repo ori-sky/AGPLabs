@@ -96,7 +96,7 @@ public:
         materials[index].fGlow = fGlow;
     }
 
-    static inline void Init(void)
+    static inline void Init(GLuint program_id)
     {
         for(unsigned int i=0; i<NUM_LIGHT_TYPES; ++i)
         {
@@ -112,6 +112,9 @@ public:
         {
             MakeMaterial(i, glm::vec4(0,0,0,1), glm::vec4(1,1,1,1), glm::vec4(1,1,1,1), 64, 0);
         }
+
+        SetMaterial(program_id, 0);
+        SetExposure(program_id, 1.0f);
     }
 
     static void UploadLightTypes(GLuint program_id);
@@ -124,6 +127,9 @@ public:
         UploadLights(program_id);
         UploadMaterials(program_id);
     }
+
+    static void SetMaterial(GLuint program_id, GLint material_id);
+    static void SetExposure(GLuint program_id, GLfloat exposure);
 };
 
 #endif

@@ -199,9 +199,10 @@ bool Game::Init(void)
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
 
-    LightingManager::Init();
+    LightingManager::Init(program_id);
 
-    LightingManager::light_types[0].vDiffuse = glm::vec4(1, 0, 0, 1);
+    //LightingManager::light_types[0].vDiffuse = glm::vec4(1, 0, 0, 1);
+    LightingManager::light_types[0].vDiffuse = glm::vec4(1, 0.8f, 0, 1);
     LightingManager::light_types[1].vDiffuse = glm::vec4(0, 1, 0, 1);
     LightingManager::light_types[2].vDiffuse = glm::vec4(0, 0, 1, 1);
 
@@ -213,15 +214,15 @@ bool Game::Init(void)
     LightingManager::light_types[1].fAttenuationQuadratic = 0.05f;
     LightingManager::light_types[2].fAttenuationQuadratic = 0.05f;
 
-    //LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
-    //LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
-    //LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
-    LightingManager::MakeLight(0, true, 0, glm::vec4(0, 1.5,  1, 1));
-    LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
+    LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
+    LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
+    LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
+    //LightingManager::MakeLight(0, true, 0, glm::vec4(0, 1.5,  1, 1));
+    //LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
 
     LightingManager::materials[0].fShininess = 64;
 
-    LightingManager::materials[1].fShininess = 8;
+    LightingManager::materials[1].fShininess = 16;
     LightingManager::materials[1].vDiffuse = glm::vec4(1, 0.9f, 0.7f, 1);
 
     LightingManager::UploadAll(this->program_id);
@@ -247,7 +248,7 @@ bool Game::Init(void)
 
     // load textures
     this->tex = TextureManager::LoadBMP("stone.bmp", GL_TEXTURE0, aniso);
-    this->nmap = TextureManager::LoadBMP("four_NM_height.bmp", GL_TEXTURE1, aniso);
+    this->nmap = TextureManager::LoadBMP("four_NM_height.bmp", GL_TEXTURE1, aniso, false, true);
     this->glossmap = TextureManager::LoadBMP("stone_gloss.bmp", GL_TEXTURE2, aniso);
 
     // bind texture units to shader samplers

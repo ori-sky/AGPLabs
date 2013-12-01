@@ -17,8 +17,8 @@
 #version 150
 precision highp float;
 
-const int NUM_LIGHT_TYPES = 16;
-const int NUM_LIGHTS = 16;
+const int NUM_LIGHT_TYPES = 64;
+const int NUM_LIGHTS = 3;
 const int NUM_MATERIALS = 64;
 
 struct LightType
@@ -68,6 +68,7 @@ layout (std140) uniform MaterialsBlock
 };
 
 uniform int u_nMaterial;
+uniform float u_fExposure;
 
 uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
@@ -137,14 +138,7 @@ vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
 
 vec3 normal_mapping(in sampler2D sMap, in vec2 vTexCoord)
 {
-    vec3 vNormal = texture(sMap, vTexCoord).rgb * 2.0 - 1.0;
-
-    // convert normal from texture coords to OpenGL coords
-    // texture coords are top-left based
-    // OpenGL coords are bottom-left based
-    vNormal.y *= -1;
-
-    return vNormal;
+    return texture(sMap, vTexCoord).rgb * 2.0 - 1.0;
 }
 
 void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vSpecular)
@@ -185,18 +179,25 @@ void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vS
         }
     }
 
-    vAmbient *= u_Materials[u_nMaterial].vAmbient;
-    vDiffuse *= u_Materials[u_nMaterial].vDiffuse;
-    vSpecular *= u_Materials[u_nMaterial].vSpecular;
+    vAmbient *= u_Materials[u_nMaterial].vAmbient.xyz;
+    vDiffuse *= u_Materials[u_nMaterial].vDiffuse.xyz;
+    vSpecular *= u_Materials[u_nMaterial].vSpecular.xyz;
+}
+
+vec3 hdr(in vec3 vColor)
+{
+    return 1.0 - exp2(-vColor * u_fExposure);
 }
 
 void main(void)
 {
     // parallax occlusion mapping
-    vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 64, 16);
+    vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 64, 8);
+    //vec2 vTexCoord = v_vTexCoord;
 
     // normal mapping
     vec3 vNormal = normal_mapping(u_sNormalHeight, vTexCoord);
+    //vec3 vNormal = v_vTNormal;
 
     // lighting
     vec3 vAmbient, vDiffuse, vSpecular;
@@ -208,5 +209,10 @@ void main(void)
     vec3 vFinalColor = vAmbient +
                        vDiffuse * vTexDiffuse +
                        vSpecular * vTexSpecular;
+
+    // HDR
+    vFinalColor = hdr(vFinalColor);
+
+    // output
     o_vColor = vec4(vFinalColor, 1.0);
 }
