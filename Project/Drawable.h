@@ -21,14 +21,14 @@
 
 class Drawable
 {
-private:
+protected:
     GLuint vao;
     GLuint vbo_vertex;
     GLuint vbo_normal;
     GLuint vbo_tangent;
     GLuint vbo_bitangent;
     GLuint vbo_texcoord;
-protected:
+
     GLenum usage;
 
     virtual unsigned int Make(glm::vec3 **vertices,
@@ -50,18 +50,28 @@ public:
     }
 #undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Drawable::UpdateBuffer"
+    static void UpdateBuffer(GLuint vbo, GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data)
+    {
+        ASSERT_GL(glBindBuffer(target, vbo))
+        ASSERT_GL(glBufferSubData(target, offset, size, data))
+    }
+#undef GAME_DOMAIN
+
 #define GAME_DOMAIN "Drawable::MakeVBO"
-    static void MakeVBO(GLsizeiptr size, const GLvoid *data, GLuint program_id,
+    static GLuint MakeVBO(GLsizeiptr size, const GLvoid *data, GLuint program_id,
                          const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type,
                          GLenum usage)
     {
-        Drawable::MakeBuffer(GL_ARRAY_BUFFER, size, data, usage);
+        GLuint vbo = Drawable::MakeBuffer(GL_ARRAY_BUFFER, size, data, usage);
 
         ASSERT_GL(GLint attrib_id = glGetAttribLocation(program_id, attrib_name))
         if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo: attribute \"%s\" is not active in program\n", attrib_name);
 
         ASSERT_GL(glVertexAttribPointer(attrib_id, attrib_size, attrib_type, GL_FALSE, 0, NULL))
         ASSERT_GL(glEnableVertexAttribArray(attrib_id))
+
+        return vbo;
     }
 #undef GAME_DOMAIN
 
@@ -82,19 +92,26 @@ public:
         unsigned int num = this->Make(&vertices, &normals, &tangents, &bitangents, &texcoords);
 
         ASSERT_GL(glGenVertexArrays(1, &this->vao))
-        ASSERT_GL(glBindVertexArray(this->vao))
+        Bind();
 
-        MakeVBO(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT, usage);
-        MakeVBO(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT, usage);
-        MakeVBO(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT, usage);
-        MakeVBO(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT, usage);
-        MakeVBO(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT, usage);
+        vbo_vertex    = MakeVBO(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT, usage);
+        vbo_normal    = MakeVBO(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT, usage);
+        vbo_tangent   = MakeVBO(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT, usage);
+        vbo_bitangent = MakeVBO(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT, usage);
+        vbo_texcoord  = MakeVBO(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT, usage);
 
         delete[] vertices;
         delete[] normals;
         delete[] tangents;
         delete[] bitangents;
         delete[] texcoords;
+    }
+#undef GAME_DOMAIN
+
+#define GAME_DOMAIN "Drawable::Bind"
+    void Bind(void)
+    {
+        ASSERT_GL(glBindVertexArray(vao))
     }
 #undef GAME_DOMAIN
 
