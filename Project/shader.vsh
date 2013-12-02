@@ -29,6 +29,9 @@ in vec3 a_vTangent;
 in vec3 a_vBitangent;
 in vec2 a_vTexCoord;
 
+// points attributes
+in float a_fPointSize;
+
 smooth out vec3 v_vVertex;
 smooth out vec3 v_vNormal;
 smooth out vec2 v_vTexCoord;
@@ -42,13 +45,12 @@ smooth out mat3 v_matWorldToTangent;
 
 void main_points(void)
 {
-    gl_PointSize = 3;
-
     vec4 vVertex = vec4(a_vVertex, 1.0);
     vec4 vModelViewVertex = u_matModelView * vVertex;
     v_vVertex = vec3(vModelViewVertex);
 
     gl_Position = u_matProjection * vModelViewVertex;
+    gl_PointSize = a_fPointSize / length(vModelViewVertex);
 }
 
 void main_geometry(void)
