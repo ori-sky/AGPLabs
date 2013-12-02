@@ -195,7 +195,6 @@ void main_points(void)
     float fDistance = length(vFromCenter);
 
     if(fDistance > 0.5) discard;
-    else if(fDistance > 0.3) o_vColor = vec4(0, 0, 0, 1);
     else o_vColor = vec4(1, 1, 1, 1);
 }
 
