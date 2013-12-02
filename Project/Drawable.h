@@ -28,9 +28,17 @@ private:
     GLuint vbo_tangent;
     GLuint vbo_bitangent;
     GLuint vbo_texcoord;
+protected:
+    GLenum usage;
 
-#define GAME_DOMAIN "Drawable::make_buffer"
-    static GLuint make_buffer(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
+    virtual unsigned int Make(glm::vec3 **vertices,
+                              glm::vec3 **normals,
+                              glm::vec3 **tangents,
+                              glm::vec3 **bitangents,
+                              glm::vec2 **texcoords) = 0;
+public:
+#define GAME_DOMAIN "Drawable::MakeBuffer"
+    static GLuint MakeBuffer(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
     {
         GLuint id;
 
@@ -42,12 +50,12 @@ private:
     }
 #undef GAME_DOMAIN
 
-#define GAME_DOMAIN "Drawable::make_vbo"
-    static void make_vbo(GLsizeiptr size, const GLvoid *data, GLuint program_id,
+#define GAME_DOMAIN "Drawable::MakeVBO"
+    static void MakeVBO(GLsizeiptr size, const GLvoid *data, GLuint program_id,
                          const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type,
                          GLenum usage)
     {
-        Drawable::make_buffer(GL_ARRAY_BUFFER, size, data, usage);
+        Drawable::MakeBuffer(GL_ARRAY_BUFFER, size, data, usage);
 
         ASSERT_GL(GLint attrib_id = glGetAttribLocation(program_id, attrib_name))
         if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo: attribute \"%s\" is not active in program\n", attrib_name);
@@ -56,15 +64,7 @@ private:
         ASSERT_GL(glEnableVertexAttribArray(attrib_id))
     }
 #undef GAME_DOMAIN
-protected:
-    GLenum usage;
 
-    virtual unsigned int Make(glm::vec3 **vertices,
-                              glm::vec3 **normals,
-                              glm::vec3 **tangents,
-                              glm::vec3 **bitangents,
-                              glm::vec2 **texcoords) = 0;
-public:
     GLint material_id;
     glm::vec3 position;
 
@@ -84,11 +84,11 @@ public:
         ASSERT_GL(glGenVertexArrays(1, &this->vao))
         ASSERT_GL(glBindVertexArray(this->vao))
 
-        make_vbo(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT, usage);
-        make_vbo(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT, usage);
-        make_vbo(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT, usage);
-        make_vbo(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT, usage);
-        make_vbo(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT, usage);
+        MakeVBO(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT, usage);
+        MakeVBO(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT, usage);
+        MakeVBO(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT, usage);
+        MakeVBO(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT, usage);
+        MakeVBO(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT, usage);
 
         delete[] vertices;
         delete[] normals;
