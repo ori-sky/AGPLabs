@@ -191,7 +191,12 @@ vec3 hdr(in vec3 vColor)
 void main_points(void)
 {
     vec2 vTexCoord = gl_PointCoord;
-    o_vColor = vec4(1.0, 1.0, 1.0, 1.0);
+    vec2 vFromCenter = vTexCoord - vec2(0.5);
+    float fDistance = length(vFromCenter);
+
+    if(fDistance > 0.5) discard;
+    else if(fDistance > 0.3) o_vColor = vec4(0, 0, 0, 1);
+    else o_vColor = vec4(1, 1, 1, 1);
 }
 
 void main_geometry(void)
