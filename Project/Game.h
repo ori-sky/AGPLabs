@@ -59,7 +59,7 @@ protected:
     CubeDrawable cube_right;
     ParticlesDrawable particles;
 public:
-    Game() : particles(100) {}
+    Game() : particles(10000) {}
     static Game * New(void) { return new Game(); }
     void PrintShaderError(GLint shader);
 
