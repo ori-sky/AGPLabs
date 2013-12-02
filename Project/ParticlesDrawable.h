@@ -23,6 +23,8 @@ class ParticlesDrawable : public Drawable
 {
 private:
     unsigned int num;
+
+    GLfloat *point_sizes;
 protected:
     virtual unsigned int Make(glm::vec3 **vertices,
                               glm::vec3 **normals,
@@ -53,6 +55,22 @@ protected:
     }
 public:
     ParticlesDrawable(unsigned int num) : Drawable(GL_DYNAMIC_DRAW), num(num) {}
+
+#define GAME_DOMAIN "ParticlesDrawable::Draw"
+    void Init(GLuint program_id)
+    {
+        Drawable::Init(program_id);
+
+        point_sizes = new GLfloat[num];
+
+        for(size_t i=0; i<num; ++i)
+        {
+            point_sizes[i] = 10;
+        }
+
+        MakeVBO(num * sizeof(GLfloat), point_sizes, program_id, "a_fPointSize", 1, GL_FLOAT, usage);
+    }
+#undef GAME_DOMAIN
 
 #define GAME_DOMAIN "ParticlesDrawable::Draw"
     virtual void Draw(GLuint program_id, GLint u_matModelView, glm::mat4 matModelView)
