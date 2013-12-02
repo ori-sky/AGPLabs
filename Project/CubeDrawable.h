@@ -151,18 +151,17 @@ protected:
         return num;
     }
 public:
+#define GAME_DOMAIN "CubeDrawable::Draw"
     virtual void Draw(GLuint program_id, GLint u_matModelView, glm::mat4 matModelView)
     {
         Drawable::Draw(program_id, u_matModelView, matModelView);
 
-        GLenum err;
-
         const GLint firsts[] = {0, 4, 8, 12, 16, 20};
         const GLint counts[] = {4, 4, 4, 4, 4, 4};
 
-        glMultiDrawArrays(GL_TRIANGLE_STRIP, firsts, counts, sizeof(firsts) / sizeof(GLint));
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "CubeDrawable::Draw => glMultiDrawArrays: error: 0x%x\n", err);
+        ASSERT_GL(glMultiDrawArrays(GL_TRIANGLE_STRIP, firsts, counts, sizeof(firsts) / sizeof(GLint)))
     }
+#undef GAME_DOMAIN
 };
 
 #endif

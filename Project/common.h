@@ -36,4 +36,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/type_precision.hpp>
 
+#define ASSERT_GL(CALL) \
+    glGetError(); \
+    CALL; \
+    { \
+        GLenum _err_ = glGetError(); \
+        if(_err_ != GL_NO_ERROR) fprintf(stderr, "OpenGL error 0x%x\n  » %s\n    » %s\n", _err_, GAME_DOMAIN, #CALL); \
+    }
+
 #endif

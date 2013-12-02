@@ -29,41 +29,33 @@ private:
     GLuint vbo_bitangent;
     GLuint vbo_texcoord;
 
+#define GAME_DOMAIN "Drawable::make_buffer"
     static GLuint make_buffer(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
     {
-        GLenum err;
         GLuint id;
 
-        glGenBuffers(1, &id);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_buffer => glGenBuffers: error: 0x%x\n", err);
-
-        glBindBuffer(target, id);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_buffer => glBindBuffer: error: 0x%x\n", err);
-
-        glBufferData(target, size, data, usage);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_buffer => glBufferData: error: 0x%x\n", err);
+        ASSERT_GL(glGenBuffers(1, &id))
+        ASSERT_GL(glBindBuffer(target, id))
+        ASSERT_GL(glBufferData(target, size, data, usage))
 
         return id;
     }
+#undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Drawable::make_vbo"
     static void make_vbo(GLsizeiptr size, const GLvoid *data, GLuint program_id,
                          const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type,
                          GLenum usage)
     {
-        GLenum err;
-
         Drawable::make_buffer(GL_ARRAY_BUFFER, size, data, usage);
 
-        GLint attrib_id = glGetAttribLocation(program_id, attrib_name);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: error: 0x%x\n", err);
-        if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo => glGetAttribLocation: attribute \"%s\" is not active in program\n", attrib_name);
+        ASSERT_GL(GLint attrib_id = glGetAttribLocation(program_id, attrib_name))
+        if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo: attribute \"%s\" is not active in program\n", attrib_name);
 
-        glVertexAttribPointer(attrib_id, attrib_size, attrib_type, GL_FALSE, 0, NULL);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glVertexAttribPointer: error: 0x%x\n", err);
-
-        glEnableVertexAttribArray(attrib_id);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::make_vbo => glEnableVertexAttribArray: error: 0x%x\n", err);
+        ASSERT_GL(glVertexAttribPointer(attrib_id, attrib_size, attrib_type, GL_FALSE, 0, NULL))
+        ASSERT_GL(glEnableVertexAttribArray(attrib_id))
     }
+#undef GAME_DOMAIN
 protected:
     GLenum usage;
 
@@ -78,26 +70,19 @@ public:
 
     Drawable(GLenum usage = GL_STATIC_DRAW) : usage(usage), material_id(0), position(glm::vec3(0)) {}
 
+#define GAME_DOMAIN "Drawable::Init"
     void Init(GLuint program_id)
     {
-        GLenum err;
-
         glm::vec3 *vertices   = NULL;
         glm::vec3 *normals    = NULL;
         glm::vec3 *tangents   = NULL;
         glm::vec3 *bitangents = NULL;
         glm::vec2 *texcoords  = NULL;
 
-        // clear errors
-        while(glGetError() != GL_NO_ERROR);
-
         unsigned int num = this->Make(&vertices, &normals, &tangents, &bitangents, &texcoords);
 
-        glGenVertexArrays(1, &this->vao);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Init => glGenVertexArrays: error: 0x%x\n", err);
-
-        glBindVertexArray(this->vao);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Init => glBindVertexArray: error: 0x%x\n", err);
+        ASSERT_GL(glGenVertexArrays(1, &this->vao))
+        ASSERT_GL(glBindVertexArray(this->vao))
 
         make_vbo(num * sizeof(glm::vec3), vertices,   program_id, "a_vVertex",    3, GL_FLOAT, usage);
         make_vbo(num * sizeof(glm::vec3), normals,    program_id, "a_vNormal",    3, GL_FLOAT, usage);
@@ -111,20 +96,19 @@ public:
         delete[] bitangents;
         delete[] texcoords;
     }
+#undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Drawable::Draw"
     virtual void Draw(GLuint program_id, GLint u_matModelView, glm::mat4 matModelView)
     {
-        GLenum err;
-
         LightingManager::SetMaterial(program_id, material_id);
 
         matModelView = glm::translate(matModelView, position);
-        glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView));
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glUniformMatrix4fvi: error: 0x%x\n", err);
 
-        glBindVertexArray(this->vao);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "Drawable::Draw => glBindVertexArray: error: 0x%x\n", err);
+        ASSERT_GL(glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView)))
+        ASSERT_GL(glBindVertexArray(this->vao))
     }
+#undef GAME_DOMAIN
 };
 
 #endif

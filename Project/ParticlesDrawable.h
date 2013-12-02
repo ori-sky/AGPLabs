@@ -44,9 +44,9 @@ protected:
 
         for(unsigned int i=0; i<num; ++i)
         {
-            (*vertices)[i].x = arc4random_uniform(1000) / 500.0f - 1;
-            (*vertices)[i].y = arc4random_uniform(1000) / 500.0f - 1;
-            (*vertices)[i].z = arc4random_uniform(1000) / 500.0f - 1;
+            (*vertices)[i].x = rand() / (float)RAND_MAX * 2 - 1;
+            (*vertices)[i].y = rand() / (float)RAND_MAX * 2 - 1;
+            (*vertices)[i].z = rand() / (float)RAND_MAX * 2 - 1;
         }
 
         return num;
@@ -54,20 +54,19 @@ protected:
 public:
     ParticlesDrawable(unsigned int num) : Drawable(GL_DYNAMIC_DRAW), num(num) {}
 
+#define GAME_DOMAIN "ParticlesDrawable::Draw"
     virtual void Draw(GLuint program_id, GLint u_matModelView, glm::mat4 matModelView)
     {
         Drawable::Draw(program_id, u_matModelView, matModelView);
 
-        GLenum err;
+        ASSERT_GL(GLint loc = glGetUniformLocation(program_id, "u_bPoints"))
+        ASSERT_GL(glUniform1i(loc, 1))
 
-        GLint loc = glGetUniformLocation(program_id, "u_bPoints");
-        glUniform1i(loc, 1);
+        ASSERT_GL(glDrawArrays(GL_POINTS, 0, num))
 
-        glDrawArrays(GL_POINTS, 0, num);
-        if((err = glGetError()) != GL_NO_ERROR) fprintf(stderr, "ParticlesDrawable::Draw => glDrawArrays: error: 0x%x\n", err);
-
-        glUniform1i(loc, 0);
+        ASSERT_GL(glUniform1i(loc, 0))
     }
+#undef GAME_DOMAIN
 };
 
 #endif

@@ -16,27 +16,41 @@
 
 #include "Game.h"
 
+#define GAME_DOMAIN "Game::PrintShaderError"
 void Game::PrintShaderError(GLint shader)
 {
     GLint max_len = 0;
     GLint log_len = 0;
-    unsigned char is_shader = glIsShader(shader);
+    ASSERT_GL(unsigned char is_shader = glIsShader(shader))
 
-    if(is_shader) glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &max_len);
-    else glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &max_len);
-
-    if(max_len > 0)
+    if(is_shader)
     {
-        GLchar *message = (GLchar *)malloc(sizeof(GLchar) * max_len);
-
-        if(is_shader) glGetShaderInfoLog(shader, max_len, &log_len, message);
-        else glGetProgramInfoLog(shader, max_len, &log_len, message);
-
-        fprintf(stderr, "%s\n", message);
-        free(message);
+        ASSERT_GL(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &max_len))
     }
-}
+    else
+    {
+        ASSERT_GL(glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &max_len))
+    }
 
+    if(max_len <= 0) return;
+
+    GLchar *message = (GLchar *)malloc(sizeof(GLchar) * max_len);
+
+    if(is_shader)
+    {
+        ASSERT_GL(glGetShaderInfoLog(shader, max_len, &log_len, message))
+    }
+    else
+    {
+        ASSERT_GL(glGetProgramInfoLog(shader, max_len, &log_len, message))
+    }
+
+    fprintf(stderr, "%s\n", message);
+    free(message);
+}
+#undef GAME_DOMAIN
+
+#define GAME_DOMAIN "Game::InitSDL"
 bool Game::InitSDL(void)
 {
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -62,8 +76,8 @@ bool Game::InitSDL(void)
     }
 
     // debug info
-    fprintf(stderr, "[DUMMY] OpenGL version: %s\n", glGetString(GL_VERSION));
-    fprintf(stderr, "[DUMMY] GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    ASSERT_GL(fprintf(stderr, "[DUMMY] OpenGL version: %s\n", glGetString(GL_VERSION)))
+    ASSERT_GL(fprintf(stderr, "[DUMMY] GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION)))
 
     // destroy dummy window and context
     SDL_GL_DeleteContext(this->ctx);
@@ -100,31 +114,35 @@ bool Game::InitSDL(void)
     }
 
     // debug info
-    fprintf(stderr, "OpenGL version: %s\n", glGetString(GL_VERSION));
-    fprintf(stderr, "GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    ASSERT_GL(fprintf(stderr, "OpenGL version: %s\n", glGetString(GL_VERSION)))
+    ASSERT_GL(fprintf(stderr, "GLSL version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION)))
 
     // enable vsync
     SDL_GL_SetSwapInterval(1);
 
     return true;
 }
+#undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Game::InitGLEW"
 bool Game::InitGLEW(void)
 {
 #if defined(_WIN32) || defined(__linux__)
     glewExperimental = true;
 
-    GLenum err = glewInit();
+    ASSERT_GL(GLenum err = glewInit())
     if(err != GLEW_OK)
     {
         fprintf(stderr, "glewInit: error\n");
-        return 1;
+        return true;
     }
 #endif
 
     return true;
 }
+#undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Game::InitShaders"
 bool Game::InitShaders(const char *v_path, const char *f_path)
 {
     long v_len, f_len;
@@ -143,16 +161,16 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
         return false;
     }
 
-    GLuint v_id = glCreateShader(GL_VERTEX_SHADER);
-    GLuint f_id = glCreateShader(GL_FRAGMENT_SHADER);
+    ASSERT_GL(GLuint v_id = glCreateShader(GL_VERTEX_SHADER))
+    ASSERT_GL(GLuint f_id = glCreateShader(GL_FRAGMENT_SHADER))
 
-    glShaderSource(v_id, 1, &v_src, (GLint *)&v_len);
-    glShaderSource(f_id, 1, &f_src, (GLint *)&f_len);
+    ASSERT_GL(glShaderSource(v_id, 1, &v_src, (GLint *)&v_len))
+    ASSERT_GL(glShaderSource(f_id, 1, &f_src, (GLint *)&f_len))
 
     GLint compile_status;
 
-    glCompileShader(v_id);
-    glGetShaderiv(v_id, GL_COMPILE_STATUS, &compile_status);
+    ASSERT_GL(glCompileShader(v_id))
+    ASSERT_GL(glGetShaderiv(v_id, GL_COMPILE_STATUS, &compile_status))
     if(!compile_status)
     {
         fprintf(stderr, "glCompileShader(v_id): error\n");
@@ -160,8 +178,8 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
         return false;
     }
 
-    glCompileShader(f_id);
-    glGetShaderiv(f_id, GL_COMPILE_STATUS, &compile_status);
+    ASSERT_GL(glCompileShader(f_id))
+    ASSERT_GL(glGetShaderiv(f_id, GL_COMPILE_STATUS, &compile_status))
     if(!compile_status)
     {
         fprintf(stderr, "glCompileShader(f_id): error\n");
@@ -169,19 +187,20 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
         return false;
     }
 
-    this->program_id = glCreateProgram();
-    glAttachShader(this->program_id, v_id);
-    glAttachShader(this->program_id, f_id);
+    ASSERT_GL(this->program_id = glCreateProgram())
+    ASSERT_GL(glAttachShader(this->program_id, v_id))
+    ASSERT_GL(glAttachShader(this->program_id, f_id))
 
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex");
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal");
-    glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord");
+    ASSERT_GL(glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex"))
+    ASSERT_GL(glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal"))
+    ASSERT_GL(glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord"))
 
-    glLinkProgram(this->program_id);
-    glUseProgram(this->program_id);
+    ASSERT_GL(glLinkProgram(this->program_id))
+    ASSERT_GL(glUseProgram(this->program_id))
 
     return true;
 }
+#undef GAME_DOMAIN
 
 bool Game::DestroySDL(void)
 {
@@ -190,8 +209,12 @@ bool Game::DestroySDL(void)
     return true;
 }
 
+#define GAME_DOMAIN "Game::Init"
 bool Game::Init(void)
 {
+    // init random
+    srand(time(NULL));
+
     this->width = 1280;
     this->height = 720;
 
@@ -236,19 +259,19 @@ bool Game::Init(void)
 
     particles.Init(program_id);
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    ASSERT_GL(glEnable(GL_DEPTH_TEST))
+    ASSERT_GL(glEnable(GL_CULL_FACE))
+    ASSERT_GL(glCullFace(GL_BACK))
+    ASSERT_GL(glEnable(GL_BLEND))
+    ASSERT_GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
+    ASSERT_GL(glEnable(GL_VERTEX_PROGRAM_POINT_SIZE))
 
     this->matIdentity = glm::mat4(1.0f);
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
 
     // max anisotropy
     GLfloat aniso;
-    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
+    ASSERT_GL(glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso))
 
     // load textures
     this->tex = TextureManager::LoadBMP("stone.bmp", GL_TEXTURE0, aniso);
@@ -257,19 +280,21 @@ bool Game::Init(void)
     TextureManager::LoadBMP("stone.bmp", GL_TEXTURE3, aniso);
 
     // bind texture units to shader samplers
-    glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0);
-    glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1);
-    glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2);
-    glUniform1i(glGetUniformLocation(this->program_id, "u_sPoints"), 3);
+    ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0))
+    ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1))
+    ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2))
+    ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sPoints"), 3))
 
     // upload projection matrix
     glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
-    GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection");
-    glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
+    ASSERT_GL(GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection"))
+    ASSERT_GL(glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection)))
 
     return true;
 }
+#undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Game::HandleSDL"
 bool Game::HandleSDL(SDL_Event *e)
 {
     switch(e->type)
@@ -310,12 +335,12 @@ bool Game::HandleSDL(SDL_Event *e)
                     this->width = e->window.data1;
                     this->height = e->window.data2;
                     this->aspect = this->width / this->height;
-                    glViewport(0, 0, this->width, this->height);
+                    ASSERT_GL(glViewport(0, 0, this->width, this->height))
 
                     // upload new projection matrix
                     glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
-                    GLint u_matProjection = glGetUniformLocation(program_id, "u_matProjection");
-                    glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection));
+                    ASSERT_GL(GLint u_matProjection = glGetUniformLocation(program_id, "u_matProjection"))
+                    ASSERT_GL(glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection)))
 
                     break;
             }
@@ -324,6 +349,7 @@ bool Game::HandleSDL(SDL_Event *e)
 
     return true;
 }
+#undef GAME_DOMAIN
 
 bool Game::Update(float seconds)
 {
@@ -379,17 +405,18 @@ bool Game::Update(float seconds)
     return true;
 }
 
+#define GAME_DOMAIN "Game::Draw"
 bool Game::Draw(void)
 {
-    glClearColor(0.6f, 0.65f, 0.9f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ASSERT_GL(glClearColor(0.6f, 0.65f, 0.9f, 1.0f))
+    ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
 
     glm::mat4 matCamera = this->camera;
 
-    GLint u_matCamera = glGetUniformLocation(this->program_id, "u_matCamera");
-    GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView");
+    ASSERT_GL(GLint u_matCamera = glGetUniformLocation(this->program_id, "u_matCamera"))
+    ASSERT_GL(GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView"))
 
-    glUniformMatrix4fv(u_matCamera, 1, GL_FALSE, glm::value_ptr(matCamera));
+    ASSERT_GL(glUniformMatrix4fv(u_matCamera, 1, GL_FALSE, glm::value_ptr(matCamera)))
 
     cube_left.Draw(program_id, u_matModelView, matCamera);
     cube_right.Draw(program_id, u_matModelView, matCamera);
@@ -399,6 +426,7 @@ bool Game::Draw(void)
 
     return true;
 }
+#undef GAME_DOMAIN
 
 bool Game::Destroy(void)
 {

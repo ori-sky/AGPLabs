@@ -20,24 +20,25 @@
 class TextureManager
 {
 public:
+#define GAME_DOMAIN "TextureManager::LoadBMP"
     static GLuint LoadBMP(const char *path, GLenum texture_unit, GLfloat aniso,
                           bool flip_x = false, bool flip_y = false)
     {
         SDL_Surface *texture = SDL_LoadBMP(path);
         if(flip_x || flip_y) texture = FlipSurface(texture, flip_x, flip_y);
 
-        glActiveTexture(texture_unit);
+        ASSERT_GL(glActiveTexture(texture_unit))
 
         GLuint id;
-        glGenTextures(1, &id);
-        glBindTexture(GL_TEXTURE_2D, id);
+        ASSERT_GL(glGenTextures(1, &id))
+        ASSERT_GL(glBindTexture(GL_TEXTURE_2D, id))
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT))
+        ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT))
+        ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
+        ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR))
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+        ASSERT_GL(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso))
 
         GLenum format = 0;
         switch(texture->format->BytesPerPixel)
@@ -50,13 +51,14 @@ public:
             break;
         }
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0, format,
-                     GL_UNSIGNED_BYTE, texture->pixels);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0, format,
+                               GL_UNSIGNED_BYTE, texture->pixels));
+        ASSERT_GL(glGenerateMipmap(GL_TEXTURE_2D))
         
         SDL_FreeSurface(texture);
         return id;
     }
+#undef GAME_DOMAIN
 
     static Uint32 GetPixel32(SDL_Surface *surface, int x, int y)
     {
