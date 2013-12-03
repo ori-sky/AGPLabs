@@ -354,7 +354,7 @@ bool Game::HandleSDL(SDL_Event *e)
 bool Game::Update(float seconds)
 {
     // particles
-    particles.Update();
+    particles.Update(seconds * 1000);
 
     const float movement_speed = 1.5f;
     const float rotation_speed = 70.0f;
