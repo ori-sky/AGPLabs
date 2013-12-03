@@ -19,25 +19,49 @@
 
 #include "Drawable.h"
 
+template <typename T>
+struct BoundedValue
+{
+    T value;
+    T min;
+    T max;
+
+    void Clamp(void);
+};
+
+template <typename T>
 struct ParticleAttribute
 {
-    glm::vec3 velocity;
-    glm::vec3 acceleration;
-    glm::vec3 jerk;
-    glm::vec3 snap;
+    BoundedValue<T> velocity;
+    BoundedValue<T> acceleration;
+    BoundedValue<T> jerk;
+    BoundedValue<T> snap;
+
+    void Update(long long ms)
+    {
+        jerk.value += snap.value * (float)ms;
+        jerk.Clamp();
+
+        acceleration.value += jerk.value * (float)ms;
+        acceleration.Clamp();
+
+        velocity.value += acceleration.value * (float)ms;
+        velocity.Clamp();
+    }
 };
 
 struct Particle
 {
     long long time_remaining;
 
-    ParticleAttribute position;
-    ParticleAttribute position_min;
-    ParticleAttribute position_max;
+    ParticleAttribute<glm::vec3> position;
+    ParticleAttribute<GLfloat> size;
 
-    ParticleAttribute size;
-    ParticleAttribute size_min;
-    ParticleAttribute size_max;
+    void Update(long long ms)
+    {
+        position.Update(ms);
+        size.Update(ms);
+    }
 };
 
 class ParticlesDrawable : public Drawable
@@ -111,7 +135,21 @@ public:
         alives[index] = 1;
         point_sizes[index] = 10;
 
+        memset(&particles[index], 0, sizeof(Particle));
+
         particles[index].time_remaining = 2000;
+
+        particles[index].position.acceleration.value.y = -0.00001f;
+        particles[index].position.acceleration.min.y = -1;
+        particles[index].position.acceleration.max.y =  1;
+
+        particles[index].position.velocity.value.y = rand() / (float)RAND_MAX * 0.01f + 0.002f;
+        particles[index].position.velocity.min.y = 0.001f;
+        particles[index].position.velocity.max.y = 1;
+
+        particles[index].size.velocity.value = rand() / (float)RAND_MAX * 0.5f;
+        particles[index].size.velocity.min = -100;
+        particles[index].size.velocity.max =  100;
 
         Bind();
         UpdateBuffer(vbo_vertex, GL_ARRAY_BUFFER, index * sizeof(glm::vec3), sizeof(glm::vec3), &vertices[index]);
@@ -151,8 +189,10 @@ public:
                 continue;
             }
 
-            vertices[i].y += rand() / (float)RAND_MAX * 0.002f;
-            point_sizes[i] += rand() / (float)RAND_MAX * 0.1f;
+            particles[i].Update(ms);
+
+            vertices[i] += particles[i].position.velocity.value;
+            point_sizes[i] += particles[i].size.velocity.value;
         }
 
         Bind();
