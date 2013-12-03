@@ -277,13 +277,13 @@ bool Game::Init(void)
     this->tex = TextureManager::LoadBMP("stone.bmp", GL_TEXTURE0, aniso);
     this->nmap = TextureManager::LoadBMP("four_NM_height.bmp", GL_TEXTURE1, aniso, false, true);
     this->glossmap = TextureManager::LoadBMP("stone_gloss.bmp", GL_TEXTURE2, aniso);
-    TextureManager::LoadBMP("stone.bmp", GL_TEXTURE3, aniso);
+    TextureManager::LoadBMP("stone_normal.bmp", GL_TEXTURE3, aniso);
 
     // bind texture units to shader samplers
     ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sDiffuse"), 0))
     ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight"), 1))
     ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sSpecular"), 2))
-    ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sPoints"), 3))
+    ASSERT_GL(glUniform1i(glGetUniformLocation(this->program_id, "u_sNormalHeight2"), 3))
 
     // upload projection matrix
     glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);

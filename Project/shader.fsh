@@ -74,7 +74,7 @@ uniform float u_fExposure;
 uniform sampler2D u_sDiffuse;
 uniform sampler2D u_sNormalHeight;
 uniform sampler2D u_sSpecular;
-uniform sampler2D u_sPoints;
+uniform sampler2D u_sNormalHeight2;
 
 uniform mat4 u_matCamera;
 
@@ -92,8 +92,8 @@ flat in int v_bAlive;
 
 out vec4 o_vColor;
 
-vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
-                                in vec3 vEye, in vec3 vNormal,
+vec2 parallax_occlusion_mapping(in sampler2D sMap, in float fMapScale,
+                                in vec2 vTexCoord, in vec3 vEye, in vec3 vNormal,
                                 in float fScale, in float fMaxSamples, in float fMinSamples)
 {
     float fParallaxLimit = -length(vEye.xy) / vEye.z * fScale;
@@ -113,7 +113,53 @@ vec2 parallax_occlusion_mapping(in sampler2D sMap, in vec2 vTexCoord,
 
     for(int nCurrSample=0; nCurrSample<nNumSamples;)
     {
-        fCurrSampledHeight = texture(sMap, vTexCoord + vCurrOffset).a;
+        fCurrSampledHeight = texture(sMap, (vTexCoord + vCurrOffset) * fMapScale).a;
+        if(fCurrSampledHeight > fCurrRayHeight)
+        {
+            float delta1 = fCurrSampledHeight - fCurrRayHeight;
+            float delta2 = (fCurrRayHeight + fStepSize) - fLastSampledHeight;
+
+            float ratio = delta1 / (delta1 + delta2);
+            vCurrOffset = (ratio) * vLastOffset + (1.0 - ratio) * vCurrOffset;
+            break;
+        }
+        else
+        {
+            ++nCurrSample;
+            fCurrRayHeight -= fStepSize;
+            vLastOffset = vCurrOffset;
+            vCurrOffset += fStepSize * vMaxOffset;
+            fLastSampledHeight = fCurrSampledHeight;
+        }
+    }
+
+    return vTexCoord + vCurrOffset;
+}
+
+vec2 parallax_occlusion_mapping_2(in sampler2D sMap1, in float fMapScale1,
+                                  in sampler2D sMap2, in float fMapScale2,
+                                  in vec2 vTexCoord, in vec3 vEye, in vec3 vNormal,
+                                  in float fScale, in float fMaxSamples, in float fMinSamples)
+{
+    float fParallaxLimit = -length(vEye.xy) / vEye.z * fScale;
+
+    vec2 vOffsetDir = normalize(vEye.xy);
+    vec2 vMaxOffset = vOffsetDir * fParallaxLimit;
+
+    float fEDotN = dot(normalize(vEye), vNormal);
+    int nNumSamples = int(mix(fMaxSamples, fMinSamples, fEDotN));
+    float fStepSize = 1.0 / float(nNumSamples);
+
+    vec2 vCurrOffset = vec2(0.0);
+    vec2 vLastOffset = vec2(0.0);
+    float fCurrRayHeight = 1.0;
+    float fLastSampledHeight = 1.0;
+    float fCurrSampledHeight = 1.0;
+
+    for(int nCurrSample=0; nCurrSample<nNumSamples;)
+    {
+        fCurrSampledHeight = texture(sMap1, (vTexCoord + vCurrOffset) * fMapScale1).a
+                           * texture(sMap2, (vTexCoord + vCurrOffset) * fMapScale2).a;
         if(fCurrSampledHeight > fCurrRayHeight)
         {
             float delta1 = fCurrSampledHeight - fCurrRayHeight;
@@ -213,19 +259,24 @@ void main_points(void)
 void main_geometry(void)
 {
     // parallax occlusion mapping
-    vec2 vTexCoord = parallax_occlusion_mapping(u_sNormalHeight, v_vTexCoord, v_vTEye, v_vTNormal, 0.15, 64, 8);
+    vec2 vTexCoord = parallax_occlusion_mapping_2(u_sNormalHeight, 1,
+                                                  u_sNormalHeight2, 2,
+                                                  v_vTexCoord, v_vTEye, v_vTNormal,
+                                                  0.1, 128, 16);
     //vec2 vTexCoord = v_vTexCoord;
 
     // normal mapping
-    vec3 vNormal = normal_mapping(u_sNormalHeight, vTexCoord);
+    vec3 vNormal = normal_mapping(u_sNormalHeight, vTexCoord)
+                 + normal_mapping(u_sNormalHeight2, vTexCoord * 2);
+    vNormal = normalize(vNormal);
     //vec3 vNormal = v_vTNormal;
 
     // lighting
     vec3 vAmbient, vDiffuse, vSpecular;
     lighting(vNormal, vAmbient, vDiffuse, vSpecular);
 
-    vec3 vTexDiffuse = texture(u_sDiffuse, vTexCoord).rgb;
-    vec3 vTexSpecular = texture(u_sSpecular, vTexCoord).rgb;
+    vec3 vTexDiffuse = texture(u_sDiffuse, vTexCoord * 2).rgb;
+    vec3 vTexSpecular = texture(u_sSpecular, vTexCoord * 2).rgb;
 
     vec3 vFinalColor = vAmbient +
                        vDiffuse * vTexDiffuse +
