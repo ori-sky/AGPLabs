@@ -89,7 +89,7 @@ public:
 #define GAME_DOMAIN "Drawable::Init"
     void Init(GLuint program_id)
     {
-        unsigned int num = this->Make(&vertices, &normals, &tangents, &bitangents, &texcoords);
+        unsigned int num = Make(&vertices, &normals, &tangents, &bitangents, &texcoords);
 
         ASSERT_GL(glGenVertexArrays(1, &this->vao))
         Bind();
