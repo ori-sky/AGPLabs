@@ -18,6 +18,7 @@
 #define DRAWABLE_H
 
 #include "common.h"
+#include "LightingManager.h"
 
 class Drawable
 {
