@@ -31,6 +31,12 @@ protected:
 
     GLenum usage;
 
+    glm::vec3 *vertices;
+    glm::vec3 *normals;
+    glm::vec3 *tangents;
+    glm::vec3 *bitangents;
+    glm::vec2 *texcoords;
+
     virtual unsigned int Make(glm::vec3 **vertices,
                               glm::vec3 **normals,
                               glm::vec3 **tangents,
@@ -83,12 +89,6 @@ public:
 #define GAME_DOMAIN "Drawable::Init"
     void Init(GLuint program_id)
     {
-        glm::vec3 *vertices   = NULL;
-        glm::vec3 *normals    = NULL;
-        glm::vec3 *tangents   = NULL;
-        glm::vec3 *bitangents = NULL;
-        glm::vec2 *texcoords  = NULL;
-
         unsigned int num = this->Make(&vertices, &normals, &tangents, &bitangents, &texcoords);
 
         ASSERT_GL(glGenVertexArrays(1, &this->vao))
@@ -99,12 +99,6 @@ public:
         vbo_tangent   = MakeVBO(num * sizeof(glm::vec3), tangents,   program_id, "a_vTangent",   3, GL_FLOAT, usage);
         vbo_bitangent = MakeVBO(num * sizeof(glm::vec3), bitangents, program_id, "a_vBitangent", 3, GL_FLOAT, usage);
         vbo_texcoord  = MakeVBO(num * sizeof(glm::vec2), texcoords,  program_id, "a_vTexCoord",  2, GL_FLOAT, usage);
-
-        delete[] vertices;
-        delete[] normals;
-        delete[] tangents;
-        delete[] bitangents;
-        delete[] texcoords;
     }
 #undef GAME_DOMAIN
 
