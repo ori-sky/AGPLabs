@@ -55,11 +55,15 @@ struct Particle
     long long time_remaining;
 
     ParticleAttribute<glm::vec3> position;
+    ParticleAttribute<glm::vec3> rotation;
+    ParticleAttribute<glm::vec3> offset;
     ParticleAttribute<GLfloat> size;
 
     void Update(long long ms)
     {
         position.Update(ms);
+        rotation.Update(ms);
+        offset.Update(ms);
         size.Update(ms);
     }
 };
@@ -72,9 +76,14 @@ private:
 
     GLuint vbo_alive;
     GLuint vbo_point_size;
+    GLuint vbo_rotation;
+    GLuint vbo_offset;
 
     GLint *alives;
     GLfloat *point_sizes;
+    glm::vec3 *rotations;
+    glm::vec3 *offsets;
+
     Particle *particles;
 protected:
     virtual unsigned int Make(glm::vec3 **vertices, glm::vec3 **normals, glm::vec3 **tangents, glm::vec3 **bitangents,
@@ -113,48 +122,73 @@ public:
 
         alives = new GLint[num];
         point_sizes = new GLfloat[num];
+        rotations = new glm::vec3[num];
+        offsets = new glm::vec3[num];
+
         particles = new Particle[num];
 
-        for(unsigned int i=0; i<num; ++i)
-        {
-            alives[i] = 0;
-            point_sizes[i] = 10;
-        }
+        memset(alives, 0, num * sizeof(GLint));
 
         vbo_alive = MakeVBO(num * sizeof(GLint), alives, program_id, "a_bAlive", 1, GL_INT, usage);
         vbo_point_size = MakeVBO(num * sizeof(GLfloat), point_sizes, program_id, "a_fPointSize", 1, GL_FLOAT, usage);
+        vbo_rotation = MakeVBO(num * sizeof(glm::vec3), rotations, program_id, "a_vRotation", 3, GL_FLOAT, usage);
+        vbo_offset = MakeVBO(num * sizeof(glm::vec3), offsets, program_id, "a_vOffset", 3, GL_FLOAT, usage);
     }
 #undef GAME_DOMAIN
 
     void CreateParticle(unsigned int index)
     {
-        vertices[index].x = rand() / (float)RAND_MAX * 2 - 1;
-        vertices[index].y = rand() / (float)RAND_MAX * 2 - 1;
-        vertices[index].z = rand() / (float)RAND_MAX * 2 - 1;
+        //vertices[index].x = rand() / (float)RAND_MAX * 2 - 1;
+        //vertices[index].y = rand() / (float)RAND_MAX * 2 - 1;
+        //vertices[index].z = rand() / (float)RAND_MAX * 2 - 1;
+
+        vertices[index].x = 0;
+        vertices[index].y = -1;
+        vertices[index].z = 0;
+
+        rotations[index].x = 0;
+        rotations[index].y = 3.14159265 * 2 * rand() / (float)RAND_MAX;
+        rotations[index].z = 0;
+
+        offsets[index].x = 0.1f * rand() / (float)RAND_MAX;
+        offsets[index].y = 0;
+        offsets[index].z = 0;
 
         alives[index] = 1;
         point_sizes[index] = 10;
 
         memset(&particles[index], 0, sizeof(Particle));
 
-        particles[index].time_remaining = 2000;
+        particles[index].time_remaining = 5000;
 
-        particles[index].position.acceleration.value.y = -0.00001f;
+        particles[index].position.velocity.value.y = 0.01f + 0.005f * rand() / (float)RAND_MAX;
+        particles[index].position.velocity.min.y = 0.001f;
+        particles[index].position.velocity.max.y = 1;
+        particles[index].position.acceleration.value.y = -0.000001f;
         particles[index].position.acceleration.min.y = -1;
         particles[index].position.acceleration.max.y =  1;
 
-        particles[index].position.velocity.value.y = rand() / (float)RAND_MAX * 0.01f + 0.002f;
-        particles[index].position.velocity.min.y = 0.001f;
-        particles[index].position.velocity.max.y = 1;
-
-        particles[index].size.velocity.value = rand() / (float)RAND_MAX * 0.5f;
+        particles[index].size.velocity.value = 0.5f * rand() / (float)RAND_MAX;
         particles[index].size.velocity.min = -100;
         particles[index].size.velocity.max =  100;
 
+        particles[index].rotation.velocity.value.y = 0.001f + 0.005f * rand() / (float)RAND_MAX;
+        particles[index].rotation.velocity.min.y = -100;
+        particles[index].rotation.velocity.max.y =  100;
+        particles[index].rotation.acceleration.value.y = 0.000001f + 0.00001f * rand() / (float)RAND_MAX;
+        particles[index].rotation.acceleration.min.y = -100;
+        particles[index].rotation.acceleration.max.y =  100;
+
+        particles[index].offset.velocity.value.x = 0.00001f + 0.01f * rand() / (float)RAND_MAX;
+        particles[index].offset.velocity.min.x = 0;
+        particles[index].offset.velocity.max.x = 1;
+
         Bind();
         UpdateBuffer(vbo_vertex, GL_ARRAY_BUFFER, index * sizeof(glm::vec3), sizeof(glm::vec3), &vertices[index]);
-        UpdateBuffer(vbo_alive, GL_ARRAY_BUFFER, index * sizeof(glm::vec3), sizeof(GLint), &alives[index]);
+        UpdateBuffer(vbo_alive, GL_ARRAY_BUFFER, index * sizeof(GLint), sizeof(GLint), &alives[index]);
         UpdateBuffer(vbo_point_size, GL_ARRAY_BUFFER, index * sizeof(GLfloat), sizeof(GLfloat), &point_sizes[index]);
+        UpdateBuffer(vbo_rotation, GL_ARRAY_BUFFER, index * sizeof(glm::vec3), sizeof(glm::vec3), &rotations[index]);
+        UpdateBuffer(vbo_offset, GL_ARRAY_BUFFER, index * sizeof(glm::vec3), sizeof(glm::vec3), &offsets[index]);
     }
 
     void CreateParticle(void)
@@ -193,12 +227,16 @@ public:
 
             vertices[i] += particles[i].position.velocity.value;
             point_sizes[i] += particles[i].size.velocity.value;
+            rotations[i] += particles[i].rotation.velocity.value;
+            offsets[i] += particles[i].offset.velocity.value;
         }
 
         Bind();
         UpdateBuffer(vbo_vertex, GL_ARRAY_BUFFER, 0, num * sizeof(glm::vec3), vertices);
         UpdateBuffer(vbo_alive, GL_ARRAY_BUFFER, 0, num * sizeof(GLint), alives);
         UpdateBuffer(vbo_point_size, GL_ARRAY_BUFFER, 0, num * sizeof(GLfloat), point_sizes);
+        UpdateBuffer(vbo_rotation, GL_ARRAY_BUFFER, 0, num * sizeof(glm::vec3), rotations);
+        UpdateBuffer(vbo_offset, GL_ARRAY_BUFFER, 0, num * sizeof(glm::vec3), offsets);
     }
 
 #define GAME_DOMAIN "ParticlesDrawable::Draw"
