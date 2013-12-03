@@ -82,12 +82,13 @@ smooth in vec3 v_vVertex;
 smooth in vec3 v_vNormal;
 smooth in vec2 v_vTexCoord;
 smooth in vec3 v_vEye;
-
 smooth in vec3 v_vTLight;
 smooth in vec3 v_vTEye;
 smooth in vec3 v_vTNormal;
-
 smooth in mat3 v_matWorldToTangent;
+
+// points
+flat in int v_bAlive;
 
 out vec4 o_vColor;
 
@@ -190,12 +191,23 @@ vec3 hdr(in vec3 vColor)
 
 void main_points(void)
 {
+    if(v_bAlive == 0)
+    {
+        discard;
+        return;
+    }
+
     vec2 vTexCoord = gl_PointCoord;
     vec2 vFromCenter = vTexCoord - vec2(0.5);
     float fDistance = length(vFromCenter);
 
-    if(fDistance > 0.5) discard;
-    else o_vColor = vec4(1, 1, 1, 1);
+    if(fDistance > 0.5)
+    {
+        discard;
+        return;
+    }
+
+    o_vColor = vec4(1, 1, 1, 1);
 }
 
 void main_geometry(void)

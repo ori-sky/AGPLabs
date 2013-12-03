@@ -29,22 +29,26 @@ in vec3 a_vTangent;
 in vec3 a_vBitangent;
 in vec2 a_vTexCoord;
 
-// points attributes
+// points
+in int a_bAlive;
 in float a_fPointSize;
 
 smooth out vec3 v_vVertex;
 smooth out vec3 v_vNormal;
 smooth out vec2 v_vTexCoord;
 smooth out vec3 v_vEye;
-
 smooth out vec3 v_vTLight;
 smooth out vec3 v_vTEye;
 smooth out vec3 v_vTNormal;
-
 smooth out mat3 v_matWorldToTangent;
+
+// points
+flat out int v_bAlive;
 
 void main_points(void)
 {
+    v_bAlive = a_bAlive;
+
     vec4 vVertex = vec4(a_vVertex, 1.0);
     vec4 vModelViewVertex = u_matModelView * vVertex;
     v_vVertex = vec3(vModelViewVertex);
