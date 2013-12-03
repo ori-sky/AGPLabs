@@ -32,6 +32,8 @@ in vec2 a_vTexCoord;
 // points
 in int a_bAlive;
 in float a_fPointSize;
+in vec3 a_vRotation;
+in vec3 a_vOffset;
 
 smooth out vec3 v_vVertex;
 smooth out vec3 v_vNormal;
@@ -49,7 +51,13 @@ void main_points(void)
 {
     v_bAlive = a_bAlive;
 
-    vec4 vVertex = vec4(a_vVertex, 1.0);
+    mat3 matRotationY;
+    matRotationY[0] = vec3(cos(a_vRotation.y), 0, -sin(a_vRotation.y));
+    matRotationY[1] = vec3(0, 1, 0);
+    matRotationY[2] = vec3(sin(a_vRotation.y), 0, cos(a_vRotation.y));
+
+    vec4 vVertex = vec4(matRotationY * (a_vVertex + a_vOffset), 1.0);
+
     vec4 vModelViewVertex = u_matModelView * vVertex;
     v_vVertex = vec3(vModelViewVertex);
 
