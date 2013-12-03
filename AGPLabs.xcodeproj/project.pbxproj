@@ -10,6 +10,7 @@
 		7F0323C4181155DB00A899C1 /* studdedmetal.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F0323C2181155C500A899C1 /* studdedmetal.bmp */; };
 		7F13E8511826A62F00A7A599 /* parallax-occlusion.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */; };
 		7F13E8521826A63300A7A599 /* parallax-occlusion.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */; };
+		7F163D50184E4C71009309B9 /* ParticlesDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F163D4F184E4C71009309B9 /* ParticlesDrawable.cpp */; };
 		7F2178151808044800FA332F /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F2178121808044800FA332F /* Block.cpp */; };
 		7F21781D18080B8500FA332F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F21781C18080B8500FA332F /* main.cpp */; };
 		7F21781F18080B8500FA332F /* AGPLab3.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F21781E18080B8500FA332F /* AGPLab3.1 */; };
@@ -189,6 +190,7 @@
 		7F0323C2181155C500A899C1 /* studdedmetal.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = studdedmetal.bmp; sourceTree = "<group>"; };
 		7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "parallax-occlusion.fsh"; sourceTree = "<group>"; };
 		7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "parallax-occlusion.vsh"; sourceTree = "<group>"; };
+		7F163D4F184E4C71009309B9 /* ParticlesDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlesDrawable.cpp; sourceTree = "<group>"; };
 		7F2178121808044800FA332F /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
 		7F2178131808044800FA332F /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
 		7F2178141808044800FA332F /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 				7F8A8E771848B5DA00248801 /* LightingManager.h */,
 				7F8A8E4C184879E700248801 /* main.cpp */,
 				7F8A8E5818487AC800248801 /* Object.h */,
+				7F163D4F184E4C71009309B9 /* ParticlesDrawable.cpp */,
 				7FAB793E184BA0EC00BEC602 /* ParticlesDrawable.h */,
 				7F8A8E5918487AC800248801 /* ResourceManager.cpp */,
 				7F8A8E5A18487AC800248801 /* ResourceManager.h */,
@@ -645,6 +648,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F163D50184E4C71009309B9 /* ParticlesDrawable.cpp in Sources */,
 				7F8A8E6918487B8500248801 /* Game.cpp in Sources */,
 				7F8A8E7C184B7C2200248801 /* LightingManager.cpp in Sources */,
 				7F8A8E4D184879E700248801 /* main.cpp in Sources */,

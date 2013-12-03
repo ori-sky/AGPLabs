@@ -213,7 +213,7 @@ bool Game::DestroySDL(void)
 bool Game::Init(void)
 {
     // init random
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 
     this->width = 1280;
     this->height = 720;
