@@ -337,9 +337,10 @@ bool Game::Init(void)
     ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
     ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
 
-    if(!this->InitShaders("postproc_identity.vsh", "postproc_identity.fsh", &program_postproc)) return false;
+    if(!this->InitShaders("postproc_sine.vsh", "postproc_sine.fsh", &program_postproc)) return false;
     ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
     ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
+    ASSERT_GL(loc_fbo_u_fOffset = glGetUniformLocation(program_postproc, "u_fOffset"))
 
     // shadow mapping
 
@@ -436,9 +437,12 @@ bool Game::HandleSDL(SDL_Event *e)
 
 bool Game::Update(float seconds)
 {
+    static float f = 0;
+    f += seconds;
+
+    glProgramUniform1f(program_postproc, loc_fbo_u_fOffset, f * 5);
+
     /*
-    static float r = 0;
-    r += 0.01f;
     LightingManager::lights[0].vPosition.x = -2 * cos(r);
     LightingManager::lights[0].vPosition.z = -2 * sin(r);
     LightingManager::lights[1].vPosition.x =  2 * cos(1.05f * r);
