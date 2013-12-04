@@ -61,6 +61,7 @@ protected:
     GLuint loc_fbo_a_vCoord;
     GLuint loc_fbo_u_sFBO;
     GLuint loc_fbo_u_vVelocity;
+    GLuint loc_fbo_u_bEnabled;
 
     GLuint fbo_shadow;
 

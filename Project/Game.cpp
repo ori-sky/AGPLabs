@@ -228,22 +228,26 @@ bool Game::Init(void)
     LightingManager::light_types[0].vDiffuse = glm::vec4(1, 0.8f, 0, 1);
     LightingManager::light_types[1].vDiffuse = glm::vec4(0, 1, 0, 1);
     LightingManager::light_types[2].vDiffuse = glm::vec4(0, 0, 1, 1);
+    LightingManager::light_types[3].vDiffuse = glm::vec4(1, 1, 1, 1);
 
     LightingManager::light_types[0].vSpecular = glm::vec4(1, 0.5f, 0.5f, 1);
     LightingManager::light_types[1].vSpecular = glm::vec4(0.5f, 1, 0.5f, 1);
     LightingManager::light_types[2].vSpecular = glm::vec4(0.5f, 0.5f, 1, 1);
+    LightingManager::light_types[3].vSpecular = glm::vec4(1, 1, 1, 1);
 
     LightingManager::light_types[0].fAttenuationQuadratic = 0.05f;
     LightingManager::light_types[1].fAttenuationQuadratic = 0.05f;
     LightingManager::light_types[2].fAttenuationQuadratic = 0.05f;
+    LightingManager::light_types[3].fAttenuationQuadratic = 0.6f;
 
     LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
     LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
     LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5,  1.5, 1.5, 1));
+    LightingManager::MakeLight(3, true, 3, glm::vec4(-0.4, 0, 0, 1));
     //LightingManager::MakeLight(0, true, 0, glm::vec4(0, 1.5,  1, 1));
     //LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
 
-    LightingManager::materials[0].fShininess = 64;
+    LightingManager::materials[0].fShininess = 128;
 
     LightingManager::materials[1].fShininess = 16;
     LightingManager::materials[1].vDiffuse = glm::vec4(1, 0.9f, 0.7f, 1);
@@ -337,10 +341,13 @@ bool Game::Init(void)
     ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
     ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
 
-    if(!this->InitShaders("postproc_motion.vsh", "postproc_motion.fsh", &program_postproc)) return false;
+    if(!this->InitShaders("postproc_bloom.vsh", "postproc_bloom.fsh", &program_postproc)) return false;
     ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
     ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
     ASSERT_GL(loc_fbo_u_vVelocity = glGetUniformLocation(program_postproc, "u_vVelocity"))
+    ASSERT_GL(loc_fbo_u_bEnabled = glGetUniformLocation(program_postproc, "u_bEnabled"))
+
+    ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 0))
 
     // shadow mapping
 
@@ -493,13 +500,20 @@ bool Game::Update(float seconds)
             case SDLK_e:
                 this->camera = glm::rotate(this->matIdentity, rotation_speed * seconds, glm::vec3(0, 0, 1)) * this->camera;
                 break;
+            // passthrough
+            case SDLK_0:
+                ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 0))
+                break;
+            case SDLK_1:
+                ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 1))
+                break;
         }
     }
 
     this->camera = glm::translate(this->matIdentity, velocity * seconds) * this->camera;
     velocity *= 0.97f;
 
-    ASSERT_GL(glProgramUniform3fv(program_postproc, loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
+    //ASSERT_GL(glProgramUniform3fv(program_postproc, loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
 
     return true;
 }
