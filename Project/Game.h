@@ -70,6 +70,8 @@ protected:
     CubeDrawable cube_left;
     CubeDrawable cube_right;
     ParticlesDrawable particles;
+
+    glm::vec3 velocity;
 public:
     Game() : particles(1000) {}
     static Game * New(void) { return new Game(); }

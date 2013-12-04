@@ -337,7 +337,7 @@ bool Game::Init(void)
     ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
     ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
 
-    if(!this->InitShaders("postproc_sine.vsh", "postproc_sine.fsh", &program_postproc)) return false;
+    if(!this->InitShaders("postproc_identity.vsh", "postproc_identity.fsh", &program_postproc)) return false;
     ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
     ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
     ASSERT_GL(loc_fbo_u_fOffset = glGetUniformLocation(program_postproc, "u_fOffset"))
@@ -439,8 +439,7 @@ bool Game::Update(float seconds)
 {
     static float f = 0;
     f += seconds;
-
-    glProgramUniform1f(program_postproc, loc_fbo_u_fOffset, f * 5);
+    glProgramUniform1f(program_postproc, loc_fbo_u_fOffset, f);
 
     /*
     LightingManager::lights[0].vPosition.x = -2 * cos(r);
@@ -453,33 +452,32 @@ bool Game::Update(float seconds)
     // particles
     particles.Update(seconds * 1000);
 
-    const float movement_speed = 1.5f;
-    const float rotation_speed = 70.0f;
+    const float acceleration = 15;
+    const float rotation_speed = 90.0f;
 
-    for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin();
-        i!=this->pressed_keys.end(); ++i)
+    for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin(); i!=this->pressed_keys.end(); ++i)
     {
         switch(*i)
         {
             case SDLK_ESCAPE:
                 return false;
             case SDLK_w:
-                this->camera = glm::translate(this->matIdentity, glm::vec3(0, 0, movement_speed * seconds)) * this->camera;
+                velocity.z += acceleration * seconds;
                 break;
             case SDLK_s:
-                this->camera = glm::translate(this->matIdentity, glm::vec3(0, 0, -movement_speed * seconds)) * this->camera;
+                velocity.z -= acceleration * seconds;
                 break;
             case SDLK_a:
-                this->camera = glm::translate(this->matIdentity, glm::vec3(movement_speed * seconds, 0, 0)) * this->camera;
+                velocity.x += acceleration * seconds;
                 break;
             case SDLK_d:
-                this->camera = glm::translate(this->matIdentity, glm::vec3(-movement_speed * seconds, 0, 0)) * this->camera;
+                velocity.x -= acceleration * seconds;
                 break;
             case SDLK_SPACE:
-                this->camera = glm::translate(this->matIdentity, glm::vec3(0, -movement_speed * seconds, 0)) * this->camera;
+                velocity.y -= acceleration * seconds;
                 break;
             case SDLK_c:
-                this->camera = glm::translate(this->matIdentity, glm::vec3(0, movement_speed * seconds, 0)) * this->camera;
+                velocity.y += acceleration * seconds;
                 break;
             case SDLK_UP:
                 this->camera = glm::rotate(this->matIdentity, -rotation_speed * seconds, glm::vec3(1, 0, 0)) * this->camera;
@@ -501,6 +499,9 @@ bool Game::Update(float seconds)
                 break;
         }
     }
+
+    this->camera = glm::translate(this->matIdentity, velocity * seconds) * this->camera;
+    velocity *= 0.97f;
 
     return true;
 }
