@@ -71,14 +71,20 @@ public:
                          GLenum usage)
     {
         GLuint vbo = Drawable::MakeBuffer(GL_ARRAY_BUFFER, size, data, usage);
+        EnableAttrib(program_id, attrib_name, attrib_size, attrib_type);
 
+        return vbo;
+    }
+#undef GAME_DOMAIN
+
+#define GAME_DOMAIN "Drawable::EnableAttrib"
+    static void EnableAttrib(GLuint program_id, const GLchar *attrib_name, GLint attrib_size, GLenum attrib_type)
+    {
         ASSERT_GL(GLint attrib_id = glGetAttribLocation(program_id, attrib_name))
         if(attrib_id < 0) fprintf(stderr, "Drawable::make_vbo: attribute \"%s\" is not active in program\n", attrib_name);
 
         ASSERT_GL(glVertexAttribPointer(attrib_id, attrib_size, attrib_type, GL_FALSE, 0, NULL))
         ASSERT_GL(glEnableVertexAttribArray(attrib_id))
-
-        return vbo;
     }
 #undef GAME_DOMAIN
 
@@ -116,9 +122,9 @@ public:
         LightingManager::SetMaterial(program_id, material_id);
 
         matModelView = glm::translate(matModelView, position);
-
         ASSERT_GL(glUniformMatrix4fv(u_matModelView, 1, GL_FALSE, glm::value_ptr(matModelView)))
-        ASSERT_GL(glBindVertexArray(this->vao))
+
+        Bind();
     }
 #undef GAME_DOMAIN
 };
