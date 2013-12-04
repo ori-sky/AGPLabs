@@ -414,7 +414,8 @@ bool Game::Update(float seconds)
 #define GAME_DOMAIN "Game::Draw"
 bool Game::Draw(void)
 {
-    ASSERT_GL(glClearColor(0.6f, 0.65f, 0.9f, 1.0f))
+    //ASSERT_GL(glClearColor(0.6f, 0.65f, 0.9f, 1.0f))
+    ASSERT_GL(glClearColor(0.02, 0.05, 0.1, 1))
     ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
 
     glm::mat4 matCamera = this->camera;
