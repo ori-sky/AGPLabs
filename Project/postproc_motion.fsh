@@ -25,20 +25,31 @@ smooth in vec2 v_vCoord;
 out vec4 o_vColor;
 
 const int nMotionSamples = 16;
-const float fBlurXY = 0.0002;
+const float fBlurXY = 0.00015;
 const float fBlurZ = 0.001;
 
 void main(void)
 {
     vec2 vTexCoord = v_vCoord;
 
-    vec2 vVelocity = u_vVelocity.xy * fBlurXY;
+    vec4 vColor = texture(u_sFBO, vTexCoord);
 
-    //float fFromCenter = length(vTexCoord - vec2(0.5));
+    // don't motion blur the left half of the screen
+    if(vTexCoord.x < 0.5)
+    {
+        o_vColor = vColor;
+        return;
+    }
+
+    if(vTexCoord.x - 0.5 < 0.005)
+    {
+        o_vColor = vec4(1, 1, 1, 1);
+        return;
+    }
+
+    vec2 vVelocity = u_vVelocity.xy * fBlurXY;
     vVelocity.x += u_vVelocity.z * (vTexCoord.x - 0.5) * fBlurZ;
     vVelocity.y += u_vVelocity.z * (vTexCoord.y - 0.5) * fBlurZ;
-
-    vec4 vColor = texture(u_sFBO, vTexCoord);
 
     vTexCoord += vVelocity;
     for(int i=1; i<nMotionSamples; ++i, vTexCoord+=vVelocity)
