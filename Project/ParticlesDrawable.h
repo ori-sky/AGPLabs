@@ -162,9 +162,9 @@ public:
         particles[index].time_remaining = 5000;
 
         particles[index].position.velocity.value.y = 0.01f + 0.005f * rand() / (float)RAND_MAX;
-        particles[index].position.velocity.min.y = 0.001f;
+        particles[index].position.velocity.min.y = -0.001f;
         particles[index].position.velocity.max.y = 1;
-        particles[index].position.acceleration.value.y = -0.000001f;
+        particles[index].position.acceleration.value.y = -0.000005f;
         particles[index].position.acceleration.min.y = -1;
         particles[index].position.acceleration.max.y =  1;
 
@@ -247,7 +247,9 @@ public:
         ASSERT_GL(GLint loc = glGetUniformLocation(program_id, "u_bPoints"))
         ASSERT_GL(glUniform1i(loc, 1))
 
+        glDepthMask(GL_FALSE);
         ASSERT_GL(glDrawArrays(GL_POINTS, 0, num))
+        glDepthMask(GL_TRUE);
 
         ASSERT_GL(glUniform1i(loc, 0))
     }

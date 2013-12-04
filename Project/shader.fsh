@@ -230,7 +230,7 @@ void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vS
     vSpecular *= u_Materials[u_nMaterial].vSpecular.xyz;
 }
 
-vec3 hdr(in vec3 vColor)
+vec3 hdr(in vec3 vColor, float fDistance)
 {
     return 1.0 - exp2(-vColor * u_fExposure);
 }
@@ -245,15 +245,21 @@ void main_points(void)
 
     vec2 vTexCoord = gl_PointCoord;
     vec2 vFromCenter = vTexCoord - vec2(0.5);
-    float fDistance = length(vFromCenter);
+    float fFromCenter = length(vFromCenter);
+    float fDistance = length(v_vVertex);
 
-    if(fDistance > 0.5)
+    if(fFromCenter > 0.5)
     {
         discard;
         return;
     }
 
-    o_vColor = vec4(1, 1, 1, 1);
+    o_vColor = vec4(1, 1, 1, 1.0);
+
+    if(fFromCenter > min(2.0, fDistance) * 0.25 - 0.35)
+    {
+        o_vColor.a *= 0.5 - fFromCenter;
+    }
 }
 
 void main_geometry(void)
@@ -283,7 +289,7 @@ void main_geometry(void)
                        vSpecular * vTexSpecular;
 
     // HDR
-    vFinalColor = hdr(vFinalColor);
+    vFinalColor = hdr(vFinalColor, length(v_vVertex));
 
     // output
     o_vColor = vec4(vFinalColor, 1.0);
