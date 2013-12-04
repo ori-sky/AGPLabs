@@ -337,7 +337,7 @@ bool Game::Init(void)
     ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
     ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
 
-    if(!this->InitShaders("postproc.vsh", "postproc.fsh", &program_postproc)) return false;
+    if(!this->InitShaders("postproc_identity.vsh", "postproc_identity.fsh", &program_postproc)) return false;
     ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
     ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
 
