@@ -52,16 +52,26 @@ protected:
     GLuint nmap;
     GLuint glossmap;
 
-    GLuint fbo;
-    GLuint tex_fbo;
-    GLuint rbo_depth;
-    GLuint vbo_fbo_vertices;
+    GLuint bloom_fbo;
+    GLuint bloom_tex_fbo;
+    GLuint bloom_rbo_depth;
+    GLuint bloom_vbo_fbo_vertices;
 
-    GLuint program_postproc;
-    GLuint loc_fbo_a_vCoord;
-    GLuint loc_fbo_u_sFBO;
-    GLuint loc_fbo_u_vVelocity;
-    GLuint loc_fbo_u_bEnabled;
+    GLuint motionblur_fbo;
+    GLuint motionblur_tex_fbo;
+    GLuint motionblur_rbo_depth;
+    GLuint motionblur_vbo_fbo_vertices;
+
+    GLuint program_bloom;
+    GLuint bloom_loc_fbo_a_vCoord;
+    GLuint bloom_loc_fbo_u_sFBO;
+    GLuint bloom_loc_fbo_u_bEnabled;
+
+    GLuint program_motionblur;
+    GLuint motionblur_loc_fbo_a_vCoord;
+    GLuint motionblur_loc_fbo_u_sFBO;
+    GLuint motionblur_loc_fbo_u_bEnabled;
+    GLuint motionblur_loc_fbo_u_vVelocity;
 
     GLuint fbo_shadow;
 

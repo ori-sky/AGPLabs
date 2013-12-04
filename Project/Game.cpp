@@ -298,11 +298,11 @@ bool Game::Init(void)
     // exposure
     LightingManager::SetExposure(program_id, 1);
 
-    // post processing back buffer
+    // bloom
 
     ASSERT_GL(glActiveTexture(GL_TEXTURE5))
-    ASSERT_GL(glGenTextures(1, &tex_fbo))
-    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, tex_fbo))
+    ASSERT_GL(glGenTextures(1, &bloom_tex_fbo))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, bloom_tex_fbo))
     ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
     ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR))
     ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE))
@@ -310,15 +310,15 @@ bool Game::Init(void)
     ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL))
     ASSERT_GL(glBindTexture(GL_TEXTURE_2D, 0))
 
-    ASSERT_GL(glGenRenderbuffers(1, &rbo_depth))
-    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, rbo_depth))
+    ASSERT_GL(glGenRenderbuffers(1, &bloom_rbo_depth))
+    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, bloom_rbo_depth))
     ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
     ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
 
-    ASSERT_GL(glGenFramebuffers(1, &fbo))
-    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fbo))
-    ASSERT_GL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_fbo, 0))
-    ASSERT_GL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_depth))
+    ASSERT_GL(glGenFramebuffers(1, &bloom_fbo))
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, bloom_fbo))
+    ASSERT_GL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bloom_tex_fbo, 0))
+    ASSERT_GL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, bloom_rbo_depth))
 
     GLenum status;
     if((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
@@ -336,18 +336,59 @@ bool Game::Init(void)
          1,  1,
     };
 
-    ASSERT_GL(glGenBuffers(1, &vbo_fbo_vertices))
-    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, vbo_fbo_vertices))
+    ASSERT_GL(glGenBuffers(1, &bloom_vbo_fbo_vertices))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, bloom_vbo_fbo_vertices))
     ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
     ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
 
-    if(!this->InitShaders("postproc_bloom.vsh", "postproc_bloom.fsh", &program_postproc)) return false;
-    ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
-    ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
-    ASSERT_GL(loc_fbo_u_vVelocity = glGetUniformLocation(program_postproc, "u_vVelocity"))
-    ASSERT_GL(loc_fbo_u_bEnabled = glGetUniformLocation(program_postproc, "u_bEnabled"))
+    // bloom program
+    if(!this->InitShaders("postproc_bloom.vsh", "postproc_bloom.fsh", &program_bloom)) return false;
+    ASSERT_GL(bloom_loc_fbo_a_vCoord = glGetAttribLocation(program_bloom, "a_vCoord"))
+    ASSERT_GL(bloom_loc_fbo_u_sFBO = glGetUniformLocation(program_bloom, "u_sFBO"))
+    ASSERT_GL(bloom_loc_fbo_u_bEnabled = glGetUniformLocation(program_bloom, "u_bEnabled"))
+    ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 0))
 
-    ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 1))
+    // motionblur
+
+    ASSERT_GL(glActiveTexture(GL_TEXTURE6))
+    ASSERT_GL(glGenTextures(1, &motionblur_tex_fbo))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, motionblur_tex_fbo))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE))
+    ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, 0))
+
+    ASSERT_GL(glGenRenderbuffers(1, &motionblur_rbo_depth))
+    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, motionblur_rbo_depth))
+    ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
+    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
+
+    ASSERT_GL(glGenFramebuffers(1, &motionblur_fbo))
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, motionblur_fbo))
+    ASSERT_GL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, motionblur_tex_fbo, 0))
+    ASSERT_GL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, motionblur_rbo_depth))
+
+    if((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        fprintf(stderr, "framebuffer error 0x%x\n", status);
+    }
+
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
+
+    ASSERT_GL(glGenBuffers(1, &motionblur_vbo_fbo_vertices))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, motionblur_vbo_fbo_vertices))
+    ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
+
+    // motionblur program
+    if(!this->InitShaders("postproc_motionblur.vsh", "postproc_motionblur.fsh", &program_motionblur)) return false;
+    ASSERT_GL(motionblur_loc_fbo_a_vCoord = glGetAttribLocation(program_motionblur, "a_vCoord"))
+    ASSERT_GL(motionblur_loc_fbo_u_sFBO = glGetUniformLocation(program_motionblur, "u_sFBO"))
+    ASSERT_GL(motionblur_loc_fbo_u_bEnabled = glGetUniformLocation(program_motionblur, "u_bEnabled"))
+    ASSERT_GL(motionblur_loc_fbo_u_vVelocity = glGetUniformLocation(program_motionblur, "u_vVelocity"))
+    ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 0))
 
     // shadow mapping
 
@@ -418,11 +459,19 @@ bool Game::HandleSDL(SDL_Event *e)
                     this->height = e->window.data2;
                     this->aspect = this->width / this->height;
 
-                    // rescale FBO and RBO
-                    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, tex_fbo))
+                    // rescale bloom stuff
+                    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, bloom_tex_fbo))
                     ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL))
                     ASSERT_GL(glBindTexture(GL_TEXTURE_2D, 0))
-                    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, rbo_depth))
+                    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, bloom_rbo_depth))
+                    ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
+                    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
+
+                    // rescale motionblur stuff
+                    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, motionblur_tex_fbo))
+                    ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL))
+                    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, 0))
+                    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, motionblur_rbo_depth))
                     ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
                     ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
 
@@ -502,10 +551,20 @@ bool Game::Update(float seconds)
                 break;
             // passthrough
             case SDLK_0:
-                ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 0))
+                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 0))
+                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 0))
                 break;
             case SDLK_1:
-                ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 1))
+                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 1))
+                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 0))
+                break;
+            case SDLK_2:
+                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 0))
+                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 1))
+                break;
+            case SDLK_3:
+                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 1))
+                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 1))
                 break;
         }
     }
@@ -513,7 +572,7 @@ bool Game::Update(float seconds)
     this->camera = glm::translate(this->matIdentity, velocity * seconds) * this->camera;
     velocity *= 0.97f;
 
-    //ASSERT_GL(glProgramUniform3fv(program_postproc, loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
+    ASSERT_GL(glProgramUniform3fv(program_motionblur, motionblur_loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
 
     return true;
 }
@@ -522,8 +581,10 @@ bool Game::Update(float seconds)
 #define GAME_DOMAIN "Game::Draw"
 bool Game::Draw(void)
 {
-    // bind framebuffer and use normal program
-    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fbo))
+    // SCENE
+
+    // bind bloom framebuffer and use normal program
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, bloom_fbo))
     ASSERT_GL(glUseProgram(program_id))
 
     //ASSERT_GL(glClearColor(0.6f, 0.65f, 0.9f, 1.0f))
@@ -541,25 +602,45 @@ bool Game::Draw(void)
     cube_right.Draw(program_id, u_matModelView, matCamera);
     particles.Draw(program_id, u_matModelView, matCamera);
 
-    // unbind framebuffer and use post processing program
-    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
-    ASSERT_GL(glUseProgram(program_postproc))
+    // BLOOM
 
-    // draw framebuffer as texture
+    // bind motionblur framebuffer and use bloom program
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, motionblur_fbo))
+    ASSERT_GL(glUseProgram(program_bloom))
 
     ASSERT_GL(glClearColor(0, 0, 0, 1))
     ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
 
-    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, tex_fbo))
-    ASSERT_GL(glUniform1i(loc_fbo_u_sFBO, 5))
+    // draw framebuffer as texture
+    ASSERT_GL(glActiveTexture(GL_TEXTURE5))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, bloom_tex_fbo))
+    ASSERT_GL(glUniform1i(bloom_loc_fbo_u_sFBO, 5))
 
-    ASSERT_GL(glEnableVertexAttribArray(loc_fbo_a_vCoord))
-    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, vbo_fbo_vertices))
-    ASSERT_GL(glVertexAttribPointer(loc_fbo_a_vCoord, 2, GL_FLOAT, GL_FALSE, 0, 0))
-
+    ASSERT_GL(glEnableVertexAttribArray(bloom_loc_fbo_a_vCoord))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, bloom_vbo_fbo_vertices))
+    ASSERT_GL(glVertexAttribPointer(bloom_loc_fbo_a_vCoord, 2, GL_FLOAT, GL_FALSE, 0, 0))
     ASSERT_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4))
+    ASSERT_GL(glDisableVertexAttribArray(bloom_loc_fbo_a_vCoord))
 
-    ASSERT_GL(glDisableVertexAttribArray(loc_fbo_a_vCoord))
+    // MOTIONBLUR
+
+    // unbind framebuffer and use motionblur program
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
+    ASSERT_GL(glUseProgram(program_motionblur))
+
+    ASSERT_GL(glClearColor(0, 0, 0, 1))
+    ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
+
+    // draw framebuffer as texture
+    ASSERT_GL(glActiveTexture(GL_TEXTURE6))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, motionblur_tex_fbo))
+    ASSERT_GL(glUniform1i(motionblur_loc_fbo_u_sFBO, 6))
+
+    ASSERT_GL(glEnableVertexAttribArray(motionblur_loc_fbo_a_vCoord))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, motionblur_vbo_fbo_vertices))
+    ASSERT_GL(glVertexAttribPointer(motionblur_loc_fbo_a_vCoord, 2, GL_FLOAT, GL_FALSE, 0, 0))
+    ASSERT_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4))
+    ASSERT_GL(glDisableVertexAttribArray(motionblur_loc_fbo_a_vCoord))
 
     SDL_GL_SwapWindow(this->wnd);
 
