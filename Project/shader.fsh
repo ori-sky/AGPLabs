@@ -232,7 +232,9 @@ void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vS
 
 vec3 hdr(in vec3 vColor, float fDistance)
 {
-    return 1.0 - exp2(-vColor * u_fExposure);
+    float fDivisor = min(1.0, fDistance * fDistance * 0.2);
+    vec3 vHDR = 1.0 - exp2(-vColor * u_fExposure);
+    return vHDR / fDivisor;
 }
 
 void main_points(void)
