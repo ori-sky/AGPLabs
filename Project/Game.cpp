@@ -290,6 +290,9 @@ bool Game::Init(void)
     ASSERT_GL(GLint u_matProjection = glGetUniformLocation(this->program_id, "u_matProjection"))
     ASSERT_GL(glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection)))
 
+    // exposure
+    LightingManager::SetExposure(program_id, 1);
+
     return true;
 }
 #undef GAME_DOMAIN
