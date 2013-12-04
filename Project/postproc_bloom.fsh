@@ -60,6 +60,7 @@ vec4 gaussian_blur(in sampler2D sTex, in vec2 vTexCoord, float fThreshold)
     vHorizCoords[13] = vTexCoord + vec2( 0.028, 0.0);
 
     vec2 vVertCoords[14];
+    // TODO: make aspect ratio uniform so it is not hardcoded
     vVertCoords[ 0] = vTexCoord + vec2(0.0, -0.028 / 1.778);
     vVertCoords[ 1] = vTexCoord + vec2(0.0, -0.024 / 1.778);
     vVertCoords[ 2] = vTexCoord + vec2(0.0, -0.020 / 1.778);
