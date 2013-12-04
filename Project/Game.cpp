@@ -347,7 +347,7 @@ bool Game::Init(void)
     ASSERT_GL(loc_fbo_u_vVelocity = glGetUniformLocation(program_postproc, "u_vVelocity"))
     ASSERT_GL(loc_fbo_u_bEnabled = glGetUniformLocation(program_postproc, "u_bEnabled"))
 
-    ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 0))
+    ASSERT_GL(glProgramUniform1i(program_postproc, loc_fbo_u_bEnabled, 1))
 
     // shadow mapping
 
