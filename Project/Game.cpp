@@ -239,7 +239,7 @@ bool Game::Init(void)
 
     LightingManager::MakeLight(0, true, 0, glm::vec4( 1.5,  1.5, 1.5, 1));
     LightingManager::MakeLight(1, true, 1, glm::vec4(-1.5,  1.5, 1.5, 1));
-    LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5, -1.5, 1.5, 1));
+    LightingManager::MakeLight(2, true, 2, glm::vec4(-1.5,  1.5, 1.5, 1));
     //LightingManager::MakeLight(0, true, 0, glm::vec4(0, 1.5,  1, 1));
     //LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
 
@@ -441,13 +441,9 @@ bool Game::Update(float seconds)
     static float f = 0;
     f += seconds;
 
-    /*
-    LightingManager::lights[0].vPosition.x = -2 * cos(r);
-    LightingManager::lights[0].vPosition.z = -2 * sin(r);
-    LightingManager::lights[1].vPosition.x =  2 * cos(1.05f * r);
-    LightingManager::lights[1].vPosition.z =  2 * sin(1.05f * r);
+    LightingManager::lights[2].vPosition.x = -2 * cos(2 * f);
+    LightingManager::lights[2].vPosition.z = -2 * sin(2 * f);
     LightingManager::UploadLights(program_id);
-    */
 
     // particles
     particles.Update(seconds * 1000);
