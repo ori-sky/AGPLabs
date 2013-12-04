@@ -89,7 +89,7 @@ bool Game::InitSDL(void)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
 
     // set initial aspect ratio
     this->aspect = this->width / this->height;
@@ -265,6 +265,7 @@ bool Game::Init(void)
     ASSERT_GL(glEnable(GL_BLEND))
     ASSERT_GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
     ASSERT_GL(glEnable(GL_VERTEX_PROGRAM_POINT_SIZE))
+    ASSERT_GL(glEnable(GL_MULTISAMPLE))
 
     this->matIdentity = glm::mat4(1.0f);
     this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
