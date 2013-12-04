@@ -293,6 +293,29 @@ bool Game::Init(void)
     // exposure
     LightingManager::SetExposure(program_id, 1);
 
+    // shadow mapping
+
+    /*ASSERT_GL(glGenFramebuffers(1, &fb_shadow))
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fb_shadow))
+
+    GLuint depth;
+    ASSERT_GL(glGenTextures(1, &depth))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, depth))
+    ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE))
+
+    ASSERT_GL(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depth, 0))
+    ASSERT_GL(glDrawBuffer(GL_NONE))
+
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        fprintf(stderr, "framebuffer not complete\n");
+        return false;
+    }*/
+
     return true;
 }
 #undef GAME_DOMAIN
@@ -424,6 +447,15 @@ bool Game::Update(float seconds)
 #define GAME_DOMAIN "Game::Draw"
 bool Game::Draw(void)
 {
+    // shadow mapping
+    /*
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fb_shadow))
+    ASSERT_GL(glViewport(0, 0, 1024, 1024))
+
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
+    ASSERT_GL(glViewport(0, 0, width, height))
+    */
+
     //ASSERT_GL(glClearColor(0.6f, 0.65f, 0.9f, 1.0f))
     ASSERT_GL(glClearColor(0.02, 0.05, 0.1, 1))
     ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))

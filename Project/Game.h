@@ -52,6 +52,8 @@ protected:
     GLuint nmap;
     GLuint glossmap;
 
+    GLuint fb_shadow;
+
     glm::mat4 matIdentity;
     glm::mat4 camera;
 
