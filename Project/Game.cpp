@@ -356,6 +356,16 @@ bool Game::HandleSDL(SDL_Event *e)
 
 bool Game::Update(float seconds)
 {
+    /*
+    static float r = 0;
+    r += 0.01f;
+    LightingManager::lights[0].vPosition.x = -2 * cos(r);
+    LightingManager::lights[0].vPosition.z = -2 * sin(r);
+    LightingManager::lights[1].vPosition.x =  2 * cos(1.05f * r);
+    LightingManager::lights[1].vPosition.z =  2 * sin(1.05f * r);
+    LightingManager::UploadLights(program_id);
+    */
+
     // particles
     particles.Update(seconds * 1000);
 
