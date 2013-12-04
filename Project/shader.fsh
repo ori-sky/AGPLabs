@@ -18,7 +18,7 @@
 precision highp float;
 
 const int NUM_LIGHT_TYPES = 64;
-const int NUM_LIGHTS = 3;
+const int NUM_LIGHTS = 16;
 const int NUM_MATERIALS = 64;
 
 struct LightType
@@ -232,10 +232,10 @@ void lighting(in vec3 vNormal, out vec3 vAmbient, out vec3 vDiffuse, out vec3 vS
 
 vec3 hdr(in vec3 vColor, float fDistance)
 {
-    float fDivisor = max(0.3, min(1.0, pow(fDistance, 2) * 0.05));
+    float fDivisor = max(0.5, min(1.0, pow(fDistance, 2) * 0.05));
     vec3 vHDR = 1.0 - exp2(-vColor * u_fExposure);
-    vHDR = vHDR / fDivisor;
-    vHDR = vHDR * max(1.0, length(vColor));
+    //vHDR = vHDR / fDivisor;
+    vHDR = vHDR * max(1.0, length(vColor) / 2);
 
     return vHDR;
 }
@@ -259,7 +259,7 @@ void main_points(void)
         return;
     }
 
-    o_vColor = vec4(1, 1, 1, 1.0);
+    o_vColor = vec4(0.7, 0.9, 1, 0.95);
 
     if(fFromCenter > min(2.0, fDistance) * 0.25 - 0.35)
     {
