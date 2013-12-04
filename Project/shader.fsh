@@ -235,7 +235,7 @@ vec3 hdr(in vec3 vColor, float fDistance)
     float fDivisor = max(0.3, min(1.0, pow(fDistance, 2) * 0.05));
     vec3 vHDR = 1.0 - exp2(-vColor * u_fExposure);
     vHDR = vHDR / fDivisor;
-    vHDR = vHDR * max(1.0, pow(length(vColor), 10));
+    vHDR = vHDR * max(1.0, length(vColor));
 
     return vHDR;
 }
