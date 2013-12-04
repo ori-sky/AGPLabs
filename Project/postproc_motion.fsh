@@ -25,13 +25,18 @@ smooth in vec2 v_vCoord;
 out vec4 o_vColor;
 
 const int nMotionSamples = 16;
+const float fBlurXY = 0.0005;
+const float fBlurZ = 0.001;
 
 void main(void)
 {
     vec2 vTexCoord = v_vCoord;
 
     vec2 vVelocity = u_vVelocity.xy * 0.0005;
-    vVelocity.x += u_vVelocity.z * pow(vTexCoord.x - 0.5, 2) * 0.001;
+
+    //float fFromCenter = length(vTexCoord - vec2(0.5));
+    vVelocity.x += u_vVelocity.z * (vTexCoord.x - 0.5) * fBlurZ;
+    vVelocity.y += u_vVelocity.z * (vTexCoord.y - 0.5) * fBlurZ;
 
     vec4 vColor = texture(u_sFBO, vTexCoord);
 
