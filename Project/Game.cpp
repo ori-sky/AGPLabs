@@ -143,7 +143,7 @@ bool Game::InitGLEW(void)
 #undef GAME_DOMAIN
 
 #define GAME_DOMAIN "Game::InitShaders"
-bool Game::InitShaders(const char *v_path, const char *f_path)
+bool Game::InitShaders(const char *v_path, const char *f_path, GLuint *program)
 {
     long v_len, f_len;
     const char *v_src = ResourceManager::Load(v_path, &v_len);
@@ -187,16 +187,16 @@ bool Game::InitShaders(const char *v_path, const char *f_path)
         return false;
     }
 
-    ASSERT_GL(this->program_id = glCreateProgram())
-    ASSERT_GL(glAttachShader(this->program_id, v_id))
-    ASSERT_GL(glAttachShader(this->program_id, f_id))
+    ASSERT_GL(*program = glCreateProgram())
+    ASSERT_GL(glAttachShader(*program, v_id))
+    ASSERT_GL(glAttachShader(*program, f_id))
 
-    ASSERT_GL(glBindAttribLocation(this->program_id, GAME_ATTRIB_VERTEX, "a_vVertex"))
-    ASSERT_GL(glBindAttribLocation(this->program_id, GAME_ATTRIB_NORMAL, "a_vNormal"))
-    ASSERT_GL(glBindAttribLocation(this->program_id, GAME_ATTRIB_TEXCOORD, "a_vTexCoord"))
+    ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_VERTEX, "a_vVertex"))
+    ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_NORMAL, "a_vNormal"))
+    ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_TEXCOORD, "a_vTexCoord"))
 
-    ASSERT_GL(glLinkProgram(this->program_id))
-    ASSERT_GL(glUseProgram(this->program_id))
+    ASSERT_GL(glLinkProgram(*program))
+    ASSERT_GL(glUseProgram(*program))
 
     return true;
 }
@@ -220,7 +220,7 @@ bool Game::Init(void)
 
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
-    if(!this->InitShaders("shader.vsh", "shader.fsh")) return false;
+    if(!this->InitShaders("shader.vsh", "shader.fsh", &program_id)) return false;
 
     LightingManager::Init(program_id);
 
@@ -294,6 +294,53 @@ bool Game::Init(void)
     // exposure
     LightingManager::SetExposure(program_id, 1);
 
+    // post processing back buffer
+
+    ASSERT_GL(glActiveTexture(GL_TEXTURE5))
+    ASSERT_GL(glGenTextures(1, &tex_fbo))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, tex_fbo))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE))
+    ASSERT_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE))
+    ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL))
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, 0))
+
+    ASSERT_GL(glGenRenderbuffers(1, &rbo_depth))
+    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, rbo_depth))
+    ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
+    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
+
+    ASSERT_GL(glGenFramebuffers(1, &fbo))
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fbo))
+    ASSERT_GL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_fbo, 0))
+    ASSERT_GL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_depth))
+
+    GLenum status;
+    if((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        fprintf(stderr, "framebuffer error 0x%x\n", status);
+    }
+
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
+
+    GLfloat vertices_fbo[] =
+    {
+        -1, -1,
+         1, -1,
+        -1,  1,
+         1,  1,
+    };
+
+    ASSERT_GL(glGenBuffers(1, &vbo_fbo_vertices))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, vbo_fbo_vertices))
+    ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
+
+    if(!this->InitShaders("postproc.vsh", "postproc.fsh", &program_postproc)) return false;
+    ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
+    ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
+
     // shadow mapping
 
     /*ASSERT_GL(glGenFramebuffers(1, &fb_shadow))
@@ -362,6 +409,15 @@ bool Game::HandleSDL(SDL_Event *e)
                     this->width = e->window.data1;
                     this->height = e->window.data2;
                     this->aspect = this->width / this->height;
+
+                    // rescale FBO and RBO
+                    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, tex_fbo))
+                    ASSERT_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL))
+                    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, 0))
+                    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, rbo_depth))
+                    ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
+                    ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
+
                     ASSERT_GL(glViewport(0, 0, this->width, this->height))
 
                     // upload new projection matrix
@@ -448,14 +504,9 @@ bool Game::Update(float seconds)
 #define GAME_DOMAIN "Game::Draw"
 bool Game::Draw(void)
 {
-    // shadow mapping
-    /*
-    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fb_shadow))
-    ASSERT_GL(glViewport(0, 0, 1024, 1024))
-
-    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
-    ASSERT_GL(glViewport(0, 0, width, height))
-    */
+    // bind framebuffer and use normal program
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, fbo))
+    ASSERT_GL(glUseProgram(program_id))
 
     //ASSERT_GL(glClearColor(0.6f, 0.65f, 0.9f, 1.0f))
     ASSERT_GL(glClearColor(0.02, 0.05, 0.1, 1))
@@ -471,6 +522,26 @@ bool Game::Draw(void)
     cube_left.Draw(program_id, u_matModelView, matCamera);
     cube_right.Draw(program_id, u_matModelView, matCamera);
     particles.Draw(program_id, u_matModelView, matCamera);
+
+    // unbind framebuffer and use post processing program
+    ASSERT_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0))
+    ASSERT_GL(glUseProgram(program_postproc))
+
+    // draw framebuffer as texture
+
+    ASSERT_GL(glClearColor(0, 0, 0, 1))
+    ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
+
+    ASSERT_GL(glBindTexture(GL_TEXTURE_2D, tex_fbo))
+    ASSERT_GL(glUniform1i(loc_fbo_u_sFBO, 5))
+
+    ASSERT_GL(glEnableVertexAttribArray(loc_fbo_a_vCoord))
+    ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, vbo_fbo_vertices))
+    ASSERT_GL(glVertexAttribPointer(loc_fbo_a_vCoord, 2, GL_FLOAT, GL_FALSE, 0, 0))
+
+    ASSERT_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4))
+
+    ASSERT_GL(glDisableVertexAttribArray(loc_fbo_a_vCoord))
 
     SDL_GL_SwapWindow(this->wnd);
 

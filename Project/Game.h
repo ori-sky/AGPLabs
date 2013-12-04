@@ -52,7 +52,15 @@ protected:
     GLuint nmap;
     GLuint glossmap;
 
-    GLuint fb_shadow;
+    GLuint fbo;
+    GLuint tex_fbo;
+    GLuint rbo_depth;
+    GLuint vbo_fbo_vertices;
+    GLuint loc_fbo_u_sFBO;
+    GLuint loc_fbo_a_vCoord;
+    GLuint program_postproc;
+
+    GLuint fbo_shadow;
 
     glm::mat4 matIdentity;
     glm::mat4 camera;
@@ -69,7 +77,7 @@ public:
     
     bool InitSDL(void);
     bool InitGLEW(void);
-    bool InitShaders(const char *v_path, const char *f_path);
+    bool InitShaders(const char *v_path, const char *f_path, GLuint *program);
     bool DestroySDL(void);
 
     bool Init(void);
