@@ -34,6 +34,7 @@ void main(void)
 
     vec4 vColor = texture(u_sFBO, vTexCoord);
 
+    /*
     // don't motion blur the left half of the screen
     if(vTexCoord.x < 0.5)
     {
@@ -46,6 +47,7 @@ void main(void)
         o_vColor = vec4(1, 1, 1, 1);
         return;
     }
+    */
 
     vec2 vVelocity = u_vVelocity.xy * fBlurXY;
     vVelocity.x += u_vVelocity.z * (vTexCoord.x - 0.5) * fBlurZ;
