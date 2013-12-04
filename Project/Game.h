@@ -58,9 +58,9 @@ protected:
     GLuint vbo_fbo_vertices;
 
     GLuint program_postproc;
-    GLuint loc_fbo_u_sFBO;
-    GLuint loc_fbo_u_fOffset;
     GLuint loc_fbo_a_vCoord;
+    GLuint loc_fbo_u_sFBO;
+    GLuint loc_fbo_u_vVelocity;
 
     GLuint fbo_shadow;
 

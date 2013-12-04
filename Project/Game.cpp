@@ -337,10 +337,10 @@ bool Game::Init(void)
     ASSERT_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_fbo), vertices_fbo, GL_STATIC_DRAW))
     ASSERT_GL(glBindBuffer(GL_ARRAY_BUFFER, 0))
 
-    if(!this->InitShaders("postproc_identity.vsh", "postproc_identity.fsh", &program_postproc)) return false;
+    if(!this->InitShaders("postproc_motion.vsh", "postproc_motion.fsh", &program_postproc)) return false;
     ASSERT_GL(loc_fbo_a_vCoord = glGetAttribLocation(program_postproc, "a_vCoord"))
     ASSERT_GL(loc_fbo_u_sFBO = glGetUniformLocation(program_postproc, "u_sFBO"))
-    ASSERT_GL(loc_fbo_u_fOffset = glGetUniformLocation(program_postproc, "u_fOffset"))
+    ASSERT_GL(loc_fbo_u_vVelocity = glGetUniformLocation(program_postproc, "u_vVelocity"))
 
     // shadow mapping
 
@@ -435,11 +435,11 @@ bool Game::HandleSDL(SDL_Event *e)
 }
 #undef GAME_DOMAIN
 
+#define GAME_DOMAIN "Game::Update"
 bool Game::Update(float seconds)
 {
     static float f = 0;
     f += seconds;
-    glProgramUniform1f(program_postproc, loc_fbo_u_fOffset, f);
 
     /*
     LightingManager::lights[0].vPosition.x = -2 * cos(r);
@@ -503,8 +503,11 @@ bool Game::Update(float seconds)
     this->camera = glm::translate(this->matIdentity, velocity * seconds) * this->camera;
     velocity *= 0.97f;
 
+    ASSERT_GL(glProgramUniform3fv(program_postproc, loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
+
     return true;
 }
+#undef GAME_DOMAIN
 
 #define GAME_DOMAIN "Game::Draw"
 bool Game::Draw(void)
