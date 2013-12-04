@@ -17,8 +17,6 @@
 #version 150
 precision highp float;
 
-uniform sampler2D u_sFBO;
-
 // hacky way of avoiding enabling and disabling attribs every frame
 layout(location = 10) in vec2 a_vCoord;
 

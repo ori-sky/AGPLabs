@@ -25,5 +25,5 @@ out vec4 o_vColor;
 
 void main(void)
 {
-    o_vColor = texture2D(u_sFBO, v_vCoord);
+    o_vColor = texture(u_sFBO, v_vCoord);
 }
