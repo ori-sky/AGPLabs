@@ -28,7 +28,7 @@ char * ResourceManager::Load(const char *path, long *len)
     FILE *fh = fopen(path, "rb");
     if(!fh)
     {
-        fprintf(stderr, "fopen: error\n");
+        fprintf(stderr, "fopen: error opening `%s`\n", path);
         return NULL;
     }
 
