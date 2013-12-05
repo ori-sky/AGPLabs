@@ -19,5 +19,13 @@
 int main(int argc, const char **argv)
 {
     Game game;
-    return game.Run();
+    int result = game.Run();
+
+    if(result != 0)
+    {
+        fprintf(stderr, "FATAL ERROR: press enter key to exit\n");
+        fgetc(stdin);
+    }
+
+    return result;
 }
