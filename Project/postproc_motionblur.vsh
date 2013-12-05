@@ -15,6 +15,7 @@
  */
 
 #version 150
+#extension GL_ARB_explicit_attrib_location: enable
 precision highp float;
 
 // hacky way of avoiding enabling and disabling attribs every frame

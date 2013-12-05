@@ -11,6 +11,14 @@
 		7F13E8511826A62F00A7A599 /* parallax-occlusion.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */; };
 		7F13E8521826A63300A7A599 /* parallax-occlusion.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */; };
 		7F163D50184E4C71009309B9 /* ParticlesDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F163D4F184E4C71009309B9 /* ParticlesDrawable.cpp */; };
+		7F163D7118507C31009309B9 /* postproc_bloom.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6118507C28009309B9 /* postproc_bloom.fsh */; };
+		7F163D7218507C32009309B9 /* postproc_bloom.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6218507C28009309B9 /* postproc_bloom.vsh */; };
+		7F163D7318507C34009309B9 /* postproc_identity.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6318507C28009309B9 /* postproc_identity.fsh */; };
+		7F163D7418507C36009309B9 /* postproc_identity.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6418507C28009309B9 /* postproc_identity.vsh */; };
+		7F163D7518507C38009309B9 /* postproc_motionblur.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6518507C28009309B9 /* postproc_motionblur.fsh */; };
+		7F163D7618507C3A009309B9 /* postproc_motionblur.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6618507C28009309B9 /* postproc_motionblur.vsh */; };
+		7F163D7718507C3D009309B9 /* postproc_sine.fsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6718507C28009309B9 /* postproc_sine.fsh */; };
+		7F163D7818507C40009309B9 /* postproc_sine.vsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F163D6818507C28009309B9 /* postproc_sine.vsh */; };
 		7F2178151808044800FA332F /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F2178121808044800FA332F /* Block.cpp */; };
 		7F21781D18080B8500FA332F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F21781C18080B8500FA332F /* main.cpp */; };
 		7F21781F18080B8500FA332F /* AGPLab3.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7F21781E18080B8500FA332F /* AGPLab3.1 */; };
@@ -124,6 +132,14 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				7F163D7818507C40009309B9 /* postproc_sine.vsh in CopyFiles */,
+				7F163D7718507C3D009309B9 /* postproc_sine.fsh in CopyFiles */,
+				7F163D7618507C3A009309B9 /* postproc_motionblur.vsh in CopyFiles */,
+				7F163D7518507C38009309B9 /* postproc_motionblur.fsh in CopyFiles */,
+				7F163D7418507C36009309B9 /* postproc_identity.vsh in CopyFiles */,
+				7F163D7318507C34009309B9 /* postproc_identity.fsh in CopyFiles */,
+				7F163D7218507C32009309B9 /* postproc_bloom.vsh in CopyFiles */,
+				7F163D7118507C31009309B9 /* postproc_bloom.fsh in CopyFiles */,
 				7F8A8E7318487BD500248801 /* shader.vsh in CopyFiles */,
 				7F8A8E7218487BD400248801 /* shader.fsh in CopyFiles */,
 				7F8A8E7118487BD100248801 /* studdedmetal_normal.bmp in CopyFiles */,
@@ -191,6 +207,14 @@
 		7F13E84D1826A61700A7A599 /* parallax-occlusion.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "parallax-occlusion.fsh"; sourceTree = "<group>"; };
 		7F13E84E1826A61700A7A599 /* parallax-occlusion.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "parallax-occlusion.vsh"; sourceTree = "<group>"; };
 		7F163D4F184E4C71009309B9 /* ParticlesDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlesDrawable.cpp; sourceTree = "<group>"; };
+		7F163D6118507C28009309B9 /* postproc_bloom.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_bloom.fsh; sourceTree = "<group>"; };
+		7F163D6218507C28009309B9 /* postproc_bloom.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_bloom.vsh; sourceTree = "<group>"; };
+		7F163D6318507C28009309B9 /* postproc_identity.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_identity.fsh; sourceTree = "<group>"; };
+		7F163D6418507C28009309B9 /* postproc_identity.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_identity.vsh; sourceTree = "<group>"; };
+		7F163D6518507C28009309B9 /* postproc_motionblur.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_motionblur.fsh; sourceTree = "<group>"; };
+		7F163D6618507C28009309B9 /* postproc_motionblur.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_motionblur.vsh; sourceTree = "<group>"; };
+		7F163D6718507C28009309B9 /* postproc_sine.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_sine.fsh; sourceTree = "<group>"; };
+		7F163D6818507C28009309B9 /* postproc_sine.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = postproc_sine.vsh; sourceTree = "<group>"; };
 		7F2178121808044800FA332F /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
 		7F2178131808044800FA332F /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
 		7F2178141808044800FA332F /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
@@ -438,13 +462,21 @@
 			isa = PBXGroup;
 			children = (
 				7F8A8E5E18487B1800248801 /* four_NM_height.bmp */,
+				7F163D6118507C28009309B9 /* postproc_bloom.fsh */,
+				7F163D6218507C28009309B9 /* postproc_bloom.vsh */,
+				7F163D6318507C28009309B9 /* postproc_identity.fsh */,
+				7F163D6418507C28009309B9 /* postproc_identity.vsh */,
+				7F163D6518507C28009309B9 /* postproc_motionblur.fsh */,
+				7F163D6618507C28009309B9 /* postproc_motionblur.vsh */,
+				7F163D6718507C28009309B9 /* postproc_sine.fsh */,
+				7F163D6818507C28009309B9 /* postproc_sine.vsh */,
+				7F8A8E5F18487B1800248801 /* shader.fsh */,
+				7F8A8E6018487B1800248801 /* shader.vsh */,
 				7F8A8E6318487B1800248801 /* stone.bmp */,
 				7F8A8E6118487B1800248801 /* stone_gloss.bmp */,
 				7F8A8E6218487B1800248801 /* stone_normal.bmp */,
 				7F8A8E6518487B1800248801 /* studdedmetal.bmp */,
 				7F8A8E6418487B1800248801 /* studdedmetal_normal.bmp */,
-				7F8A8E5F18487B1800248801 /* shader.fsh */,
-				7F8A8E6018487B1800248801 /* shader.vsh */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
