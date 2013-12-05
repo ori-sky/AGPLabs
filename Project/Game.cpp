@@ -248,7 +248,7 @@ bool Game::Init(void)
     //LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
 
     // particles
-    LightingManager::MakeLightType(5, glm::vec4(0), glm::vec4(0.7f, 0.9f, 1, 1), glm::vec4(0.8f, 0.9f, 1, 1), 0.5, 0.0f, 12.0f);
+    LightingManager::MakeLightType(5, glm::vec4(0), glm::vec4(0.7f, 0.9f, 1, 1), glm::vec4(0.8f, 0.9f, 1, 1), 0.2, 0.0f, 15.0f);
     for(unsigned int i=5; i<NUM_LIGHTS; ++i)
     {
         LightingManager::MakeLight(i, false, 5, glm::vec4(0, 0, 0, 1));
@@ -579,7 +579,7 @@ bool Game::Update(float seconds)
     }
 
     this->camera = glm::translate(this->matIdentity, velocity * seconds) * this->camera;
-    velocity *= 0.97f;
+    velocity *= fmax(0, 1 - (3.5f * seconds));
 
     ASSERT_GL(glProgramUniform3fv(program_motionblur, motionblur_loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
 

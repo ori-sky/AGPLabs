@@ -284,7 +284,7 @@ void main_geometry(void)
     vec2 vTexCoord = parallax_occlusion_mapping_2(u_sNormalHeight, 1,
                                                   u_sNormalHeight2, 2,
                                                   v_vTexCoord, v_vTEye, v_vTNormal,
-                                                  0.1, 96, 8);
+                                                  0.1, 150, 20);
     //vec2 vTexCoord = v_vTexCoord;
 
     // normal mapping

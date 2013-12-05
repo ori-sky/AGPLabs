@@ -118,7 +118,7 @@ public:
     {
         Drawable::Init(program_id);
 
-        timestep = 80;
+        timestep = 10000.0f / num;
 
         alives = new GLint[num];
         point_sizes = new GLfloat[num];
@@ -251,7 +251,6 @@ public:
                 LightingManager::lights[i + 5].vPosition.x = vAbsolute.x;
                 LightingManager::lights[i + 5].vPosition.y = vAbsolute.y;
                 LightingManager::lights[i + 5].vPosition.z = vAbsolute.z;
-
                 LightingManager::lights[i + 5].bActive = 1;
             }
         }
