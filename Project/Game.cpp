@@ -173,7 +173,7 @@ bool Game::InitShaders(const char *v_path, const char *f_path, GLuint *program)
     ASSERT_GL(glGetShaderiv(v_id, GL_COMPILE_STATUS, &compile_status))
     if(!compile_status)
     {
-        fprintf(stderr, "glCompileShader(v_id): error\n");
+        fprintf(stderr, "glCompileShader(v_id): error in `%s`\n", f_path);
         this->PrintShaderError(v_id);
         return false;
     }
@@ -182,7 +182,7 @@ bool Game::InitShaders(const char *v_path, const char *f_path, GLuint *program)
     ASSERT_GL(glGetShaderiv(f_id, GL_COMPILE_STATUS, &compile_status))
     if(!compile_status)
     {
-        fprintf(stderr, "glCompileShader(f_id): error\n");
+        fprintf(stderr, "glCompileShader(f_id): error `%s`\n", f_path);
         this->PrintShaderError(f_id);
         return false;
     }
