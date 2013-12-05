@@ -38,12 +38,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\lib\windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\..\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\lib\windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -86,7 +88,19 @@ xcopy /d "$(ProjectDir)..\..\Project\*.bmp" "$(TargetDir)..\"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /d "$(ProjectDir)..\..\lib\windows\*.dll" "$(TargetDir)"
+
+xcopy /d "$(ProjectDir)..\..\Project\*.vsh" "$(TargetDir)"
+xcopy /d "$(ProjectDir)..\..\Project\*.fsh" "$(TargetDir)"
+xcopy /d "$(ProjectDir)..\..\Project\*.bmp" "$(TargetDir)"
+
+xcopy /d "$(ProjectDir)..\..\Project\*.vsh" "$(TargetDir)..\"
+xcopy /d "$(ProjectDir)..\..\Project\*.fsh" "$(TargetDir)..\"
+xcopy /d "$(ProjectDir)..\..\Project\*.bmp" "$(TargetDir)..\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Project\Game.cpp" />
@@ -105,14 +119,6 @@ xcopy /d "$(ProjectDir)..\..\Project\*.bmp" "$(TargetDir)..\"</Command>
     <ClInclude Include="..\..\Project\ParticlesDrawable.h" />
     <ClInclude Include="..\..\Project\ResourceManager.h" />
     <ClInclude Include="..\..\Project\TextureManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\Visual Studio 2010\Projects\AGPProject1\Debug\glew32.dll">
-      <DeploymentContent>false</DeploymentContent>
-    </None>
-    <None Include="..\..\..\..\Visual Studio 2010\Projects\AGPProject1\Debug\SDL2.dll">
-      <DeploymentContent>false</DeploymentContent>
-    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

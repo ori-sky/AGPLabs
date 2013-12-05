@@ -60,12 +60,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\Visual Studio 2010\Projects\AGPProject1\Debug\SDL2.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\..\..\Visual Studio 2010\Projects\AGPProject1\Debug\glew32.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>
