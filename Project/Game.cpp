@@ -191,9 +191,9 @@ bool Game::InitShaders(const char *v_path, const char *f_path, GLuint *program)
     ASSERT_GL(glAttachShader(*program, v_id))
     ASSERT_GL(glAttachShader(*program, f_id))
 
-    ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_VERTEX, "a_vVertex"))
-    ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_NORMAL, "a_vNormal"))
-    ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_TEXCOORD, "a_vTexCoord"))
+    //ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_VERTEX, "a_vVertex"))
+    //ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_NORMAL, "a_vNormal"))
+    //ASSERT_GL(glBindAttribLocation(*program, GAME_ATTRIB_TEXCOORD, "a_vTexCoord"))
 
     ASSERT_GL(glLinkProgram(*program))
     ASSERT_GL(glUseProgram(*program))
