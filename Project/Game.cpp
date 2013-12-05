@@ -198,6 +198,9 @@ bool Game::InitShaders(const char *v_path, const char *f_path, GLuint *program)
     ASSERT_GL(glLinkProgram(*program))
     ASSERT_GL(glUseProgram(*program))
 
+	// fixes viewport starting at the wrong size
+	ASSERT_GL(glViewport(0, 0, width, height))
+
     return true;
 }
 #undef GAME_DOMAIN
@@ -462,9 +465,12 @@ bool Game::HandleSDL(SDL_Event *e)
             switch(e->window.event)
             {
                 case SDL_WINDOWEVENT_RESIZED:
-                    this->width = e->window.data1;
-                    this->height = e->window.data2;
-                    this->aspect = this->width / this->height;
+                    // fixes weird SDL bug on Windows
+                    if(e->window.data2 < 20) break;
+
+                    width = e->window.data1;
+                    height = e->window.data2;
+                    aspect = width / height;
 
                     // rescale bloom stuff
                     ASSERT_GL(glBindTexture(GL_TEXTURE_2D, bloom_tex_fbo))
@@ -482,10 +488,10 @@ bool Game::HandleSDL(SDL_Event *e)
                     ASSERT_GL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height))
                     ASSERT_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0))
 
-                    ASSERT_GL(glViewport(0, 0, this->width, this->height))
+                    ASSERT_GL(glViewport(0, 0, width, height))
 
                     // upload new projection matrix
-                    glm::mat4 matProjection = glm::perspective(35.0f, this->aspect, 0.01f, 100.0f);
+                    glm::mat4 matProjection = glm::perspective(35.0f, aspect, 0.01f, 100.0f);
                     ASSERT_GL(GLint u_matProjection = glGetUniformLocation(program_id, "u_matProjection"))
                     ASSERT_GL(glUniformMatrix4fv(u_matProjection, 1, GL_FALSE, glm::value_ptr(matProjection)))
 
