@@ -247,6 +247,13 @@ bool Game::Init(void)
     //LightingManager::MakeLight(0, true, 0, glm::vec4(0, 1.5,  1, 1));
     //LightingManager::MakeLight(1, true, 1, glm::vec4(0, 1.5, -1, 1));
 
+    // particles
+    LightingManager::MakeLightType(5, glm::vec4(0), glm::vec4(0.7f, 0.9f, 1, 1), glm::vec4(0.8f, 0.9f, 1, 1), 0.5, 0.0f, 12.0f);
+    for(unsigned int i=5; i<NUM_LIGHTS; ++i)
+    {
+        LightingManager::MakeLight(i, false, 5, glm::vec4(0, 0, 0, 1));
+    }
+
     LightingManager::materials[0].fShininess = 128;
 
     LightingManager::materials[1].fShininess = 16;
@@ -497,8 +504,10 @@ bool Game::Update(float seconds)
     static float f = 0;
     f += seconds;
 
+    // moving light
     LightingManager::lights[2].vPosition.x = -2 * cos(2 * f);
     LightingManager::lights[2].vPosition.z = -2 * sin(2 * f);
+
     LightingManager::UploadLights(program_id);
 
     // particles

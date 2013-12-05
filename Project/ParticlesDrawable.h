@@ -118,7 +118,7 @@ public:
     {
         Drawable::Init(program_id);
 
-        timestep = 10;
+        timestep = 80;
 
         alives = new GLint[num];
         point_sizes = new GLfloat[num];
@@ -213,6 +213,12 @@ public:
             CreateParticle();
         }
 
+        glm::mat3 matRotationY;
+        matRotationY[0] = glm::vec3(0, 0, 0);
+        matRotationY[1] = glm::vec3(0, 1, 0);
+        matRotationY[2] = glm::vec3(0, 0, 0);
+
+
         for(unsigned int i=0; i<num; ++i)
         {
             if(!alives[i]) continue;
@@ -220,6 +226,7 @@ public:
             if((particles[i].time_remaining -= ms) <= 0)
             {
                 alives[i] = 0;
+                LightingManager::lights[i + 5].bActive = 0;
                 continue;
             }
 
@@ -229,6 +236,24 @@ public:
             point_sizes[i] += particles[i].size.velocity.value;
             rotations[i] += particles[i].rotation.velocity.value;
             offsets[i] += particles[i].offset.velocity.value;
+
+            if(i < NUM_LIGHTS - 5)
+            {
+                // crazy optimization
+                float c = cos(rotations[i].y);
+                float s = sin(rotations[i].y);
+                matRotationY[0].x =  c;
+                matRotationY[0].z = -s;
+                matRotationY[2].x =  s;
+                matRotationY[2].z =  c;
+
+                glm::vec3 vAbsolute = matRotationY * (vertices[i] + offsets[i]);
+                LightingManager::lights[i + 5].vPosition.x = vAbsolute.x;
+                LightingManager::lights[i + 5].vPosition.y = vAbsolute.y;
+                LightingManager::lights[i + 5].vPosition.z = vAbsolute.z;
+
+                LightingManager::lights[i + 5].bActive = 1;
+            }
         }
 
         Bind();

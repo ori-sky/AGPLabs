@@ -20,7 +20,7 @@
 #include "common.h"
 
 #define NUM_LIGHT_TYPES 16
-#define NUM_LIGHTS 16
+#define NUM_LIGHTS 128
 #define NUM_MATERIALS 64
 
 struct LightType

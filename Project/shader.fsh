@@ -18,7 +18,7 @@
 precision highp float;
 
 const int NUM_LIGHT_TYPES = 64;
-const int NUM_LIGHTS = 16;
+const int NUM_LIGHTS = 128;
 const int NUM_MATERIALS = 64;
 
 struct LightType
@@ -52,19 +52,28 @@ struct Material
     int nReserved2;
 };
 
+layout (std140) uniform PositionsBlock
+{
+    /* minimum block size is 16384
+     * size of vec4 is 16
+     * 16384 / 16 = 1024
+     */
+    vec4 u_vPositions[1024];
+};
+
 layout (std140) uniform LightTypesBlock
 {
     LightType u_LightTypes[NUM_LIGHT_TYPES];
 };
 
-layout (std140) uniform LightsBlock
-{
-    Light u_Lights[NUM_LIGHTS];
-};
-
 layout (std140) uniform MaterialsBlock
 {
     Material u_Materials[NUM_MATERIALS];
+};
+
+layout (std140) uniform LightsBlock
+{
+    Light u_Lights[NUM_LIGHTS];
 };
 
 uniform int u_bPoints;

@@ -84,7 +84,7 @@ protected:
 
     glm::vec3 velocity;
 public:
-    Game() : particles(1000) {}
+    Game() : particles(NUM_LIGHTS - 5) {}
     static Game * New(void) { return new Game(); }
     void PrintShaderError(GLint shader);
 
