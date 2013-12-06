@@ -218,12 +218,21 @@ bool Game::Init(void)
     // init random
     srand((unsigned int)time(NULL));
 
+    // initial states
+    b_hdr = false;
+    b_bloom = false;
+    b_motionblur = false;
+    b_particles_create = true;
+    b_particles_update = true;
+
     this->width = 1280;
     this->height = 720;
 
     if(!this->InitSDL()) return false;
     if(!this->InitGLEW()) return false;
     if(!this->InitShaders("shader.vsh", "shader.fsh", &program_id)) return false;
+    ASSERT_GL(loc_u_bHDR = glGetUniformLocation(program_id, "u_bHDR"))
+    ASSERT_GL(glProgramUniform1i(program_id, loc_u_bHDR, b_hdr))
 
     LightingManager::Init(program_id);
 
@@ -272,6 +281,7 @@ bool Game::Init(void)
     cube_right.material_id = 1;
 
     particles.Init(program_id);
+    particles.b_create = b_particles_create;
 
     ASSERT_GL(glEnable(GL_DEPTH_TEST))
     ASSERT_GL(glEnable(GL_CULL_FACE))
@@ -356,7 +366,7 @@ bool Game::Init(void)
     ASSERT_GL(bloom_loc_fbo_a_vCoord = glGetAttribLocation(program_bloom, "a_vCoord"))
     ASSERT_GL(bloom_loc_fbo_u_sFBO = glGetUniformLocation(program_bloom, "u_sFBO"))
     ASSERT_GL(bloom_loc_fbo_u_bEnabled = glGetUniformLocation(program_bloom, "u_bEnabled"))
-    ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 0))
+    ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, b_bloom))
 
     // motionblur
 
@@ -398,7 +408,7 @@ bool Game::Init(void)
     ASSERT_GL(motionblur_loc_fbo_u_sFBO = glGetUniformLocation(program_motionblur, "u_sFBO"))
     ASSERT_GL(motionblur_loc_fbo_u_bEnabled = glGetUniformLocation(program_motionblur, "u_bEnabled"))
     ASSERT_GL(motionblur_loc_fbo_u_vVelocity = glGetUniformLocation(program_motionblur, "u_vVelocity"))
-    ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 0))
+    ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, b_motionblur))
 
     // shadow mapping
 
@@ -448,6 +458,30 @@ bool Game::HandleSDL(SDL_Event *e)
             }
 
             this->pressed_keys.push_back(e->key.keysym.sym);
+
+            switch(e->key.keysym.sym)
+            {
+                case SDLK_1: // toggle HDR
+                    b_hdr = !b_hdr;
+                    ASSERT_GL(glProgramUniform1i(program_id, loc_u_bHDR, b_hdr))
+                    break;
+                case SDLK_2: // toggle bloom
+                    b_bloom = !b_bloom;
+                    ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, b_bloom))
+                    break;
+                case SDLK_3: // toggle motion blur
+                    b_motionblur = !b_motionblur;
+                    ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, b_motionblur))
+                    break;
+                case SDLK_4: // toggle particles create
+                    b_particles_create = !b_particles_create;
+                    particles.b_create = b_particles_create;
+                    break;
+                case SDLK_5: // toggle particles update
+                    b_particles_update = !b_particles_update;
+                    break;
+            }
+
             break;
         case SDL_KEYUP:
             // remove key if in pressed_keys
@@ -511,13 +545,13 @@ bool Game::Update(float seconds)
     f += seconds;
 
     // moving light
-    LightingManager::lights[2].vPosition.x = -2 * cos(2 * f);
-    LightingManager::lights[2].vPosition.z = -2 * sin(2 * f);
+    //LightingManager::lights[2].vPosition.x = -2 * cos(2 * f);
+    //LightingManager::lights[2].vPosition.z = -2 * sin(2 * f);
 
     LightingManager::UploadLights(program_id);
 
     // particles
-    particles.Update(seconds * 1000);
+    if(b_particles_update) particles.Update(seconds * 1000);
 
     const float acceleration = 15;
     const float rotation_acceleration = 400;
@@ -570,22 +604,6 @@ bool Game::Update(float seconds)
             case SDLK_e:
                 rotation_velocity.z += rotation_acceleration * seconds;
                 //this->camera = glm::rotate(this->matIdentity, rotation_speed * seconds, glm::vec3(0, 0, 1)) * this->camera;
-                break;
-            case SDLK_0:
-                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 0))
-                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 0))
-                break;
-            case SDLK_1:
-                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 1))
-                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 0))
-                break;
-            case SDLK_2:
-                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 0))
-                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 1))
-                break;
-            case SDLK_3:
-                ASSERT_GL(glProgramUniform1i(program_bloom, bloom_loc_fbo_u_bEnabled, 1))
-                ASSERT_GL(glProgramUniform1i(program_motionblur, motionblur_loc_fbo_u_bEnabled, 1))
                 break;
         }
     }

@@ -111,7 +111,9 @@ protected:
         return num;
     }
 public:
-    ParticlesDrawable(unsigned int num) : Drawable(GL_DYNAMIC_DRAW), num(num) {}
+    bool b_create;
+
+    ParticlesDrawable(unsigned int num) : Drawable(GL_DYNAMIC_DRAW), num(num), b_create(true) {}
 
 #define GAME_DOMAIN "ParticlesDrawable::Draw"
     void Init(GLuint program_id)
@@ -138,6 +140,8 @@ public:
 
     void CreateParticle(unsigned int index)
     {
+        if(!b_create) return;
+
         //vertices[index].x = rand() / (float)RAND_MAX * 2 - 1;
         //vertices[index].y = rand() / (float)RAND_MAX * 2 - 1;
         //vertices[index].z = rand() / (float)RAND_MAX * 2 - 1;

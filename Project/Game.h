@@ -47,6 +47,7 @@ protected:
     float aspect;
 
     GLuint program_id;
+    GLuint loc_u_bHDR;
 
     GLuint tex;
     GLuint nmap;
@@ -84,6 +85,12 @@ protected:
 
     glm::vec3 velocity;
     glm::vec3 rotation_velocity;
+
+    bool b_hdr;
+    bool b_bloom;
+    bool b_motionblur;
+    bool b_particles_create;
+    bool b_particles_update;
 public:
     Game() : particles(NUM_LIGHTS - 5) {}
     static Game * New(void) { return new Game(); }

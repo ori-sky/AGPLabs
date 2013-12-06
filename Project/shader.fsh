@@ -76,6 +76,7 @@ layout (std140) uniform LightsBlock
     Light u_Lights[NUM_LIGHTS];
 };
 
+uniform int u_bHDR;
 uniform int u_bPoints;
 uniform int u_nMaterial;
 uniform float u_fExposure;
@@ -283,9 +284,9 @@ void main_geometry(void)
     /* multiplied by normal to get the distance to the *plane* of the vertex
      * this compensates for viewing from sharp angles
      */
-    float fMaxSamples = 150;
+    float fMaxSamples = 80;
     float fMinSamples = 30;
-    float fSampleLevel = 0.6;
+    float fSampleLevel = 0.15;
 
     float fDistance = length(v_vVertex * v_vNormal);
 
@@ -294,8 +295,8 @@ void main_geometry(void)
                                                   u_sNormalHeight2, 2,
                                                   v_vTexCoord, v_vTEye, v_vTNormal,
                                                   0.1,
-                                                  min(fMaxSamples, (fMaxSamples / fSampleLevel) / pow(fDistance,2)),
-                                                  min(fMinSamples, (fMinSamples / fSampleLevel) / pow(fDistance,2)));
+                                                  min(fMaxSamples, (fMaxSamples / fSampleLevel) / pow(fDistance,3)),
+                                                  min(fMinSamples, (fMinSamples / fSampleLevel) / pow(fDistance,3)));
     //vec2 vTexCoord = v_vTexCoord;
 
     // normal mapping
@@ -316,7 +317,10 @@ void main_geometry(void)
                        vSpecular * vTexSpecular;
 
     // HDR
-    vFinalColor = hdr(vFinalColor, length(v_vVertex));
+    if(u_bHDR == 1)
+    {
+        vFinalColor = hdr(vFinalColor, length(v_vVertex));
+    }
 
     // output
     o_vColor = vec4(vFinalColor, 1.0);
