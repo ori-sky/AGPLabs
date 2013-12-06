@@ -280,11 +280,18 @@ void main_points(void)
 
 void main_geometry(void)
 {
+    float fDistance = length(v_vVertex);
+    float fMaxSamples = 150;
+    float fMinSamples = 30;
+    float fSampleLevel = 0.2;
+
     // parallax occlusion mapping
     vec2 vTexCoord = parallax_occlusion_mapping_2(u_sNormalHeight, 1,
                                                   u_sNormalHeight2, 2,
                                                   v_vTexCoord, v_vTEye, v_vTNormal,
-                                                  0.1, 150, 20);
+                                                  0.1,
+                                                  min(fMaxSamples, (fMaxSamples / fSampleLevel) / pow(fDistance,3)),
+                                                  min(fMinSamples, (fMinSamples / fSampleLevel) / pow(fDistance,3)));
     //vec2 vTexCoord = v_vTexCoord;
 
     // normal mapping
