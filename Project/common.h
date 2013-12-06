@@ -44,4 +44,11 @@
         if(_err_ != GL_NO_ERROR) fprintf(stderr, "OpenGL error 0x%x\n  » %s\n    » %s\n", _err_, GAME_DOMAIN, #CALL); \
     }
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <minmax.h>
+#define fmax max
+#define fmin min
+#undef main
+#endif
+
 #endif
