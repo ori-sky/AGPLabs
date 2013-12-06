@@ -281,7 +281,7 @@ void main_points(void)
 void main_geometry(void)
 {
     float fDistance = length(v_vVertex);
-    float fMaxSamples = 150;
+    float fMaxSamples = 100;
     float fMinSamples = 30;
     float fSampleLevel = 0.2;
 
