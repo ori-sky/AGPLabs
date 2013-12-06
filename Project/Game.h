@@ -83,6 +83,7 @@ protected:
     ParticlesDrawable particles;
 
     glm::vec3 velocity;
+    glm::vec3 rotation_velocity;
 public:
     Game() : particles(NUM_LIGHTS - 5) {}
     static Game * New(void) { return new Game(); }
