@@ -555,7 +555,6 @@ bool Game::Update(float seconds)
 
     const float acceleration = 15;
     const float rotation_acceleration = 400;
-    const float rotation_speed = 90.0f;
 
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin(); i!=this->pressed_keys.end(); ++i)
     {
@@ -714,6 +713,11 @@ int Game::Run(int argc, const char **argv)
         current_time = SDL_GetTicks();
         accumulator += (current_time - previous_time) / 1000.0f;
 
+        if(accumulator >= timestep)
+        {
+            if(!this->Draw()) this->running = false;
+        }
+
         for(;accumulator >= timestep; accumulator -= timestep)
         {
             if(!this->Update(timestep))
@@ -721,11 +725,6 @@ int Game::Run(int argc, const char **argv)
                 this->running = false;
                 break;
             }
-        }
-
-        if(this->running)
-        {
-            if(!this->Draw()) this->running = false;
         }
 
         while(SDL_PollEvent(&e))
