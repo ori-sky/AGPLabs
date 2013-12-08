@@ -285,18 +285,20 @@ void main_geometry(void)
      * this compensates for viewing from sharp angles
      */
     float fMaxSamples = 80;
-    float fMinSamples = 30;
+    float fMinSamples = 10;
+    float fFloorSamples = 5;
     float fSampleLevel = 0.15;
 
     float fDistance = length(v_vVertex * v_vNormal);
+    float fDistanceCubed = pow(fDistance, 3);
 
     // parallax occlusion mapping
     vec2 vTexCoord = parallax_occlusion_mapping_2(u_sNormalHeight, 1,
                                                   u_sNormalHeight2, 2,
                                                   v_vTexCoord, v_vTEye, v_vTNormal,
                                                   0.1,
-                                                  min(fMaxSamples, (fMaxSamples / fSampleLevel) / pow(fDistance,3)),
-                                                  min(fMinSamples, (fMinSamples / fSampleLevel) / pow(fDistance,3)));
+                                                  min(fMaxSamples, (fMaxSamples / fSampleLevel) / fDistanceCubed),
+                                                  max(fFloorSamples, min(fMinSamples, (fMinSamples / fSampleLevel) / fDistanceCubed)));
     //vec2 vTexCoord = v_vTexCoord;
 
     // normal mapping
