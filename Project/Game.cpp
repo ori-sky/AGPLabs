@@ -292,7 +292,8 @@ bool Game::Init(void)
     ASSERT_GL(glEnable(GL_MULTISAMPLE))
 
     this->matIdentity = glm::mat4(1.0f);
-    this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
+    this->position = glm::vec3(0.0f, 0.0f, -5.0f);
+    //this->camera = glm::translate(this->matIdentity, glm::vec3(0.0f, 0.0f, -5.0f));
 
     // max anisotropy
     GLfloat aniso;
@@ -554,7 +555,7 @@ bool Game::Update(float seconds)
     if(b_particles_update) particles.Update(seconds * 1000);
 
     const float acceleration = 15;
-    const float rotation_acceleration = 400;
+    const float rotation_acceleration = 10;
 
     for(std::vector<SDL_Keycode>::iterator i=this->pressed_keys.begin(); i!=this->pressed_keys.end(); ++i)
     {
@@ -563,22 +564,22 @@ bool Game::Update(float seconds)
             case SDLK_ESCAPE:
                 return false;
             case SDLK_w:
-                velocity.z += acceleration * seconds;
-                break;
-            case SDLK_s:
                 velocity.z -= acceleration * seconds;
                 break;
-            case SDLK_a:
-                velocity.x += acceleration * seconds;
+            case SDLK_s:
+                velocity.z += acceleration * seconds;
                 break;
-            case SDLK_d:
+            case SDLK_a:
                 velocity.x -= acceleration * seconds;
                 break;
+            case SDLK_d:
+                velocity.x += acceleration * seconds;
+                break;
             case SDLK_SPACE:
-                velocity.y -= acceleration * seconds;
+                velocity.y += acceleration * seconds;
                 break;
             case SDLK_c:
-                velocity.y += acceleration * seconds;
+                velocity.y -= acceleration * seconds;
                 break;
             case SDLK_UP:
                 rotation_velocity.x -= rotation_acceleration * seconds;
@@ -607,13 +608,13 @@ bool Game::Update(float seconds)
         }
     }
 
-    camera = glm::translate(matIdentity, velocity * seconds) * camera;
-    velocity *= fmax(0, 1 - (3.5f * seconds));
-
-    camera = glm::rotate(matIdentity, rotation_velocity.x * seconds, glm::vec3(1, 0, 0)) * camera;
-    camera = glm::rotate(matIdentity, rotation_velocity.y * seconds, glm::vec3(0, 1, 0)) * camera;
-    camera = glm::rotate(matIdentity, rotation_velocity.z * seconds, glm::vec3(0, 0, 1)) * camera;
+    orientation = glm::quat(rotation_velocity * seconds) * orientation;
     rotation_velocity *= fmax(0, 1 - (4.0f * seconds));
+
+    //position += velocity * seconds;
+    position -= glm::inverse(orientation) * velocity * seconds;
+    //camera = glm::translate(matIdentity, velocity * seconds) * camera;
+    velocity *= fmax(0, 1 - (3.5f * seconds));
 
     ASSERT_GL(glProgramUniform3fv(program_motionblur, motionblur_loc_fbo_u_vVelocity, 1, glm::value_ptr(velocity)))
 
@@ -634,10 +635,12 @@ bool Game::Draw(void)
     ASSERT_GL(glClearColor(0.02, 0.05, 0.1, 1))
     ASSERT_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
 
-    glm::mat4 matCamera = this->camera;
+    glm::mat4 matTranslation = glm::translate(matIdentity, position);
+    glm::mat4 matRotation = glm::toMat4(orientation);
+    glm::mat4 matCamera = matRotation * matTranslation;
 
-    ASSERT_GL(GLint u_matCamera = glGetUniformLocation(this->program_id, "u_matCamera"))
-    ASSERT_GL(GLint u_matModelView = glGetUniformLocation(this->program_id, "u_matModelView"))
+    ASSERT_GL(GLint u_matCamera = glGetUniformLocation(program_id, "u_matCamera"))
+    ASSERT_GL(GLint u_matModelView = glGetUniformLocation(program_id, "u_matModelView"))
 
     ASSERT_GL(glUniformMatrix4fv(u_matCamera, 1, GL_FALSE, glm::value_ptr(matCamera)))
 
@@ -685,7 +688,7 @@ bool Game::Draw(void)
     ASSERT_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4))
     ASSERT_GL(glDisableVertexAttribArray(motionblur_loc_fbo_a_vCoord))
 
-    SDL_GL_SwapWindow(this->wnd);
+    SDL_GL_SwapWindow(wnd);
 
     return true;
 }

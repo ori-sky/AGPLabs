@@ -77,7 +77,6 @@ protected:
     GLuint fbo_shadow;
 
     glm::mat4 matIdentity;
-    glm::mat4 camera;
 
     CubeDrawable cube_left;
     CubeDrawable cube_right;
@@ -85,6 +84,9 @@ protected:
 
     glm::vec3 velocity;
     glm::vec3 rotation_velocity;
+
+    glm::vec3 position;
+    glm::quat orientation;
 
     bool b_hdr;
     bool b_bloom;
