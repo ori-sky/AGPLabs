@@ -25,7 +25,7 @@ smooth in vec2 v_vCoord;
 out vec4 o_vColor;
 
 const float fThreshold = 0.3;
-const float fBloomIntensity = 2.0;
+const float fBloomIntensity = 1.3;
 const float fOriginalIntensity = 1.0;
 const float fBloomSaturation = 0.7;
 const float fOriginalSaturation = 1.1;
